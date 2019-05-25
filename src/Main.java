@@ -50,7 +50,7 @@ public class Main {
 
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze();
-            form.drawGui(analyzer);
+            form.startDraw(analyzer);
 
 //            viewer.report(analyzer);
 

@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GuiForm">
   <grid id="27dc6" binding="rootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="290" y="155" width="530" height="337"/>
+      <xy x="290" y="237" width="610" height="255"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -22,7 +22,9 @@
       </grid>
       <grid id="dcd46" binding="panelSlider" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="Center"/>
-        <properties/>
+        <properties>
+          <foreground color="-589922"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="c4f04" class="javax.swing.JLabel">
@@ -35,12 +37,23 @@
       </grid>
       <grid id="1cdf5" binding="panelButton" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
         <constraints border-constraint="South"/>
-        <properties/>
+        <properties>
+          <background color="-1"/>
+        </properties>
         <border type="none"/>
         <children>
+          <component id="38d0f" class="javax.swing.JLabel" binding="labelFrom">
+            <constraints/>
+            <properties>
+              <horizontalAlignment value="2"/>
+              <horizontalTextPosition value="2"/>
+              <text value="Date from:"/>
+            </properties>
+          </component>
           <component id="61b94" class="javax.swing.JButton" binding="buttonShowBarChart">
             <constraints/>
             <properties>
+              <background color="-10116"/>
               <hideActionText value="false"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
@@ -52,13 +65,23 @@
           <component id="19a5e" class="javax.swing.JButton" binding="buttonShowPieChart">
             <constraints/>
             <properties>
+              <background color="-6295306"/>
               <text value="Show Pie Chart"/>
             </properties>
           </component>
-          <component id="c4a76" class="javax.swing.JButton" binding="buttonReset">
+          <component id="c4a76" class="javax.swing.JButton" binding="buttonSetTimeRange">
             <constraints/>
             <properties>
-              <text value="Reset"/>
+              <background color="-3145815"/>
+              <text value="Set time range"/>
+            </properties>
+          </component>
+          <component id="1363c" class="javax.swing.JLabel" binding="labelTo">
+            <constraints/>
+            <properties>
+              <horizontalAlignment value="2"/>
+              <horizontalTextPosition value="2"/>
+              <text value="Date to: "/>
             </properties>
           </component>
         </children>

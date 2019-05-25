@@ -21,9 +21,11 @@ public interface ITextAnalyzer {
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
 
-    Date getFirstDate() throws ParseException;
-    Date getLastDate()  throws ParseException;
-    void setDateArray ();
-    Date [] getDateArray ();
+
+    Date getDateOfSlider (int sliderValue);
+    Date getDateFirst() throws ParseException;
+    Date getDateLast()  throws ParseException;
+    void setDateArrayForSliderLabels();
+    Date [] getDateArrayForSliderLabels();
 
 }

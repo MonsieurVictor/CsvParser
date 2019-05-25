@@ -8,8 +8,8 @@ import java.util.List;
 public class TextAnalyzer implements ITextAnalyzer {
 
 
-    private Date firstDate;
-    private Date lastDate;
+    private Date dateFirst;
+    private Date dateLast;
     private int diffSec;
     private Date [] dateArray = new Date [6];
 
@@ -75,10 +75,10 @@ public class TextAnalyzer implements ITextAnalyzer {
         getTopTransmitters();
         getTopProtocols();
         getTopUsedApplications();
-        this.firstDate = getFirstDate();
-        this.lastDate = getLastDate();
-        countDatesRange(firstDate, lastDate);
-        setDateArray();
+        this.dateFirst = getDateFirst();
+        this.dateLast = getDateLast();
+        countDatesRange(dateFirst, dateLast);
+        setDateArrayForSliderLabels();
 
 
 //        getTopProtocols();
@@ -212,49 +212,45 @@ public class TextAnalyzer implements ITextAnalyzer {
         return topUsedApplicationsPairs;
     }
 
-    public Date getFirstDate() throws ParseException {
+    public Date getDateFirst() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
         String firstDateInCSV = dataFlowStructureList.get(0).rawDate;
         return sdf.parse(firstDateInCSV);
     }
 
-    public Date getLastDate() throws ParseException {
+    public Date getDateLast() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
         String lastDateInCSV = dataFlowStructureList.get(dataFlowStructureList.size()-1).rawDate;
         return sdf.parse(lastDateInCSV);
     }
 
 
-    public void setDateArray () {
-
-        dateArray[0] = this.firstDate;
-        dateArray[5] = this.lastDate;
+    public void setDateArrayForSliderLabels() {
 
         Calendar cal = Calendar.getInstance();
+        for (int i = 0; i <= 4; i++) {
 
-        for (int i = 1; i <= 4; i++) {
-
-            cal.setTime(firstDate);
+            cal.setTime(dateFirst);
             int rangeBetweenSlices = diffSec / 5;
             cal.add(Calendar.SECOND, rangeBetweenSlices*i );
             dateArray[i]= cal.getTime();
-            System.out.println("added one slice: "+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(cal.getTime()));
 
         }
+        dateArray[5] = this.dateLast;
     }
 
-    public Date [] getDateArray () {
+    public Date [] getDateArrayForSliderLabels() {
         return this.dateArray;
     }
 
     public void countDatesRange (Date firstDate, Date lastDate){
-        try {
 
+        try {
             System.out.println("\ndifference between:");
             System.out.println(firstDate);
             System.out.println(lastDate + "\n");
 
-            DecimalFormat crunchifyFormatter = new DecimalFormat("###,###");
+            DecimalFormat decimalFormatter = new DecimalFormat("###,###");
 
             // getTime() returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object
             long diff = lastDate.getTime() - firstDate.getTime();
@@ -263,27 +259,33 @@ public class TextAnalyzer implements ITextAnalyzer {
             System.out.println("difference between days: " + diffDays);
 
             int diffhours = (int) (diff / (60 * 60 * 1000));
-            System.out.println("difference between hours: " + crunchifyFormatter.format(diffhours));
+            System.out.println("difference between hours: " + decimalFormatter.format(diffhours));
 
             int diffmin = (int) (diff / (60 * 1000));
-            System.out.println("difference between minutes: " + crunchifyFormatter.format(diffmin));
+            System.out.println("difference between minutes: " + decimalFormatter.format(diffmin));
 
             this.diffSec = (int) (diff / (1000));
-            System.out.println("difference between seconds: " + crunchifyFormatter.format(diffSec));
+            System.out.println("difference between seconds: " + decimalFormatter.format(diffSec));
 
-            System.out.println("difference between milliseconds: " + crunchifyFormatter.format(diff));
+            System.out.println("difference between milliseconds: " + decimalFormatter.format(diff));
 
-            System.out.println(firstDate);
-            System.out.println(lastDate + "\n");
-            System.out.println("MM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(firstDate));
-            System.out.println("yyyy-MM-dd formatted date : " + new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(lastDate));
+
+            System.out.println("\nMM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(firstDate));
+            System.out.println("MM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(lastDate));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
+
+    public Date getDateOfSlider (int sliderValue){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateFirst);
+        cal.add(Calendar.SECOND, diffSec*sliderValue/1000 );
+        return cal.getTime();
+    }
+
 
 
     public List parseDataFlowStructure(List <String[]> buffer) {
