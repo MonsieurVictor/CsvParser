@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GuiForm">
+  <grid id="27dc6" binding="rootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="290" y="155" width="530" height="337"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="e265f" binding="panelCenter" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="33c1" class="javax.swing.JLabel">
+            <constraints border-constraint="West"/>
+            <properties>
+              <text value="Date from:"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="dcd46" binding="panelSlider" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c4f04" class="javax.swing.JLabel">
+            <constraints border-constraint="West"/>
+            <properties>
+              <text value="Date to     :"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="1cdf5" binding="panelButton" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="61b94" class="javax.swing.JButton" binding="buttonShowBarChart">
+            <constraints/>
+            <properties>
+              <hideActionText value="false"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <text value="Show Bar Chart"/>
+              <verticalAlignment value="0"/>
+              <verticalTextPosition value="0"/>
+            </properties>
+          </component>
+          <component id="19a5e" class="javax.swing.JButton" binding="buttonShowPieChart">
+            <constraints/>
+            <properties>
+              <text value="Show Pie Chart"/>
+            </properties>
+          </component>
+          <component id="c4a76" class="javax.swing.JButton" binding="buttonReset">
+            <constraints/>
+            <properties>
+              <text value="Reset"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

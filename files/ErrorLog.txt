@@ -1,0 +1,81 @@
+
+Error reading flags:java.lang.NumberFormatException: For input string: "2147486779"
+Error reading flags:java.lang.NumberFormatException: For input string: "2147486779"
+Error message:java.lang.NumberFormatException: For input string: "2147486779"
+Error message:java.lang.NumberFormatException: For input string: "2147486779"
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 5 out of bounds for length 5
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+Error message:java.lang.IllegalArgumentException: verticalAlignment
+Error message:java.lang.IllegalArgumentException: verticalAlignment
+Error message:java.lang.IllegalArgumentException: verticalAlignment
+Error message:java.lang.IllegalArgumentException: cannot add to layout: constraints must be a GridBagConstraint
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NumberFormatException: For input string: "7/13/2018 5:23:22.000000000 PM"
+Error message:java.lang.NumberFormatException: For input string: "7/13/2018 5:23:22.000000000 PM"
+Error message:java.text.ParseException: Unparseable date: "2012-02-03 06:30:00.0"
+Error message:java.text.ParseException: Unparseable date: "2012-02-03 06:30:00.0"
+Error message:java.text.ParseException: Unparseable date: "2012-02-03 06:30:00.0"
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.IllegalArgumentException: adding a window to a container
+Error message:java.lang.IllegalArgumentException: adding a window to a container
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
+Error message:java.lang.NullPointerException
