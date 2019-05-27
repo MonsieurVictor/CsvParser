@@ -20,6 +20,7 @@ public interface ITextAnalyzer {
     List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
+    void reparseDataFlowStructureList(Date dateFrom, Date dateTo) throws ParseException;
 
 
     Date getDateOfSlider (int sliderValue);

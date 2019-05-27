@@ -10,13 +10,16 @@ public class TextAnalyzer implements ITextAnalyzer {
 
     private Date dateFirst;
     private Date dateLast;
+    private Date dateFrom;
+    private Date dateTo;
     private int diffSec;
     private Date [] dateArray = new Date [6];
+    private List buffer;
 
 
     public class DataFlowStructure {
 
-        String rawDate;
+        Date dateObj;
         long bytesIn;
         long bytesOut;
         int packetsIn;
@@ -29,7 +32,7 @@ public class TextAnalyzer implements ITextAnalyzer {
 
 
         DataFlowStructure(
-                String rawDate,
+                Date dateObj,
                 Long bytesIn,
                 Long bytesOut,
                 Integer packetsIn,
@@ -39,7 +42,7 @@ public class TextAnalyzer implements ITextAnalyzer {
                 String protocolNumber,
                 String sourceAddress) {
 
-            this.rawDate = rawDate;
+            this.dateObj = dateObj;
             this.bytesIn = bytesIn;
             this.bytesOut = bytesOut;
             this.packetsIn = packetsIn;
@@ -63,7 +66,7 @@ public class TextAnalyzer implements ITextAnalyzer {
         }
     }
 
-    private List buffer;
+
 
     public void setBuffer(List buffer) {
         this.buffer = buffer;
@@ -71,13 +74,15 @@ public class TextAnalyzer implements ITextAnalyzer {
 
     public void doAnalyze() throws ParseException {
         parseDataFlowStructure(this.buffer);
+        this.dateFirst = getDateFirst();
+        this.dateLast = getDateLast();
+        countRangeInitialDates(dateFirst, dateLast);
         getTopReceivers();
         getTopTransmitters();
         getTopProtocols();
         getTopUsedApplications();
-        this.dateFirst = getDateFirst();
-        this.dateLast = getDateLast();
-        countDatesRange(dateFirst, dateLast);
+
+
         setDateArrayForSliderLabels();
 
 
@@ -94,6 +99,7 @@ public class TextAnalyzer implements ITextAnalyzer {
 //    }
 
     public List <TopRatedPair> getTopReceivers(){
+        topReceiversPairs.clear();
 
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
@@ -213,15 +219,11 @@ public class TextAnalyzer implements ITextAnalyzer {
     }
 
     public Date getDateFirst() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
-        String firstDateInCSV = dataFlowStructureList.get(0).rawDate;
-        return sdf.parse(firstDateInCSV);
+        return dataFlowStructureList.get(0).dateObj;
     }
 
     public Date getDateLast() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
-        String lastDateInCSV = dataFlowStructureList.get(dataFlowStructureList.size()-1).rawDate;
-        return sdf.parse(lastDateInCSV);
+        return dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
     }
 
 
@@ -243,7 +245,7 @@ public class TextAnalyzer implements ITextAnalyzer {
         return this.dateArray;
     }
 
-    public void countDatesRange (Date firstDate, Date lastDate){
+    public void countRangeInitialDates(Date firstDate, Date lastDate){
 
         try {
             System.out.println("\ndifference between:");
@@ -288,11 +290,43 @@ public class TextAnalyzer implements ITextAnalyzer {
 
 
 
-    public List parseDataFlowStructure(List <String[]> buffer) {
+    public List parseDataFlowStructure(List <String[]> buffer) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
+
+        //        Date date = dateFirst;
+//        System.out.println();
+//        System.out.println("reference date: " + date);
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(date);
+//        cal.add(Calendar.HOUR, 36);
+//        System.out.println("added one and half days to reference date: "+cal.getTime());
+//
+//        String newDateString = "2012-02-03 06:30:00.0";
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSSSS");
+//        Date newDate = sdf.parse(newDateString);
+//        System.out.println("new date to compare with reference date : "+newDate);
+//
+//        Calendar newCal = Calendar.getInstance();
+//        newCal.setTime(newDate);
+//
+//
+//        if(cal.after(newCal)){
+//            System.out.println("date is greater than reference that.");
+//        }else if(cal.before(newCal)){
+//            System.out.println("date is lesser than reference that.");
+//        }else{
+//            System.out.println("date is equal to reference that.");
+//        }
 
         for (String[] csvRow: buffer){
 
-            String rawDate = csvRow[0] ;
+
+
+
+
+            Date dateObj = sdf.parse(csvRow[0]) ;
             long bytesIn = Long.parseLong(csvRow[1]);
             long bytesOut = Long.parseLong(csvRow[2]);
             int packetsIn = Integer.parseInt(csvRow[3]);
@@ -302,7 +336,7 @@ public class TextAnalyzer implements ITextAnalyzer {
             String protocolNumber  = csvRow[7];
             String sourceAddress  = csvRow[8];
             this.dataFlowStructureList.add(new DataFlowStructure(
-                    rawDate,
+                    dateObj,
                     bytesIn,
                     bytesOut,
                     packetsIn,
@@ -314,6 +348,44 @@ public class TextAnalyzer implements ITextAnalyzer {
         }
 
         return dataFlowStructureList;
+    }
+
+    public void reparseDataFlowStructureList(Date dateFrom, Date dateTo) throws ParseException {
+        this.dataFlowStructureList.clear();
+        parseDataFlowStructure(this.buffer);
+
+        Calendar calDateFrom = Calendar.getInstance();
+        calDateFrom.setTime(dateFrom);
+
+        Calendar calDateTo = Calendar.getInstance();
+        calDateTo.setTime(dateTo);
+
+        for (int i = 0; i < dataFlowStructureList.size(); i++) {
+
+
+            Date testDate = dataFlowStructureList.get(i).dateObj;
+            Calendar calDateFromCsv = Calendar.getInstance();
+            calDateFromCsv.setTime(testDate);
+
+
+
+            if(calDateFrom.after(calDateFromCsv)){
+//                System.out.println("date is lesser than DateFrom.");
+                dataFlowStructureList.remove(i);
+                i--;
+            }else if (calDateTo.before(calDateFromCsv)) {
+                dataFlowStructureList.remove(i);
+                i--;
+//                System.out.println("testDate is greater than DateTo.");
+            }
+            else{
+//                System.out.println("date is equal to reference that.");
+            }
+
+        }
+
+        getTopReceivers();
+
     }
 
 
