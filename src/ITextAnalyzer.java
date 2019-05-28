@@ -22,6 +22,8 @@ public interface ITextAnalyzer {
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
     void reparseDataFlowStructureList(Date dateFrom, Date dateTo) throws ParseException;
 
+    List <TextAnalyzer.TopRatedPair> getTopReceivers();
+
 
     Date getDateOfSlider (int sliderValue);
     Date getDateFirst() throws ParseException;

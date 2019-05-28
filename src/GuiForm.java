@@ -5,7 +5,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.resources.JFreeChartResources;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -15,7 +14,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +23,7 @@ public class GuiForm implements IGuiForm {
 
     private JPanel rootPanel;
     private JButton buttonShowBarChart;
-    private JButton buttonSetTimeRange;
+    private JButton buttonToJSON;
     private JButton buttonShowPieChart;
     private JPanel panelButton;
     private JPanel panelCenter;
@@ -46,11 +44,11 @@ public class GuiForm implements IGuiForm {
     ChartPanel panelChartPie;
     ChartPanel panelChartBar;
 
-
-
     private JPanel panelSlider;
     private JLabel labelFrom;
     private JLabel labelTo;
+    private JLabel labelFrom2;
+    private JLabel labelTo2;
 
     public ITextAnalyzer analyzer = new TextAnalyzer();
 
@@ -58,19 +56,16 @@ public class GuiForm implements IGuiForm {
 
         this.analyzer = analyzer;
         this.dateFirst = analyzer.getDateFirst();
-
         this.dateLast = analyzer.getDateLast();
         dateFrom = analyzer.getDateFirst();
-
         dateTo = analyzer.getDateLast();
         dateArrayForSliderLabels = analyzer.getDateArrayForSliderLabels();
+        analyzer.setDateArrayForSliderLabels();
 
-        labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFirst))));
-        labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateLast)));
+        setLabelsDate();
         drawChart();
 
 //        drawChart2();
-
     }
 
     public void drawChart() throws ParseException {
@@ -78,12 +73,11 @@ public class GuiForm implements IGuiForm {
         JFrame jFrame = new JFrame("Top Receivers Chart");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setContentPane(rootPanel);
-        jFrame.setBounds(0, 0, 900, 300);
-
+        jFrame.setBounds(0, 0, 900, 200);
         setSliderFrom();
         setSliderTo();
-        panelCenter.setVisible(true);
 
+//        panelCenter.setVisible(true);
         jFrame.setVisible(true);
 
         buttonShowBarChart.addActionListener(new ActionListener() {
@@ -101,26 +95,14 @@ public class GuiForm implements IGuiForm {
                                                      frameBar = new ChartFrame("Top 10 Receivers", null);
                                                      frameBar.setLayout(new GridLayout());
 
-
-
-                                                     frameBar.setBounds(1000, 0, 900, 500);
+                                                     frameBar.setBounds(0, 205, 900, 300);
                                                      frameBar.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
 
                                                      panelChartBar = new ChartPanel(chartBar);
                                                      panelChartBar.setLayout(new GridLayout());
 
-                                                     frameBar.add(panelChartBar);
+                                                     frameBar.add(panelChartBar).setVisible(true);
                                                      frameBar.setVisible(true);
-
-
-
-//                                          ChartPanel panelChart1 = new ChartPanel(chart);
-//                                          panelCenter.removeAll();
-//                                          panelCenter.add(panelChart1, BorderLayout.CENTER);
-//                                          panelCenter.validate();
-//                                          panelCenter.setVisible(true);
-//                                          panelSlider.setVisible(false);
-//                                          jFrame.setBounds(0, 0, 1100, 500);
                                                  }
                                              }
         );
@@ -143,7 +125,7 @@ public class GuiForm implements IGuiForm {
                                                      framePie.setLayout(new GridLayout());
 
 
-                                                     framePie.setBounds(0, 300, 900, 500);
+                                                     framePie.setBounds(0, 510, 900, 500);
                                                      framePie.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
 
 
@@ -156,15 +138,16 @@ public class GuiForm implements IGuiForm {
                                              }
         );
 
-        buttonSetTimeRange.addActionListener(new ActionListener() {
+        buttonToJSON.addActionListener(new ActionListener() {
                                                  @Override
                                                  public void actionPerformed(ActionEvent evt) {
                                                      dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
                                                      dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
 
                                                      setTryCatch();
-                                                     labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom))));
-                                                     labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
+                                                     setLabelsDate();
+
+                                                     infoBox("The file successfully saved to:\n Top_Receivers_" + (new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(dateFrom)) + "_" + (new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(dateTo)) + ".JSON", "Save result" );
                                                  }
                                              }
         );
@@ -174,20 +157,9 @@ public class GuiForm implements IGuiForm {
             public void stateChanged(ChangeEvent evt) {
                 dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
                 dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                setLabelsDate();
                 setTryCatch();
-
-                labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom))));
-                labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
-
-
             }
-
-
-
-
-
-
-
         });
 
         sliderTo.addChangeListener(new ChangeListener() {
@@ -195,15 +167,10 @@ public class GuiForm implements IGuiForm {
             public void stateChanged(ChangeEvent evt) {
                 dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
                 dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                setLabelsDate();
                 setTryCatch();
-
-                labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom))));
-                labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
             }
-
-
         });
-
     }
 
     public void drawChart2() {
@@ -232,12 +199,12 @@ public class GuiForm implements IGuiForm {
         for (Date date : dateArrayForSliderLabels) {
             labelTable.put(i += 200 , new JLabel(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date)));
         }
-
         sliderFrom.setLabelTable(labelTable);
         sliderFrom.setMinorTickSpacing(100);
         sliderFrom.setMajorTickSpacing(200);
         sliderFrom.setPaintTicks(true);
         sliderFrom.setPaintLabels(true);
+
     }
 
     private void setSliderTo(){
@@ -251,6 +218,7 @@ public class GuiForm implements IGuiForm {
         }
 
         sliderTo.setLabelTable(labelTable);
+
         sliderTo.setMinorTickSpacing(100);
         sliderTo.setMajorTickSpacing(200);
         sliderTo.setPaintTicks(true);
@@ -260,7 +228,7 @@ public class GuiForm implements IGuiForm {
     private void setDataSetPie() {
         datasetPie = new DefaultPieDataset();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; (i < 10) && i < (analyzer.topReceiversPairs.size()) ; i++) {
             datasetPie.setValue(analyzer.topReceiversPairs.get(i).key, new Integer(analyzer.topReceiversPairs.get(i).value));
         }
         chartPie = ChartFactory.createPieChart3D("Top 10 Received Packets", datasetPie, true, true, true);
@@ -276,7 +244,7 @@ public class GuiForm implements IGuiForm {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; (i < 10) && i < (analyzer.topReceiversPairs.size()) ; i++) {
             dataset.setValue(analyzer.topReceiversPairs.get(i).value, "", analyzer.topReceiversPairs.get(i).key);
         }
 
@@ -289,13 +257,12 @@ public class GuiForm implements IGuiForm {
         p.setDomainCrosshairPaint(Color.BLUE);
         p.setRangeCrosshairPaint(Color.ORANGE);
         p.setOutlinePaint(Color.BLUE);
-
-
     }
 
     private void setTryCatch() {
         try {
             analyzer.reparseDataFlowStructureList(dateFrom, dateTo);
+            analyzer.getTopReceivers();
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -308,8 +275,6 @@ public class GuiForm implements IGuiForm {
 
                 setDataSetBar();
 
-                panelChartBar.setVisible(false);
-                panelChartBar.removeAll();
                 frameBar.remove(panelChartBar);
 
                 panelChartBar = new ChartPanel(chartBar);
@@ -332,19 +297,12 @@ public class GuiForm implements IGuiForm {
                 System.out.println("Pie is showing");
                 setDataSetPie();
 
-                panelChartPie.setVisible(false);
-                panelChartPie.removeAll();
                 framePie.remove(panelChartPie);
 
                 panelChartPie = new ChartPanel(chartPie);
                 panelChartPie.setLayout(new BorderLayout());
                 framePie.add(panelChartPie, BorderLayout.CENTER);
                 framePie.setVisible(true);
-
-
-
-
-
 
             } else {
                 System.out.println("Pie is not showed");
@@ -354,42 +312,18 @@ public class GuiForm implements IGuiForm {
         }
     }
 
+    private void setLabelsDate() {
 
+        labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom))));
+        labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
 
+    }
+
+    public static void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
 }
-
-
-
-//////////////////////////////////            DATES          //////////////////////////////////////////////////////////////
-
-
-//        Date date = dateFirst;
-//        System.out.println();
-//        System.out.println("reference date: " + date);
-//
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(date);
-//        cal.add(Calendar.HOUR, 36);
-//        System.out.println("added one and half days to reference date: "+cal.getTime());
-//
-//        String newDateString = "2012-02-03 06:30:00.0";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSSSS");
-//        Date newDate = sdf.parse(newDateString);
-//        System.out.println("new date to compare with reference date : "+newDate);
-//
-//        Calendar newCal = Calendar.getInstance();
-//        newCal.setTime(newDate);
-//
-//
-//        if(cal.after(newCal)){
-//            System.out.println("date is greater than reference that.");
-//        }else if(cal.before(newCal)){
-//            System.out.println("date is lesser than reference that.");
-//        }else{
-//            System.out.println("date is equal to reference that.");
-//        }
-
-///////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

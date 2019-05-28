@@ -26,32 +26,33 @@ public class Main {
     private IResultViewer viewer;
     private IErrorLogger logger;
     private IGuiForm form;
+    private IJSONSaver jsonSaver;
 
     public Main (
                  IAppOptions options,
                  ITextReader reader,
                  ITextAnalyzer analyzer,
                  IErrorLogger logger,
-                 IGuiForm form
+                 IGuiForm form,
+                 IJSONSaver jsonSaver
               ) {
 
         this.options = options;
         this.reader = reader;
         this.analyzer = analyzer;
-
+        this.jsonSaver = jsonSaver;
         this.viewer = viewer;
         this.logger = logger;
         this.form = form;
+        this.jsonSaver = jsonSaver;
     }
 
     public void execute() {
         try {
             options.parseOptions();
-
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze();
             form.startDraw(analyzer);
-
 //            viewer.report(analyzer);
 
         } catch (IOException e) {
@@ -69,9 +70,10 @@ public class Main {
         IErrorLogger logger = new ErrorLogger();
         ITextAnalyzer analyzer = new TextAnalyzer();
         IGuiForm form = new GuiForm();
+        IJSONSaver jsonSaver = new JSONSaver();
 
 //        IResultViewer viewer = new ConsoleResultViewer();
-        Main app = new Main(options, reader, analyzer, logger, form); //почему нельзя просто создать объект с пустыми аргументами?
+        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
         app.execute();
     }
 }

@@ -81,9 +81,7 @@ public class TextAnalyzer implements ITextAnalyzer {
         getTopTransmitters();
         getTopProtocols();
         getTopUsedApplications();
-
-
-        setDateArrayForSliderLabels();
+//        setDateArrayForSliderLabels();
 
 
 //        getTopProtocols();
@@ -216,6 +214,14 @@ public class TextAnalyzer implements ITextAnalyzer {
             System.out.println(topUsedApplicationsPairs.get(i).key + "  " +  topUsedApplicationsPairs.get(i).value);
         }
         return topUsedApplicationsPairs;
+    }
+
+    public void setDateFirst(Date dateFirst) {
+        this.dateFirst = dataFlowStructureList.get(0).dateObj;
+    }
+
+    public void setDateLast(Date dateLast) {
+        this.dateLast = dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
     }
 
     public Date getDateFirst() throws ParseException {
@@ -370,21 +376,16 @@ public class TextAnalyzer implements ITextAnalyzer {
 
 
             if(calDateFrom.after(calDateFromCsv)){
-//                System.out.println("date is lesser than DateFrom.");
                 dataFlowStructureList.remove(i);
                 i--;
             }else if (calDateTo.before(calDateFromCsv)) {
                 dataFlowStructureList.remove(i);
                 i--;
-//                System.out.println("testDate is greater than DateTo.");
             }
             else{
-//                System.out.println("date is equal to reference that.");
             }
 
         }
-
-        getTopReceivers();
 
     }
 
