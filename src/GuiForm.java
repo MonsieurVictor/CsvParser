@@ -7,7 +7,6 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -51,6 +50,7 @@ public class GuiForm implements IGuiForm {
     private JLabel labelTo2;
 
     public ITextAnalyzer analyzer = new TextAnalyzer();
+    private IJSONSaver jsonSaver = new JSONSaver();
 
     public void startDraw(ITextAnalyzer analyzer) throws ParseException {
 
@@ -61,7 +61,6 @@ public class GuiForm implements IGuiForm {
         dateTo = analyzer.getDateLast();
         dateArrayForSliderLabels = analyzer.getDateArrayForSliderLabels();
         analyzer.setDateArrayForSliderLabels();
-
         setLabelsDate();
         drawChart();
 
@@ -76,10 +75,7 @@ public class GuiForm implements IGuiForm {
         jFrame.setBounds(0, 0, 900, 200);
         setSliderFrom();
         setSliderTo();
-
-//        panelCenter.setVisible(true);
         jFrame.setVisible(true);
-
         buttonShowBarChart.addActionListener(new ActionListener() {
                                                  @Override
                                                  public void actionPerformed(ActionEvent evt) {
@@ -97,7 +93,6 @@ public class GuiForm implements IGuiForm {
 
                                                      frameBar.setBounds(0, 205, 900, 300);
                                                      frameBar.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
-
                                                      panelChartBar = new ChartPanel(chartBar);
                                                      panelChartBar.setLayout(new GridLayout());
 
@@ -141,13 +136,21 @@ public class GuiForm implements IGuiForm {
         buttonToJSON.addActionListener(new ActionListener() {
                                                  @Override
                                                  public void actionPerformed(ActionEvent evt) {
-                                                     dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-                                                     dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
-
+//                                                     dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
+//                                                     dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+//
                                                      setTryCatch();
-                                                     setLabelsDate();
+//                                                     setLabelsDate();
 
-                                                     infoBox("The file successfully saved to:\n Top_Receivers_" + (new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(dateFrom)) + "_" + (new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss").format(dateTo)) + ".JSON", "Save result" );
+
+                                                     if (analyzer.topReceiversPairs.isEmpty()){
+                                                         infoBox("It's nothing to save! The Top Rating List is Empty!\n" , "Save error" );
+                                                     }                                                     else {
+                                                         jsonSaver.setFileName("Top_10_Receivers_", dateFrom, dateTo);
+                                                         jsonSaver.createJSONFile(analyzer);
+                                                         infoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result" );
+                                                     }
+
                                                  }
                                              }
         );
@@ -159,6 +162,8 @@ public class GuiForm implements IGuiForm {
                 dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
                 setLabelsDate();
                 setTryCatch();
+                checkDatePropriety();
+
             }
         });
 
@@ -169,6 +174,7 @@ public class GuiForm implements IGuiForm {
                 dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
                 setLabelsDate();
                 setTryCatch();
+                checkDatePropriety();
             }
         });
     }
@@ -235,9 +241,6 @@ public class GuiForm implements IGuiForm {
         chartPie.setBackgroundPaint(Color.white);
         chartPie.getTitle().setPaint(Color.blue);
         PiePlot3D p = (PiePlot3D) chartPie.getPlot();
-
-
-
     }
 
     private void setDataSetBar() {
@@ -261,7 +264,7 @@ public class GuiForm implements IGuiForm {
 
     private void setTryCatch() {
         try {
-            analyzer.reparseDataFlowStructureList(dateFrom, dateTo);
+            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
             analyzer.getTopReceivers();
 
         } catch (ParseException e) {
@@ -322,6 +325,18 @@ public class GuiForm implements IGuiForm {
     public static void infoBox(String infoMessage, String titleBar)
     {
         JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void checkDatePropriety(){
+        if (dateFrom.compareTo(dateTo) >= 0 ){
+            buttonShowBarChart.setEnabled(false);
+            buttonShowPieChart.setEnabled(false);
+            buttonToJSON.setEnabled(false);
+        } else {
+            buttonShowBarChart.setEnabled(true);
+            buttonShowPieChart.setEnabled(true);
+            buttonToJSON.setEnabled(true);
+        }
     }
 }
 

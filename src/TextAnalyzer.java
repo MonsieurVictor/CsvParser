@@ -74,8 +74,9 @@ public class TextAnalyzer implements ITextAnalyzer {
 
     public void doAnalyze() throws ParseException {
         parseDataFlowStructure(this.buffer);
-        this.dateFirst = getDateFirst();
-        this.dateLast = getDateLast();
+        setDateFirst();
+        setDateLast();
+
         countRangeInitialDates(dateFirst, dateLast);
         getTopReceivers();
         getTopTransmitters();
@@ -216,20 +217,20 @@ public class TextAnalyzer implements ITextAnalyzer {
         return topUsedApplicationsPairs;
     }
 
-    public void setDateFirst(Date dateFirst) {
+    public void setDateFirst() {
         this.dateFirst = dataFlowStructureList.get(0).dateObj;
     }
 
-    public void setDateLast(Date dateLast) {
+    public void setDateLast() {
         this.dateLast = dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
     }
 
     public Date getDateFirst() throws ParseException {
-        return dataFlowStructureList.get(0).dateObj;
+        return dateFirst;
     }
 
     public Date getDateLast() throws ParseException {
-        return dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
+        return dateLast;
     }
 
 
@@ -300,37 +301,7 @@ public class TextAnalyzer implements ITextAnalyzer {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
 
-        //        Date date = dateFirst;
-//        System.out.println();
-//        System.out.println("reference date: " + date);
-//
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(date);
-//        cal.add(Calendar.HOUR, 36);
-//        System.out.println("added one and half days to reference date: "+cal.getTime());
-//
-//        String newDateString = "2012-02-03 06:30:00.0";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSSSS");
-//        Date newDate = sdf.parse(newDateString);
-//        System.out.println("new date to compare with reference date : "+newDate);
-//
-//        Calendar newCal = Calendar.getInstance();
-//        newCal.setTime(newDate);
-//
-//
-//        if(cal.after(newCal)){
-//            System.out.println("date is greater than reference that.");
-//        }else if(cal.before(newCal)){
-//            System.out.println("date is lesser than reference that.");
-//        }else{
-//            System.out.println("date is equal to reference that.");
-//        }
-
         for (String[] csvRow: buffer){
-
-
-
-
 
             Date dateObj = sdf.parse(csvRow[0]) ;
             long bytesIn = Long.parseLong(csvRow[1]);
@@ -341,6 +312,7 @@ public class TextAnalyzer implements ITextAnalyzer {
             String destinationAddress = csvRow[6] ;
             String protocolNumber  = csvRow[7];
             String sourceAddress  = csvRow[8];
+
             this.dataFlowStructureList.add(new DataFlowStructure(
                     dateObj,
                     bytesIn,
@@ -352,11 +324,11 @@ public class TextAnalyzer implements ITextAnalyzer {
                     protocolNumber,
                     sourceAddress));
         }
-
         return dataFlowStructureList;
     }
 
-    public void reparseDataFlowStructureList(Date dateFrom, Date dateTo) throws ParseException {
+    public void reparseDataFlowStructureListWithDateRange(Date dateFrom, Date dateTo) throws ParseException {
+
         this.dataFlowStructureList.clear();
         parseDataFlowStructure(this.buffer);
 
@@ -368,12 +340,9 @@ public class TextAnalyzer implements ITextAnalyzer {
 
         for (int i = 0; i < dataFlowStructureList.size(); i++) {
 
-
             Date testDate = dataFlowStructureList.get(i).dateObj;
             Calendar calDateFromCsv = Calendar.getInstance();
             calDateFromCsv.setTime(testDate);
-
-
 
             if(calDateFrom.after(calDateFromCsv)){
                 dataFlowStructureList.remove(i);

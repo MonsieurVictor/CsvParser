@@ -10,10 +10,6 @@
 
  You can use any open source libraries to accomplish this task
 
- DEADLINE:
- 2 Days from the date of the email sent.
- Any results sent after 2 days will be discarded unless prior arrangement.
-
  Please confirm receipt of the email.*/
 
 import java.io.IOException;
@@ -27,6 +23,7 @@ public class Main {
     private IErrorLogger logger;
     private IGuiForm form;
     private IJSONSaver jsonSaver;
+    private IGUILauncher guiLauncher;
 
     public Main (
                  IAppOptions options,
@@ -34,7 +31,8 @@ public class Main {
                  ITextAnalyzer analyzer,
                  IErrorLogger logger,
                  IGuiForm form,
-                 IJSONSaver jsonSaver
+                 IJSONSaver jsonSaver,
+                 IGUILauncher guiLauncher
               ) {
 
         this.options = options;
@@ -45,6 +43,7 @@ public class Main {
         this.logger = logger;
         this.form = form;
         this.jsonSaver = jsonSaver;
+        this.guiLauncher = guiLauncher;
     }
 
     public void execute() {
@@ -52,6 +51,7 @@ public class Main {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze();
+            guiLauncher.drawLauncher();
             form.startDraw(analyzer);
 //            viewer.report(analyzer);
 
@@ -71,9 +71,10 @@ public class Main {
         ITextAnalyzer analyzer = new TextAnalyzer();
         IGuiForm form = new GuiForm();
         IJSONSaver jsonSaver = new JSONSaver();
+        IGUILauncher guiLauncher = new GUILauncher();
 
 //        IResultViewer viewer = new ConsoleResultViewer();
-        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
+        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver, guiLauncher); //почему нельзя просто создать объект с пустыми аргументами?
         app.execute();
     }
 }

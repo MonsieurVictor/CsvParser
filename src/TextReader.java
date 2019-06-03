@@ -23,7 +23,6 @@ public class TextReader implements ITextReader {
 
         while (reader.ready()) {
             initialString = reader.readLine().split(",");
-//            System.out.println(Arrays.toString(initialString));
             initialList.add(initialString);
         }
     }

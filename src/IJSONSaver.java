@@ -1,3 +1,7 @@
+import java.util.Date;
+
 public interface IJSONSaver {
-//    void saveToJSON(Date dateFrom, Date dateTo, )
+    void createJSONFile(ITextAnalyzer analyzer);
+    void setFileName (String topCategoryName, Date dateFrom, Date dateTo);
+    String getFileName();
 }
