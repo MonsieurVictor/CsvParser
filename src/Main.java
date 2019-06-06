@@ -21,18 +21,16 @@ public class Main {
     private IAppOptions options;
     private IResultViewer viewer;
     private IErrorLogger logger;
-    private IGuiForm form;
+    private IGuiForm guiForm;
     private IJSONSaver jsonSaver;
-    private IGUILauncher guiLauncher;
 
     public Main (
                  IAppOptions options,
                  ITextReader reader,
                  ITextAnalyzer analyzer,
                  IErrorLogger logger,
-                 IGuiForm form,
-                 IJSONSaver jsonSaver,
-                 IGUILauncher guiLauncher
+                 IGuiForm guiTop10Receivers,
+                 IJSONSaver jsonSaver
               ) {
 
         this.options = options;
@@ -41,9 +39,8 @@ public class Main {
         this.jsonSaver = jsonSaver;
         this.viewer = viewer;
         this.logger = logger;
-        this.form = form;
+        this.guiForm = guiTop10Receivers;
         this.jsonSaver = jsonSaver;
-        this.guiLauncher = guiLauncher;
     }
 
     public void execute() {
@@ -51,8 +48,8 @@ public class Main {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze();
-            guiLauncher.drawLauncher();
-            form.startDraw(analyzer);
+//            guiLauncher.drawLauncher(analyzer, guiForm);
+            guiForm.startDraw(analyzer);
 //            viewer.report(analyzer);
 
         } catch (IOException e) {
@@ -71,10 +68,9 @@ public class Main {
         ITextAnalyzer analyzer = new TextAnalyzer();
         IGuiForm form = new GuiForm();
         IJSONSaver jsonSaver = new JSONSaver();
-        IGUILauncher guiLauncher = new GUILauncher();
 
 //        IResultViewer viewer = new ConsoleResultViewer();
-        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver, guiLauncher); //почему нельзя просто создать объект с пустыми аргументами?
+        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
         app.execute();
     }
 }

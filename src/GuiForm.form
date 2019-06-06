@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GuiForm">
-  <grid id="27dc6" binding="rootPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="rootPanelChart" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="290" y="237" width="933" height="560"/>
     </constraints>
@@ -51,6 +51,17 @@
               <horizontalTextPosition value="2"/>
               <opaque value="true"/>
               <text value="Date from:"/>
+            </properties>
+          </component>
+          <component id="e0d44" class="javax.swing.JButton" binding="buttonBack" default-binding="true">
+            <constraints/>
+            <properties>
+              <background color="-1"/>
+              <hideActionText value="true"/>
+              <horizontalTextPosition value="0"/>
+              <icon value="icons/back3.png"/>
+              <text value=""/>
+              <toolTipText value="Back"/>
             </properties>
           </component>
           <component id="61b94" class="javax.swing.JButton" binding="buttonShowBarChart">

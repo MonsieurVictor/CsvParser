@@ -132,6 +132,7 @@ public class TextAnalyzer implements ITextAnalyzer {
 
 
     public List <TopRatedPair> getTopTransmitters(){
+        topTransmittersPairs.clear();
 
         Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
 
@@ -243,7 +244,6 @@ public class TextAnalyzer implements ITextAnalyzer {
             int rangeBetweenSlices = diffSec / 5;
             cal.add(Calendar.SECOND, rangeBetweenSlices*i );
             dateArray[i]= cal.getTime();
-
         }
         dateArray[5] = this.dateLast;
     }
@@ -353,13 +353,6 @@ public class TextAnalyzer implements ITextAnalyzer {
             }
             else{
             }
-
         }
-
     }
-
-
-
-
-
 }
