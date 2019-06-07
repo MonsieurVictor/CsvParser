@@ -44,98 +44,17 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/GuiForm.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="370">
-                  <caret line="440" column="31" lean-forward="true" selection-start-line="440" selection-start-column="31" selection-end-line="440" selection-end-column="31" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="e#9646#9647#0" expanded="true" />
-                    <element signature="e#9716#9717#0" expanded="true" />
-                    <element signature="e#9755#9756#0" expanded="true" />
-                    <element signature="e#9826#9827#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/awt/Container.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="585">
-                  <caret line="415" column="21" selection-start-line="415" selection-start-column="21" selection-end-line="415" selection-end-column="21" />
-                  <folding>
-                    <element signature="e#37566#37567#0" expanded="true" />
-                    <element signature="e#37612#37613#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/GuiForm.form">
-              <provider selected="true" editor-type-id="ui-designer" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/TextAnalyzer.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3009">
-                  <caret line="179" column="48" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="48" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/ITextAnalyzer.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="323">
-                  <caret line="19" column="57" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="57" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Main.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="901">
-                  <caret line="65" column="46" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
-                  <folding>
-                    <element signature="n#!!doc" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/GuiForm.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-494">
-                  <caret line="125" lean-forward="true" selection-start-line="125" selection-end-line="125" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="6" lean-forward="true" selection-start-column="6" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -147,7 +66,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>range</find>
       <find>analyzer</find>
       <find>reparse</find>
       <find>receivers</find>
@@ -163,7 +81,6 @@
       <find>&lt;</find>
       <find>receiver</find>
       <find>Top 10 Rated Transmitters</find>
-      <find>topTransmittersPairs</find>
       <find>redraw</find>
       <find>layou</find>
       <find>setLayout</find>
@@ -177,6 +94,8 @@
       <find>json</find>
       <find>back</find>
       <find>topratedpa</find>
+      <find>topTransmittersPairs</find>
+      <find>dataFlowStructureList</find>
     </findStrings>
     <replaceStrings>
       <replace>Rx</replace>
@@ -212,6 +131,7 @@
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/ITextAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/GuiForm.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -240,6 +160,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -247,21 +168,10 @@
               <item name="CsvParser" type="b2602c69:ProjectViewProjectNode" />
               <item name="CsvParser" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="CsvParser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CsvParser" type="462c0819:PsiDirectoryNode" />
-              <item name="files" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CsvParser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CsvParser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -273,7 +183,7 @@
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH" value="225" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW" value="true" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="424" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="458" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/icons" />
@@ -359,17 +269,18 @@
       <workItem from="1559659824473" duration="8092000" />
       <workItem from="1559810863554" duration="2918000" />
       <workItem from="1559828080343" duration="13357000" />
+      <workItem from="1559910476997" duration="547000" />
+      <workItem from="1559911099062" duration="1094000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="213084000" />
+    <option name="totallyTimeSpent" value="214725000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="1932" height="1057" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.13141026" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11057692" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -469,14 +380,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.base/java/util/ArrayList.java" />
-    <entry file="jar://$PROJECT_DIR$/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar!/org/jfree/chart/plot/PlotOrientation.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.desktop/javax/swing/AbstractButton.java" />
     <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.desktop/java/awt/BorderLayout.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/Calendar.java" />
@@ -564,16 +467,8 @@
     <entry file="file://$PROJECT_DIR$/Top_10_Receivers_2018-07-19-08-46-08_2018-07-19-03-18-22.json" />
     <entry file="file://$PROJECT_DIR$/Top_10_Receivers_2018-07-18-10-41-25_2018-07-19-12-02-15.json" />
     <entry file="file://$PROJECT_DIR$/Top_10_Receivers_2018-07-14-08-54-04_2018-07-15-08-04-09.json" />
-    <entry file="file://$PROJECT_DIR$/files/Top_10_Receivers_2018-07-13-05-23-22_2018-07-25-01-46-58.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/files/Top_10_Receivers_2018-07-15-02-36-24_2018-07-16-08-50-32.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="91" selection-start-column="91" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/files/Top_10_Receivers_2018-07-13-05-23-22_2018-07-25-01-46-58.json" />
+    <entry file="file://$PROJECT_DIR$/files/Top_10_Receivers_2018-07-15-02-36-24_2018-07-16-08-50-32.json" />
     <entry file="file://$PROJECT_DIR$/src/IJSONSaver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -625,16 +520,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GuiLauncher.java" />
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
-          <caret line="65" column="46" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/awt/event/ActionListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -642,25 +527,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ITextAnalyzer.java">
+    <entry file="file://$PROJECT_DIR$/files/Top_10_Transmitters_2018-07-13-05-23-22_2018-07-25-01-46-58.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/files/Top_10_Rx_2018-07-18-11-46-47_2018-07-21-01-21-19.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="57" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state>
+          <caret column="31" selection-start-column="31" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/files/Top_10_Rx_2018-07-18-11-46-47_2018-07-21-01-21-19.json">
+    <entry file="file://$PROJECT_DIR$/files/Top_10_Rx_2018-07-13-05-23-22_2018-07-25-01-46-58.json">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GuiForm.form">
-      <provider selected="true" editor-type-id="ui-designer" />
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/awt/Container.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
+        <state relative-caret-position="627">
           <caret line="415" column="21" selection-start-line="415" selection-start-column="21" selection-end-line="415" selection-end-column="21" />
           <folding>
             <element signature="e#37566#37567#0" expanded="true" />
@@ -669,27 +551,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/TextAnalyzer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3009">
-          <caret line="179" column="48" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="48" />
+        <state relative-caret-position="67">
+          <caret line="133" column="31" selection-start-line="133" selection-start-column="31" selection-end-line="133" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GuiForm.java">
+    <entry file="file://$PROJECT_DIR$/src/ITextAnalyzer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="440" column="31" lean-forward="true" selection-start-line="440" selection-start-column="31" selection-end-line="440" selection-end-column="31" />
+        <state relative-caret-position="408">
+          <caret line="24" column="47" selection-start-line="24" selection-start-column="47" selection-end-line="24" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9646#9647#0" expanded="true" />
-            <element signature="e#9716#9717#0" expanded="true" />
-            <element signature="e#9755#9756#0" expanded="true" />
-            <element signature="e#9826#9827#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="65" column="46" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GuiForm.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GuiForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1111">
+          <caret line="421" lean-forward="true" selection-start-line="421" selection-end-line="421" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" lean-forward="true" selection-start-column="6" selection-end-column="6" />
         </state>
       </provider>
     </entry>
