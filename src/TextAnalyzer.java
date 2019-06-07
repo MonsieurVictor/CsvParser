@@ -6,8 +6,6 @@ import java.util.List;
 
 
 public class TextAnalyzer implements ITextAnalyzer {
-
-
     private Date dateFirst;
     private Date dateLast;
     private Date dateFrom;
@@ -16,9 +14,13 @@ public class TextAnalyzer implements ITextAnalyzer {
     private Date [] dateArray = new Date [6];
     private List buffer;
 
+    List <TextAnalyzer.DataFlowStructure> dataFlowStructureList = new ArrayList<>();
+    List <TextAnalyzer.TopRatedPair> topReceiversPairs = new ArrayList<>();
+    List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
+    List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
+    List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
 
     public class DataFlowStructure {
-
         Date dateObj;
         long bytesIn;
         long bytesOut;
@@ -28,8 +30,6 @@ public class TextAnalyzer implements ITextAnalyzer {
         String destinationAddress;
         String protocolNumber;
         String sourceAddress;
-
-
 
         DataFlowStructure(
                 Date dateObj,
@@ -41,7 +41,6 @@ public class TextAnalyzer implements ITextAnalyzer {
                 String destinationAddress,
                 String protocolNumber,
                 String sourceAddress) {
-
             this.dateObj = dateObj;
             this.bytesIn = bytesIn;
             this.bytesOut = bytesOut;
@@ -54,19 +53,14 @@ public class TextAnalyzer implements ITextAnalyzer {
         }
     }
 
-
     public class TopRatedPair {
-
         String key;
         int value;
-
         TopRatedPair(String key, Integer value) {
             this.key = key;
             this.value = value;
         }
     }
-
-
 
     public void setBuffer(List buffer) {
         this.buffer = buffer;
@@ -76,30 +70,23 @@ public class TextAnalyzer implements ITextAnalyzer {
         parseDataFlowStructure(this.buffer);
         setDateFirst();
         setDateLast();
-
         countRangeInitialDates(dateFirst, dateLast);
         getTopReceivers();
         getTopTransmitters();
         getTopProtocols();
         getTopUsedApplications();
 //        setDateArrayForSliderLabels();
-
-
 //        getTopProtocols();
 //        getTopUsedApplications();
-
-
     }
 
 //    private Integer countMethod(String methodString, int numberBefore, int newNumber ) {
 //        if (String methodString == "Summ"){
-//
 //        }
 //    }
 
     public List <TopRatedPair> getTopReceivers(){
         topReceiversPairs.clear();
-
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
         for (DataFlowStructure currentDataFlowRow : dataFlowStructureList) {
@@ -112,28 +99,19 @@ public class TextAnalyzer implements ITextAnalyzer {
                 }
             }
         }
-
         for (String key : top10ReceiversMap.keySet()) {
             topReceiversPairs.add(new TopRatedPair(key, top10ReceiversMap.get(key)));
         }
-
         Collections.sort(topReceiversPairs, (o1, o2) -> o2.value - o1.value);
-
         System.out.println(  " \n Top 10 Rated Receivers:");
-
         for (int i = 0; (i < 10) && (i < topReceiversPairs.size()); i++) {
             System.out.println(topReceiversPairs.get(i).key + "  " + topReceiversPairs.get(i).value);
         }
-
         return topReceiversPairs;
     }
 
-
-
-
     public List <TopRatedPair> getTopTransmitters(){
         topTransmittersPairs.clear();
-
         Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
 
         for (DataFlowStructure currentTransmitter : dataFlowStructureList) {
@@ -146,23 +124,18 @@ public class TextAnalyzer implements ITextAnalyzer {
                 }
             }
         }
-
         for (String key : top10TransmittersMap.keySet()) {
             topTransmittersPairs.add(new TopRatedPair(key, top10TransmittersMap.get(key)));
         }
-
         Collections.sort(topTransmittersPairs, (o1, o2) -> o2.value - o1.value);
-
         System.out.println(  " \n Top 10 Rated Transmitters:");
         for (int i = 0; (i < 10) && (i < topTransmittersPairs.size()); i++) {
             System.out.println(topTransmittersPairs.get(i).key + "  " +  topTransmittersPairs.get(i).value);
         }
-
         return topTransmittersPairs;
     }
 
-    public List <TopRatedPair> getTopProtocols(){
-
+    private List <TopRatedPair> getTopProtocols(){
         Map<String, Integer> topProtocolsMap = new HashMap<String, Integer>();
 
         for (DataFlowStructure currentProtocol : dataFlowStructureList) {
@@ -175,23 +148,18 @@ public class TextAnalyzer implements ITextAnalyzer {
                 }
             }
         }
-
         for (String key : topProtocolsMap.keySet()) {
             topProtocolsPairs.add(new TopRatedPair(key, topProtocolsMap.get(key)));
         }
-
         Collections.sort(topProtocolsPairs, (o1, o2) -> o2.value - o1.value);
-
         System.out.println(  " \n Top 3 Used Protocols:");
         for (int i = 0; (i < 3) && (i < topProtocolsPairs.size()); i++) {
             System.out.println(topProtocolsPairs.get(i).key + "  " +  topProtocolsPairs.get(i).value);
         }
-
         return topProtocolsPairs;
     }
 
-    public List <TopRatedPair> getTopUsedApplications(){
-
+    private List <TopRatedPair> getTopUsedApplications(){
         Map<String, Integer> topUsedApplicationsMap = new HashMap<String, Integer>();
 
         for (DataFlowStructure currentApplication : dataFlowStructureList) {
@@ -204,13 +172,10 @@ public class TextAnalyzer implements ITextAnalyzer {
                 }
             }
         }
-
         for (String key : topUsedApplicationsMap.keySet()) {
             topUsedApplicationsPairs.add(new TopRatedPair(key, topUsedApplicationsMap.get(key)));
         }
-
         Collections.sort(topUsedApplicationsPairs, (o1, o2) -> o2.value - o1.value);
-
         System.out.println(  " \n Top 10 Used Applications:");
         for (int i = 0; (i < 10) && (i < topUsedApplicationsPairs.size()); i++) {
             System.out.println(topUsedApplicationsPairs.get(i).key + "  " +  topUsedApplicationsPairs.get(i).value);
@@ -218,11 +183,11 @@ public class TextAnalyzer implements ITextAnalyzer {
         return topUsedApplicationsPairs;
     }
 
-    public void setDateFirst() {
+    private void setDateFirst() {
         this.dateFirst = dataFlowStructureList.get(0).dateObj;
     }
 
-    public void setDateLast() {
+    private void setDateLast() {
         this.dateLast = dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
     }
 
@@ -234,12 +199,9 @@ public class TextAnalyzer implements ITextAnalyzer {
         return dateLast;
     }
 
-
     public void setDateArrayForSliderLabels() {
-
         Calendar cal = Calendar.getInstance();
         for (int i = 0; i <= 4; i++) {
-
             cal.setTime(dateFirst);
             int rangeBetweenSlices = diffSec / 5;
             cal.add(Calendar.SECOND, rangeBetweenSlices*i );
@@ -252,13 +214,11 @@ public class TextAnalyzer implements ITextAnalyzer {
         return this.dateArray;
     }
 
-    public void countRangeInitialDates(Date firstDate, Date lastDate){
-
+    private void countRangeInitialDates(Date firstDate, Date lastDate){
         try {
             System.out.println("\ndifference between:");
             System.out.println(firstDate);
             System.out.println(lastDate + "\n");
-
             DecimalFormat decimalFormatter = new DecimalFormat("###,###");
 
             // getTime() returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object
@@ -278,31 +238,24 @@ public class TextAnalyzer implements ITextAnalyzer {
 
             System.out.println("difference between milliseconds: " + decimalFormatter.format(diff));
 
-
             System.out.println("\nMM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(firstDate));
             System.out.println("MM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(lastDate));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Date getDateOfSlider (int sliderValue){
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateFirst);
         cal.add(Calendar.SECOND, diffSec*sliderValue/1000 );
         return cal.getTime();
     }
 
-
-
-    public List parseDataFlowStructure(List <String[]> buffer) throws ParseException {
-
+    private List parseDataFlowStructure(List <String[]> buffer) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
 
         for (String[] csvRow: buffer){
-
             Date dateObj = sdf.parse(csvRow[0]) ;
             long bytesIn = Long.parseLong(csvRow[1]);
             long bytesOut = Long.parseLong(csvRow[2]);
@@ -312,7 +265,6 @@ public class TextAnalyzer implements ITextAnalyzer {
             String destinationAddress = csvRow[6] ;
             String protocolNumber  = csvRow[7];
             String sourceAddress  = csvRow[8];
-
             this.dataFlowStructureList.add(new DataFlowStructure(
                     dateObj,
                     bytesIn,
@@ -328,30 +280,23 @@ public class TextAnalyzer implements ITextAnalyzer {
     }
 
     public void reparseDataFlowStructureListWithDateRange(Date dateFrom, Date dateTo) throws ParseException {
-
         this.dataFlowStructureList.clear();
         parseDataFlowStructure(this.buffer);
-
         Calendar calDateFrom = Calendar.getInstance();
         calDateFrom.setTime(dateFrom);
-
         Calendar calDateTo = Calendar.getInstance();
         calDateTo.setTime(dateTo);
 
         for (int i = 0; i < dataFlowStructureList.size(); i++) {
-
             Date testDate = dataFlowStructureList.get(i).dateObj;
             Calendar calDateFromCsv = Calendar.getInstance();
             calDateFromCsv.setTime(testDate);
-
             if(calDateFrom.after(calDateFromCsv)){
                 dataFlowStructureList.remove(i);
                 i--;
             }else if (calDateTo.before(calDateFromCsv)) {
                 dataFlowStructureList.remove(i);
                 i--;
-            }
-            else{
             }
         }
     }

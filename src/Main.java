@@ -7,15 +7,12 @@
  Output can be any structure containing the results of the computation.
  Serialize computation results to a JSON string and save to a file.
  Using computation results make a GUI window with a chart for received and transmitted bytes over time for top network transmitter and receiver. You can use any graph or chart libraries that you wish.
-
  You can use any open source libraries to accomplish this task
-
  Please confirm receipt of the email.*/
 
 import java.io.IOException;
 
 public class Main {
-
     private ITextReader reader;
     private ITextAnalyzer analyzer;
     private IAppOptions options;
@@ -24,7 +21,7 @@ public class Main {
     private IGuiForm guiForm;
     private IJSONSaver jsonSaver;
 
-    public Main (
+    private Main (
                  IAppOptions options,
                  ITextReader reader,
                  ITextAnalyzer analyzer,
@@ -32,7 +29,6 @@ public class Main {
                  IGuiForm guiTop10Receivers,
                  IJSONSaver jsonSaver
               ) {
-
         this.options = options;
         this.reader = reader;
         this.analyzer = analyzer;
@@ -43,15 +39,13 @@ public class Main {
         this.jsonSaver = jsonSaver;
     }
 
-    public void execute() {
+    private void start() {
         try {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze();
-//            guiLauncher.drawLauncher(analyzer, guiForm);
             guiForm.startDraw(analyzer);
 //            viewer.report(analyzer);
-
         } catch (IOException e) {
             logger.errorOpen(e);
 //             nice report on can't open the file
@@ -68,9 +62,8 @@ public class Main {
         ITextAnalyzer analyzer = new TextAnalyzer();
         IGuiForm form = new GuiForm();
         IJSONSaver jsonSaver = new JSONSaver();
-
 //        IResultViewer viewer = new ConsoleResultViewer();
         Main app = new Main(options, reader, analyzer, logger, form, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
-        app.execute();
+        app.start();
     }
 }
