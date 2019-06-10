@@ -27,7 +27,7 @@ public class AppOptions implements IAppOptions {
                 System.out.println("File " + listOfFiles[i].getName());
                 }
             }
-            this.filePath = "files/" + listOfFiles[0].getName();
+            this.filePath = "files" + File.separatorChar + listOfFiles[0].getName();
 
         System.out.println("\nThe file " + this.filePath + " was selected\n");
         return this;

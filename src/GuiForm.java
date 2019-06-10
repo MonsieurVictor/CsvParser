@@ -2,8 +2,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -42,11 +40,6 @@ public class GuiForm implements IGuiForm {
     private Date dateLast;
     private Date dateFrom;
     private Date dateTo;
-
-    private JFreeChart chartBarTopRx;
-    private JFreeChart chartPieTopRx;
-    private JFreeChart chartBarTopTx;
-    private JFreeChart chartPieTopTx;
 
     private JSlider sliderFrom;
     private JSlider sliderTo;
@@ -104,6 +97,14 @@ public class GuiForm implements IGuiForm {
             setJframeMainMenu("Top 10 Transmitters");
             drawMenuTx();
         });
+        buttonTopProtocols.addActionListener(e -> {
+            setJframeMainMenu("Top 10 Protocols");
+//            drawMenuProtocols();
+        });
+        buttonTopApps.addActionListener(e -> {
+            setJframeMainMenu("Top 10 Protocols");
+//            drawMenuApps();
+        });
         buttonBack.addActionListener(e -> {
             buttonShowBarChart.removeActionListener(listenerShowBarChart);
             buttonShowPieChart.removeActionListener(listenerShowPieChart);
@@ -122,47 +123,55 @@ public class GuiForm implements IGuiForm {
 
     private void drawMenuRx() {
         listenerShowBarChart = evt -> {
-            panelChartBarTopRx = new ChartPanel(setDatasetBarTopRx());
-            panelChartBarTopRx.setLayout(new GridLayout());
-            frameBarTopRx = new ChartFrame("Top 10 Rx", null);
-            frameBarTopRx.setLayout(new GridLayout());
-            frameBarTopRx.setBounds(0, 205, 900, 300);
-            frameBarTopRx.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
-            frameBarTopRx.setVisible(true);
-            frameBarTopRx.add(panelChartBarTopRx);
+            frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
         };
         buttonShowBarChart.addActionListener(listenerShowBarChart);
         listenerShowPieChart = evt -> {
-            panelChartPieTopRx = new ChartPanel(setDatasetPieTopRx());
-            panelChartPieTopRx.setLayout(new GridLayout());
-            try {
-                framePieTopRx.setVisible(false);
-            } catch (Exception e) {
-                System.out.println("framePieTopRx is not set: " + e);
-            }
-            framePieTopRx = new ChartFrame("Top 10 Rx", null);
-            framePieTopRx.setLayout(new GridLayout());
-            framePieTopRx.setBounds(0, 510, 900, 500);
-            framePieTopRx.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
-            framePieTopRx.add(panelChartPieTopRx);
-            framePieTopRx.setVisible(true);
+            framePieTopRx = createChartFrame(createJFreeChartPieTopRx(), "Top 10 Rx", 0, 510, 900, 300 );
         };
         buttonShowPieChart.addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
             updateChartsTopRx();
-            if (analyzer.getTopReceivers().isEmpty()) {
-                infoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
+            if (analyzer.getTopReceiversPairs().isEmpty()) {
+                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
             } else {
                 jsonSaver.setFileName("Top_10_Rx_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(analyzer);
-                infoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
+                jsonSaver.createJSONFile(analyzer.getTopReceiversPairs());
+                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
         buttonToJSON.addActionListener(listenerToJSON);
         listenerSliderFrom = changeListenerFactoryRx();
         sliderFrom.addChangeListener(listenerSliderFrom);
         listenerSliderTo = changeListenerFactoryRx();
-        sliderTo.addChangeListener(listenerSliderTo);    }
+        sliderTo.addChangeListener(listenerSliderTo);
+    }
+
+    private void drawMenuTx(){
+        listenerShowBarChart = evt -> {
+            frameBarTopTx = createChartFrame(createChartBarTopTx(), "Top 10 Tx", 910, 205, 900, 300);
+        };
+        buttonShowBarChart.addActionListener(listenerShowBarChart);
+        listenerShowPieChart = evt -> {
+            framePieTopTx = createChartFrame(createJFreeChartPieTopTx(), "Top 10 Tx", 910, 510, 900, 300 );
+        };
+        buttonShowPieChart.addActionListener(listenerShowPieChart);
+        listenerToJSON = evt -> {
+            updateChartsTopTx();
+            if (analyzer.getTopTransmittersPairs().isEmpty()) {
+                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
+            } else {
+                jsonSaver.setFileName("Top_10_Transmitters_", dateFrom, dateTo);
+                jsonSaver.createJSONFile(analyzer.getTopTransmittersPairs());
+                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
+            }
+        };
+        buttonToJSON.addActionListener (listenerToJSON) ;
+        listenerSliderFrom = changeListenerFactoryTx();
+        sliderFrom.addChangeListener(listenerSliderFrom);
+        listenerSliderTo = changeListenerFactoryTx();
+        sliderTo.addChangeListener(listenerSliderTo);
+    }
 
     private ChangeListener changeListenerFactoryRx(){
         return evt -> {
@@ -184,62 +193,29 @@ public class GuiForm implements IGuiForm {
         };
     }
 
-    private void drawMenuTx(){
-        listenerShowBarChart = evt -> {
-            panelChartBarTopTx = new ChartPanel(setDatasetBarTopTx());
-            panelChartBarTopTx.setLayout(new GridLayout());
-            frameBarTopTx = new ChartFrame("Top 10 Tx", null);
-            frameBarTopTx.setLayout(new GridLayout());
-            frameBarTopTx.setBounds(910, 205, 900, 300);
-            frameBarTopTx.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
-            frameBarTopTx.setVisible(true);
-            frameBarTopTx.add(panelChartBarTopTx);
-        };
-        buttonShowBarChart.addActionListener(listenerShowBarChart);
-        listenerShowPieChart = evt -> {
-            panelChartPieTopTx = new ChartPanel(setDatasetPieTopTx());
-            panelChartPieTopTx.setLayout(new GridLayout());
-            try {
-                framePieTopTx.setVisible(false);
-            } catch (Exception e) {
-                System.out.println("framePieTopTx is not set: " + e);
-            }
-            framePieTopTx = new ChartFrame("Top 10 Transmitters", null);
-            framePieTopTx.setLayout(new GridLayout());
-            framePieTopTx.setBounds(910, 510, 900, 500);
-            framePieTopTx.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
-            framePieTopTx.add(panelChartPieTopTx);
-            framePieTopTx.setVisible(true);
-        };
-        buttonShowPieChart.addActionListener(listenerShowPieChart);
-        listenerToJSON = evt -> {
-            updateChartsTopTx();
-            if (analyzer.getTopTransmitters().isEmpty()) {
-                infoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
-            } else {
-                jsonSaver.setFileName("Top_10_Transmitters_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(analyzer);
-                infoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
-            }
-        };
-        buttonToJSON.addActionListener (listenerToJSON) ;
-        listenerSliderFrom = changeListenerFactoryTx();
-        sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = changeListenerFactoryTx();
-        sliderTo.addChangeListener(listenerSliderTo);
+    private ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
+        ChartPanel chartBarPanel = new ChartPanel(chartBar);
+        chartBarPanel.setLayout(new GridLayout());
+        ChartFrame chartFrame = new ChartFrame(categoryName, null);
+        chartFrame.setLayout(new GridLayout());
+        chartFrame.setBounds(locationX, locationY, sizeX, sizeY);
+        chartFrame.setDefaultCloseOperation(ChartFrame.HIDE_ON_CLOSE);
+        chartFrame.add(chartBarPanel);
+        chartFrame.setVisible(true);
+        return chartFrame;
     }
 
     private void setSliderFrom () {
-        panelCenter.add(sliderFrom = sliderFactory(0));
-    }
+            panelCenter.add(sliderFrom = createSlider(0));
+        }
 
     private void setSliderTo () {
-        panelSlider.add(sliderTo = sliderFactory(1000));
+        panelSlider.add(sliderTo = createSlider(1000));
     }
 
-    private JSlider sliderFactory(int initialValue) {
+    private JSlider createSlider(int initialValue) {
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 1000, initialValue);
-        Hashtable<Integer, Component> labelTable = new Hashtable();
+        Hashtable labelTable = new Hashtable();
         int i = -200;
         for (Date date : dateArrayForSliderLabels) {
             labelTable.put(i += 200, new JLabel(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date)));
@@ -259,73 +235,62 @@ public class GuiForm implements IGuiForm {
         jFrame.setBounds(0, 0, 900, 200);
     }
 
-    private JFreeChart setDatasetBarTopRx() {
-        return chartBarFactory("Top 10 Received Packets", analyzer.getTopReceivers());
+    private JFreeChart createChartBarTopRx() {
+        return createJFreeChartBar("Top 10 Received Packets", analyzer.getTopReceiversPairs());
     }
 
-    private JFreeChart setDatasetBarTopTx() {
-        return chartBarFactory("Top 10 Transmitted Packets", analyzer.getTopTransmitters());
+    private JFreeChart createChartBarTopTx() {
+        return createJFreeChartBar("Top 10 Transmitted Packets", analyzer.getTopTransmittersPairs());
     }
 
-    private JFreeChart setDatasetPieTopRx() {
-        return chartPieFactory("Top 10 Received Packets", analyzer.getTopReceivers());
+    private JFreeChart createJFreeChartPieTopRx() {
+        return createJFreeChartPie("Top 10 Received Packets", analyzer.getTopReceiversPairs());
     }
 
-    private JFreeChart setDatasetPieTopTx() {
-        return chartPieFactory("Top 10 Transmitted Packets", analyzer.getTopTransmitters());
+    private JFreeChart createJFreeChartPieTopTx() {
+        return createJFreeChartPie("Top 10 Transmitted Packets", analyzer.getTopTransmittersPairs());
     }
 
-    private JFreeChart chartBarFactory (String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
+    private JFreeChart createJFreeChartBar(String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; (i < 10) && i < (pair.size()) ; i++) {
             dataset.setValue(pair.get(i).value, "", pair.get(i).key);
         }
         JFreeChart chartBar = ChartFactory.createBarChart3D(categoryName
-                        + " from: "
-                        + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateFrom)
-                        + " to: "
-                        + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateTo)
-                        , "", "Packets", dataset,
-                PlotOrientation.HORIZONTAL, false, true, false);
-        chartBar.setBackgroundPaint(Color.white);
-        chartBar.getTitle().setPaint(Color.blue);
-        CategoryPlot p = chartBar.getCategoryPlot();
-        p.setRangeGridlinePaint(Color.GREEN);
-        p.setDomainCrosshairPaint(Color.BLUE);
-        p.setRangeCrosshairPaint(Color.ORANGE);
-        p.setOutlinePaint(Color.BLUE);
+                        + getDateRangeString(), "",
+                "Packets", dataset,  PlotOrientation.HORIZONTAL,
+                false, true, false);
         return chartBar;
     }
 
-    private JFreeChart chartPieFactory (String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
+    private JFreeChart createJFreeChartPie(String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (int i = 0; (i < 10) && i < (pair.size()) ; i++) {
             dataset.setValue(pair.get(i).key, new Integer(pair.get(i).value));
         }
-        JFreeChart chartPie = ChartFactory.createPieChart3D(categoryName
-                + " from: "
+        JFreeChart chartPie = ChartFactory.createPieChart3D(categoryName + getDateRangeString(),
+                dataset, true, true, true);
+        return chartPie;
+    }
+
+    private String getDateRangeString() {
+        return (" from: "
                 + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateFrom)
                 + " to: "
-                + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateTo)
-                , dataset, true, true, true);
-        chartPie.setBackgroundPaint(Color.white);
-        chartPie.getTitle().setPaint(Color.blue);
-        PiePlot3D p = (PiePlot3D) chartPie.getPlot();
-        return chartPie;
+                + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateTo));
     }
 
     private void updateChartsTopRx() {
         try {
             analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-            analyzer.getTopReceivers();
+            analyzer.getTopReceiversPairs();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         try {
             if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
-                frameBarTopRx.remove(panelChartBarTopRx);
-                panelChartBarTopRx = new ChartPanel(setDatasetBarTopRx());
-                panelChartBarTopRx.setLayout(new GridLayout());
+                frameBarTopRx.getContentPane().removeAll();
+                panelChartBarTopRx = new ChartPanel(createChartBarTopRx());
                 frameBarTopRx.add(panelChartBarTopRx);
                 frameBarTopRx.setVisible(true);
             }
@@ -334,9 +299,8 @@ public class GuiForm implements IGuiForm {
         }
         try {
             if (framePieTopRx.isShowing()) {
-                framePieTopRx.remove(panelChartPieTopRx);
-                panelChartPieTopRx = new ChartPanel(setDatasetPieTopRx());
-                panelChartPieTopRx.setLayout(new BorderLayout());
+                framePieTopRx.getContentPane().removeAll();
+                panelChartPieTopRx = new ChartPanel(createJFreeChartPieTopRx());
                 framePieTopRx.add(panelChartPieTopRx, BorderLayout.CENTER);
                 framePieTopRx.setVisible(true);
             }
@@ -348,17 +312,14 @@ public class GuiForm implements IGuiForm {
     private void updateChartsTopTx() {
         try {
             analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-            analyzer.getTopTransmitters();
-
+            analyzer.getTopTransmittersPairs();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         try {
             if (frameBarTopTx.isShowing()) {
-
-                frameBarTopTx.remove(panelChartBarTopTx);
-                panelChartBarTopTx = new ChartPanel(setDatasetBarTopTx());
-                panelChartBarTopTx.setLayout(new GridLayout());
+                frameBarTopTx.getContentPane().removeAll();
+                panelChartBarTopTx = new ChartPanel(createChartBarTopTx());
                 frameBarTopTx.add(panelChartBarTopTx);
                 frameBarTopTx.setVisible(true);
             }
@@ -367,9 +328,9 @@ public class GuiForm implements IGuiForm {
         }
         try {
             if (framePieTopTx.isShowing()) {
-                framePieTopTx.remove(panelChartPieTopTx);
-                panelChartPieTopTx = new ChartPanel(setDatasetPieTopTx());
-                panelChartPieTopTx.setLayout(new BorderLayout());
+                framePieTopTx.getContentPane().removeAll();
+                panelChartPieTopTx = new ChartPanel(createJFreeChartPieTopTx());
+//                panelChartPieTopTx.setLayout(new BorderLayout());
                 framePieTopTx.add(panelChartPieTopTx, BorderLayout.CENTER);
                 framePieTopTx.setVisible(true);
             }
@@ -379,12 +340,11 @@ public class GuiForm implements IGuiForm {
     }
 
     private void setLabelsDate() {
-        labelFrom.setText(String.format("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom))));
+        labelFrom.setText("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom)));
         labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
-
     }
 
-    private static void infoBox(String infoMessage, String titleBar) {
+    private static void showInfoBox(String infoMessage, String titleBar) {
         JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 

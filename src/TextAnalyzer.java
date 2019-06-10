@@ -71,8 +71,8 @@ public class TextAnalyzer implements ITextAnalyzer {
         setDateFirst();
         setDateLast();
         countRangeInitialDates(dateFirst, dateLast);
-        getTopReceivers();
-        getTopTransmitters();
+        getTopReceiversPairs();
+        getTopTransmittersPairs();
         getTopProtocols();
         getTopUsedApplications();
 //        setDateArrayForSliderLabels();
@@ -85,7 +85,7 @@ public class TextAnalyzer implements ITextAnalyzer {
 //        }
 //    }
 
-    public List <TopRatedPair> getTopReceivers(){
+    public List <TopRatedPair> getTopReceiversPairs(){
         topReceiversPairs.clear();
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
@@ -110,7 +110,7 @@ public class TextAnalyzer implements ITextAnalyzer {
         return topReceiversPairs;
     }
 
-    public List <TopRatedPair> getTopTransmitters(){
+    public List <TopRatedPair> getTopTransmittersPairs(){
         topTransmittersPairs.clear();
         Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
 
@@ -220,24 +220,17 @@ public class TextAnalyzer implements ITextAnalyzer {
             System.out.println(firstDate);
             System.out.println(lastDate + "\n");
             DecimalFormat decimalFormatter = new DecimalFormat("###,###");
-
             // getTime() returns the number of milliseconds since January 1, 1970, 00:00:00 GMT represented by this Date object
             long diff = lastDate.getTime() - firstDate.getTime();
-
             int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
             System.out.println("difference between days: " + diffDays);
-
             int diffhours = (int) (diff / (60 * 60 * 1000));
             System.out.println("difference between hours: " + decimalFormatter.format(diffhours));
-
             int diffmin = (int) (diff / (60 * 1000));
             System.out.println("difference between minutes: " + decimalFormatter.format(diffmin));
-
             this.diffSec = (int) (diff / (1000));
             System.out.println("difference between seconds: " + decimalFormatter.format(diffSec));
-
             System.out.println("difference between milliseconds: " + decimalFormatter.format(diff));
-
             System.out.println("\nMM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(firstDate));
             System.out.println("MM/dd/yyyy formatted date : " + new SimpleDateFormat("MM/dd/yyyy hh:mm:ss").format(lastDate));
         } catch (Exception e) {

@@ -1,23 +1,23 @@
+import java.io.File;
 import java.io.IOException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class JSONSaver implements IJSONSaver  {
     private String jsonFileName;
-    private ITextAnalyzer analyzer = new TextAnalyzer();
 
-    public void createJSONFile(ITextAnalyzer analyzer){
-        this.analyzer = analyzer;
+    public void createJSONFile(List<TextAnalyzer.TopRatedPair> pairs){
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; (i < 10) && i < (analyzer.getTopReceivers().size()) ; i++) {
+        for (int i = 0; (i < 10) && i < (pairs.size()) ; i++) {
             JSONObject obj = new JSONObject();
-            obj.put(analyzer.getTopReceivers().get(i).key, analyzer.getTopReceivers().get(i).value);
+            obj.put(pairs.get(i).key, pairs.get(i).value);
             jsonArray.add(obj);
         }
-        try (FileWriter file = new FileWriter( "files/"+ getFileName())) {
+        try (FileWriter file = new FileWriter( "files" + File.separatorChar + getFileName())) {
             file.write(jsonArray.toJSONString());
             file.flush();
         } catch (IOException e) {
