@@ -1,5 +1,5 @@
 import java.text.ParseException;
 
 public interface IGuiForm {
-    void startDraw(ITextAnalyzer analyzer) throws ParseException;
+    void startDraw(TextAnalyzer analyzer, GuiForm guiForm) throws ParseException;
 }

@@ -13,29 +13,27 @@
 import java.io.IOException;
 
 public class Main {
-    private ITextReader reader;
-    private ITextAnalyzer analyzer;
-    private IAppOptions options;
-    private IResultViewer viewer;
-    private IErrorLogger logger;
-    private IGuiForm guiForm;
-    private IJSONSaver jsonSaver;
+    private TextReader reader;
+    private TextAnalyzer analyzer;
+    private AppOptions options;
+    private ErrorLogger logger;
+    private GuiForm guiForm;
+    private JSONSaver jsonSaver;
 
     private Main (
-                 IAppOptions options,
-                 ITextReader reader,
-                 ITextAnalyzer analyzer,
-                 IErrorLogger logger,
-                 IGuiForm guiTop10Receivers,
-                 IJSONSaver jsonSaver
+                 AppOptions options,
+                 TextReader reader,
+                 TextAnalyzer analyzer,
+                 ErrorLogger logger,
+                 GuiForm guiForm,
+                 JSONSaver jsonSaver
               ) {
         this.options = options;
         this.reader = reader;
         this.analyzer = analyzer;
         this.jsonSaver = jsonSaver;
-        this.viewer = viewer;
         this.logger = logger;
-        this.guiForm = guiTop10Receivers;
+        this.guiForm = guiForm;
         this.jsonSaver = jsonSaver;
     }
 
@@ -43,8 +41,8 @@ public class Main {
         try {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
-            analyzer.doAnalyze();
-            guiForm.startDraw(analyzer);
+            analyzer.doAnalyze(guiForm);
+            guiForm.startDraw(analyzer, guiForm);
 //            viewer.report(analyzer);
         } catch (IOException e) {
             logger.errorOpen(e);
@@ -56,14 +54,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        IAppOptions options = new AppOptions();
-        ITextReader reader = new TextReader();
-        IErrorLogger logger = new ErrorLogger();
-        ITextAnalyzer analyzer = new TextAnalyzer();
-        IGuiForm form = new GuiForm();
-        IJSONSaver jsonSaver = new JSONSaver();
-//        IResultViewer viewer = new ConsoleResultViewer();
-        Main app = new Main(options, reader, analyzer, logger, form, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
+        AppOptions options = new AppOptions();
+        TextReader reader = new TextReader();
+        ErrorLogger logger = new ErrorLogger();
+        TextAnalyzer analyzer = new TextAnalyzer();
+        GuiForm guiForm = new GuiForm();
+        JSONSaver jsonSaver = new JSONSaver();
+        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
         app.start();
     }
 }

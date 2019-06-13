@@ -11,11 +11,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.List;
 
-public class GuiForm implements IGuiForm {
+public class GuiForm implements IGuiForm, IObserver {
 
     private JFrame jFrame = new JFrame("Main menu");
 
@@ -59,8 +58,9 @@ public class GuiForm implements IGuiForm {
     private JLabel labelFrom2;
     private JLabel labelTo2;
 
-    private ITextAnalyzer analyzer = new TextAnalyzer();
-    private IJSONSaver jsonSaver = new JSONSaver();
+    private GuiForm guiForm;
+    private TextAnalyzer analyzer;
+    private JSONSaver jsonSaver = new JSONSaver();
 
     private ActionListener listenerShowBarChart;
     private ActionListener listenerShowPieChart;
@@ -68,8 +68,13 @@ public class GuiForm implements IGuiForm {
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
 
-    public void startDraw(ITextAnalyzer analyzer) throws ParseException {
+    List<IObserver> observers = new ArrayList<>();
+
+    public void startDraw(TextAnalyzer analyzer, GuiForm guiForm) throws ParseException {
+        this.guiForm = guiForm;
         this.analyzer = analyzer;
+//        addObserver(this.analyzer);
+
         this.dateFirst = analyzer.getDateFirst();
         this.dateLast = analyzer.getDateLast();
         dateFrom = analyzer.getDateFirst();
@@ -141,9 +146,9 @@ public class GuiForm implements IGuiForm {
             }
         };
         buttonToJSON.addActionListener(listenerToJSON);
-        listenerSliderFrom = changeListenerFactoryRx();
+        listenerSliderFrom = createChangeListenerRx();
         sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = changeListenerFactoryRx();
+        listenerSliderTo = createChangeListenerRx();
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
@@ -167,23 +172,27 @@ public class GuiForm implements IGuiForm {
             }
         };
         buttonToJSON.addActionListener (listenerToJSON) ;
-        listenerSliderFrom = changeListenerFactoryTx();
+        listenerSliderFrom = createChangeListenerTx();
         sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = changeListenerFactoryTx();
+        listenerSliderTo = createChangeListenerTx();
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private ChangeListener changeListenerFactoryRx(){
+    private ChangeListener createChangeListenerRx() {
         return evt -> {
             dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
             dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
             setLabelsDate();
-            updateChartsTopRx();
+            try {
+                analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             checkSlidersPropriety();
         };
     }
 
-    private ChangeListener changeListenerFactoryTx(){
+    private ChangeListener createChangeListenerTx(){
         return evt -> {
             dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
             dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
@@ -281,12 +290,12 @@ public class GuiForm implements IGuiForm {
     }
 
     private void updateChartsTopRx() {
-        try {
-            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-            analyzer.getTopReceiversPairs();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
+//            analyzer.getTopReceiversPairs();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         try {
             if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
                 frameBarTopRx.getContentPane().removeAll();
@@ -330,7 +339,6 @@ public class GuiForm implements IGuiForm {
             if (framePieTopTx.isShowing()) {
                 framePieTopTx.getContentPane().removeAll();
                 panelChartPieTopTx = new ChartPanel(createJFreeChartPieTopTx());
-//                panelChartPieTopTx.setLayout(new BorderLayout());
                 framePieTopTx.add(panelChartPieTopTx, BorderLayout.CENTER);
                 framePieTopTx.setVisible(true);
             }
@@ -358,5 +366,12 @@ public class GuiForm implements IGuiForm {
             buttonShowPieChart.setEnabled(true);
             buttonToJSON.setEnabled(true);
         }
+    }
+
+
+    public void handleCalculationEvent (GuiForm guiForm) throws ParseException {
+        this.guiForm = guiForm;
+        System.out.println("event of calculated handled");
+        updateChartsTopRx();
     }
 }

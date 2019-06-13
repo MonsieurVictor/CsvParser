@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.List;
 
 
-public class TextAnalyzer implements ITextAnalyzer {
+public class TextAnalyzer implements ITextAnalyzer, IObservable {
     private Date dateFirst;
     private Date dateLast;
     private Date dateFrom;
@@ -14,11 +14,15 @@ public class TextAnalyzer implements ITextAnalyzer {
     private Date [] dateArray = new Date [6];
     private List buffer;
 
+    List <IObserver> observers = new ArrayList<>();
+
     List <TextAnalyzer.DataFlowStructure> dataFlowStructureList = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topReceiversPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
+
+    GuiForm guiForm;
 
     public class DataFlowStructure {
         Date dateObj;
@@ -66,7 +70,10 @@ public class TextAnalyzer implements ITextAnalyzer {
         this.buffer = buffer;
     }
 
-    public void doAnalyze() throws ParseException {
+    public void doAnalyze(GuiForm guiForm) throws ParseException {
+        this.guiForm = guiForm;
+        addObserver(guiForm);
+
         parseDataFlowStructure(this.buffer);
         setDateFirst();
         setDateLast();
@@ -237,17 +244,14 @@ public class TextAnalyzer implements ITextAnalyzer {
             e.printStackTrace();
         }
     }
-
     public Date getDateOfSlider (int sliderValue){
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateFirst);
         cal.add(Calendar.SECOND, diffSec*sliderValue/1000 );
         return cal.getTime();
     }
-
     private List parseDataFlowStructure(List <String[]> buffer) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
-
         for (String[] csvRow: buffer){
             Date dateObj = sdf.parse(csvRow[0]) ;
             long bytesIn = Long.parseLong(csvRow[1]);
@@ -271,7 +275,6 @@ public class TextAnalyzer implements ITextAnalyzer {
         }
         return dataFlowStructureList;
     }
-
     public void reparseDataFlowStructureListWithDateRange(Date dateFrom, Date dateTo) throws ParseException {
         this.dataFlowStructureList.clear();
         parseDataFlowStructure(this.buffer);
@@ -292,5 +295,33 @@ public class TextAnalyzer implements ITextAnalyzer {
                 i--;
             }
         }
+        notifyObserver();
     }
+    public void handleChangeSliderEvent(Date dateFrom, Date dateTo, GuiForm guiForm) throws ParseException {
+        this.guiForm = guiForm;
+        System.out.println("Slider change handled!" + dateFrom.toString() + " " + dateTo.toString());
+        reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
+    }
+
+    public void addObserver(IObserver o){
+        observers.add(o);
+    }
+
+    public void removeObserver(IObserver o){
+        observers.remove(o);
+
+    }
+
+    public void notifyObserver() {
+        for(IObserver o: observers){
+            try {
+                o.handleCalculationEvent(guiForm);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+//    public void handleCalculationEvent(GuiForm guiForm) throws ParseException {}
 }
+

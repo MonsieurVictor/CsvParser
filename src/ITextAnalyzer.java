@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ITextAnalyzer {
     void setBuffer(List buffer);
-    void doAnalyze() throws ParseException;
+    void doAnalyze(GuiForm guiForm) throws ParseException;
     void reparseDataFlowStructureListWithDateRange(Date dateFrom, Date dateTo) throws ParseException;
     List <TextAnalyzer.TopRatedPair> getTopReceiversPairs();
     List <TextAnalyzer.TopRatedPair> getTopTransmittersPairs();

@@ -25,8 +25,8 @@ public class ErrorLogger implements IErrorLogger {
         String errorText = System.lineSeparator() + "Error message:" + e;
         try {
             Files.write(Paths.get(filePath), errorText.getBytes(), StandardOpenOption.APPEND);
-        } catch (Exception flagsE) {
-            System.out.println("can't write flag error to the log" + flagsE);
+        } catch (IOException ex) {
+            System.out.println("can't write flag error to the log" + ex);
         }
     }
 }
