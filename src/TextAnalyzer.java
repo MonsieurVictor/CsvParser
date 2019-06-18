@@ -17,10 +17,13 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     List <IObserver> observers = new ArrayList<>();
 
     List <TextAnalyzer.DataFlowStructure> dataFlowStructureList = new ArrayList<>();
+    List <Record>recordList = new ArrayList<>();
+
     List <TextAnalyzer.TopRatedPair> topReceiversPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
+
 
     GuiForm guiForm;
 
@@ -75,6 +78,8 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         addObserver(guiForm);
 
         parseDataFlowStructure(this.buffer);
+        
+
         setDateFirst();
         setDateLast();
         countRangeInitialDates(dateFirst, dateLast);

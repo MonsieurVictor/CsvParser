@@ -319,12 +319,12 @@ public class GuiForm implements IGuiForm, IObserver {
     }
 
     private void updateChartsTopTx() {
-        try {
-            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-            analyzer.getTopTransmittersPairs();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
+//            analyzer.getTopTransmittersPairs();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         try {
             if (frameBarTopTx.isShowing()) {
                 frameBarTopTx.getContentPane().removeAll();
