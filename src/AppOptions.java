@@ -12,9 +12,6 @@ public class AppOptions implements IAppOptions {
         return this.filePath;
     }
 
-
-
-
     private AppOptions setFilePath() {
 
         File folder = new File("files");
@@ -37,11 +34,9 @@ public class AppOptions implements IAppOptions {
 
     /**
      * most full command format: <filePath> -s -f -w <ignoreListFilePath>
-
      * @return
      */
     public void parseOptions() throws Exception {
-
         this
                 .setFilePath();
     }

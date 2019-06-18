@@ -24,6 +24,8 @@ public class GuiForm implements IGuiForm, IObserver {
     private JPanel panelCenter;
     private JPanel rootPanelLauncher;
 
+    private String categoryFlag = "None";
+
     private JButton buttonTopRx;
     private JButton buttonTopTx;
     private JButton buttonTopProtocols;
@@ -96,18 +98,18 @@ public class GuiForm implements IGuiForm, IObserver {
         rootPanelLauncher.add(buttonTopApps);
         buttonTopRx.addActionListener(e -> {
             setJframeMainMenu("Top 10 Receivers");
-            drawMenuRx();
+            drawTopRx();
         });
         buttonTopTx.addActionListener(e -> {
             setJframeMainMenu("Top 10 Transmitters");
-            drawMenuTx();
+            drawTopTx();
         });
         buttonTopProtocols.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Protocols");
+//            setJframeMainMenu("Top 10 Protocols");
 //            drawMenuProtocols();
         });
         buttonTopApps.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Protocols");
+//            setJframeMainMenu("Top 10 Apps");
 //            drawMenuApps();
         });
         buttonBack.addActionListener(e -> {
@@ -126,7 +128,8 @@ public class GuiForm implements IGuiForm, IObserver {
         jFrame.setVisible(true);
     }
 
-    private void drawMenuRx() {
+    private void drawTopRx() {
+        categoryFlag = "Rx";
         listenerShowBarChart = evt -> {
             frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
         };
@@ -146,13 +149,14 @@ public class GuiForm implements IGuiForm, IObserver {
             }
         };
         buttonToJSON.addActionListener(listenerToJSON);
-        listenerSliderFrom = createChangeListenerRx();
+        listenerSliderFrom = createChangeListener();
         sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListenerRx();
+        listenerSliderTo = createChangeListener();
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private void drawMenuTx(){
+    private void drawTopTx(){
+        categoryFlag = "Tx";
         listenerShowBarChart = evt -> {
             frameBarTopTx = createChartFrame(createChartBarTopTx(), "Top 10 Tx", 910, 205, 900, 300);
         };
@@ -172,19 +176,19 @@ public class GuiForm implements IGuiForm, IObserver {
             }
         };
         buttonToJSON.addActionListener (listenerToJSON) ;
-        listenerSliderFrom = createChangeListenerTx();
+        listenerSliderFrom = createChangeListener();
         sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListenerTx();
+        listenerSliderTo = createChangeListener();
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private ChangeListener createChangeListenerRx() {
+    private ChangeListener createChangeListener() {
         return evt -> {
             dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
             dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
             setLabelsDate();
             try {
-                analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
+                analyzer.reparseRecordListDateRange(dateFrom, dateTo);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -192,15 +196,19 @@ public class GuiForm implements IGuiForm, IObserver {
         };
     }
 
-    private ChangeListener createChangeListenerTx(){
-        return evt -> {
-            dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-            dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
-            setLabelsDate();
-            updateChartsTopTx();
-            checkSlidersPropriety();
-        };
-    }
+//    private ChangeListener createChangeListenerTx(){
+//        return evt -> {
+//            dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
+//            dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+//            setLabelsDate();
+//            try {
+//                analyzer.reparseRecordListDateRange(dateFrom, dateTo);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            checkSlidersPropriety();
+//        };
+//    }
 
     private ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
         ChartPanel chartBarPanel = new ChartPanel(chartBar);
@@ -290,12 +298,6 @@ public class GuiForm implements IGuiForm, IObserver {
     }
 
     private void updateChartsTopRx() {
-//        try {
-//            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-//            analyzer.getTopReceiversPairs();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         try {
             if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
                 frameBarTopRx.getContentPane().removeAll();
@@ -319,12 +321,6 @@ public class GuiForm implements IGuiForm, IObserver {
     }
 
     private void updateChartsTopTx() {
-//        try {
-//            analyzer.reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-//            analyzer.getTopTransmittersPairs();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         try {
             if (frameBarTopTx.isShowing()) {
                 frameBarTopTx.getContentPane().removeAll();
@@ -368,10 +364,21 @@ public class GuiForm implements IGuiForm, IObserver {
         }
     }
 
-
-    public void handleCalculationEvent (GuiForm guiForm) throws ParseException {
+    public void handleCalculationEvent(GuiForm guiForm) throws ParseException {
         this.guiForm = guiForm;
         System.out.println("event of calculated handled");
-        updateChartsTopRx();
+        if (categoryFlag == "none"){
+            System.out.println("Category is not selected!");
+        } else if (categoryFlag == "Rx"){
+            System.out.println(categoryFlag);
+            updateChartsTopRx();
+        } else if (categoryFlag == "Tx") {
+            System.out.println(categoryFlag);
+            updateChartsTopTx();
+        }
+//        }else if  (categoryFlag == "Protocols"){
+//        updateChartsTop"Protocols();
+//        }else if  (categoryFlag == "Apps"){
+//        updateChartsTopApps();
     }
 }

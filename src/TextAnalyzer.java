@@ -14,53 +14,20 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     private Date [] dateArray = new Date [6];
     private List buffer;
 
+    Record record = new Record();
+
     List <IObserver> observers = new ArrayList<>();
 
-    List <TextAnalyzer.DataFlowStructure> dataFlowStructureList = new ArrayList<>();
-    List <Record>recordList = new ArrayList<>();
+    List <Record> recordList = new ArrayList<>();
 
     List <TextAnalyzer.TopRatedPair> topReceiversPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
 
-
     GuiForm guiForm;
 
-    public class DataFlowStructure {
-        Date dateObj;
-        long bytesIn;
-        long bytesOut;
-        int packetsIn;
-        int packetsOut;
-        String applicationName;
-        String destinationAddress;
-        String protocolNumber;
-        String sourceAddress;
-
-        DataFlowStructure(
-                Date dateObj,
-                Long bytesIn,
-                Long bytesOut,
-                Integer packetsIn,
-                Integer packetsOut,
-                String applicationName,
-                String destinationAddress,
-                String protocolNumber,
-                String sourceAddress) {
-            this.dateObj = dateObj;
-            this.bytesIn = bytesIn;
-            this.bytesOut = bytesOut;
-            this.packetsIn = packetsIn;
-            this.packetsOut = packetsOut;
-            this.applicationName = applicationName;
-            this.destinationAddress = destinationAddress;
-            this.protocolNumber = protocolNumber;
-            this.sourceAddress = sourceAddress;
-        }
-    }
-
-    public class TopRatedPair {
+       public class TopRatedPair {
         String key;
         int value;
         TopRatedPair(String key, Integer value) {
@@ -76,9 +43,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     public void doAnalyze(GuiForm guiForm) throws ParseException {
         this.guiForm = guiForm;
         addObserver(guiForm);
-
-        parseDataFlowStructure(this.buffer);
-        
+        recordList = record.parseRecordList(this.buffer);
 
         setDateFirst();
         setDateLast();
@@ -87,27 +52,20 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         getTopTransmittersPairs();
         getTopProtocols();
         getTopUsedApplications();
-//        setDateArrayForSliderLabels();
-//        getTopProtocols();
-//        getTopUsedApplications();
     }
 
-//    private Integer countMethod(String methodString, int numberBefore, int newNumber ) {
-//        if (String methodString == "Summ"){
-//        }
-//    }
 
     public List <TopRatedPair> getTopReceiversPairs(){
         topReceiversPairs.clear();
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
-        for (DataFlowStructure currentDataFlowRow : dataFlowStructureList) {
-            if (!currentDataFlowRow.applicationName.equals("")) {
-                if (top10ReceiversMap.containsKey(currentDataFlowRow.applicationName)) {
-                    Integer totalPacketsReceived = top10ReceiversMap.get(currentDataFlowRow.applicationName);
-                    top10ReceiversMap.replace(currentDataFlowRow.applicationName, totalPacketsReceived = totalPacketsReceived + currentDataFlowRow.packetsIn);
+        for (Record currentDataFlowRow : recordList) {
+            if (!currentDataFlowRow.getApplicationName().equals("")) {
+                if (top10ReceiversMap.containsKey(currentDataFlowRow.getApplicationName())) {
+                    Integer totalPacketsReceived = top10ReceiversMap.get(currentDataFlowRow.getApplicationName());
+                    top10ReceiversMap.replace(currentDataFlowRow.getApplicationName(), totalPacketsReceived = totalPacketsReceived + currentDataFlowRow.getPacketsIn());
                 } else {
-                    top10ReceiversMap.put(currentDataFlowRow.applicationName, currentDataFlowRow.packetsIn);
+                    top10ReceiversMap.put(currentDataFlowRow.getApplicationName(), currentDataFlowRow.getPacketsIn());
                 }
             }
         }
@@ -126,13 +84,13 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         topTransmittersPairs.clear();
         Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
 
-        for (DataFlowStructure currentTransmitter : dataFlowStructureList) {
-            if (!currentTransmitter.applicationName.equals("")) {
-                if (top10TransmittersMap.containsKey(currentTransmitter.applicationName)) {
-                    Integer totalPacketsTransmitted = top10TransmittersMap.get(currentTransmitter.applicationName);
-                    top10TransmittersMap.replace(currentTransmitter.applicationName, totalPacketsTransmitted = totalPacketsTransmitted + currentTransmitter.packetsOut);
+        for (Record currentDataFlowRow : recordList) {
+            if (!currentDataFlowRow.getApplicationName().equals("")) {
+                if (top10TransmittersMap.containsKey(currentDataFlowRow.getApplicationName())) {
+                    Integer totalPacketsTransmitted = top10TransmittersMap.get(currentDataFlowRow.getApplicationName());
+                    top10TransmittersMap.replace(currentDataFlowRow.getApplicationName(), totalPacketsTransmitted = totalPacketsTransmitted + currentDataFlowRow.getPacketsOut());
                 } else {
-                    top10TransmittersMap.put(currentTransmitter.applicationName, currentTransmitter.packetsOut);
+                    top10TransmittersMap.put(currentDataFlowRow.getApplicationName(), currentDataFlowRow.getPacketsOut());
                 }
             }
         }
@@ -150,13 +108,13 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     private List <TopRatedPair> getTopProtocols(){
         Map<String, Integer> topProtocolsMap = new HashMap<String, Integer>();
 
-        for (DataFlowStructure currentProtocol : dataFlowStructureList) {
-            if (!currentProtocol.protocolNumber.equals("")) {
-                if (topProtocolsMap.containsKey(currentProtocol.protocolNumber)) {
-                    Integer totalTimesProtocolUsed = topProtocolsMap.get(currentProtocol.protocolNumber);
-                    topProtocolsMap.replace(currentProtocol.protocolNumber, totalTimesProtocolUsed = totalTimesProtocolUsed + 1);
+        for (Record currentDataFlowRow : recordList) {
+            if (!currentDataFlowRow.getProtocolNumber().equals("")) {
+                if (topProtocolsMap.containsKey(currentDataFlowRow.getProtocolNumber())) {
+                    Integer totalTimesProtocolUsed = topProtocolsMap.get(currentDataFlowRow.getProtocolNumber());
+                    topProtocolsMap.replace(currentDataFlowRow.getProtocolNumber(), totalTimesProtocolUsed = totalTimesProtocolUsed + 1);
                 } else {
-                    topProtocolsMap.put(currentProtocol.protocolNumber, 1);
+                    topProtocolsMap.put(currentDataFlowRow.getProtocolNumber(), 1);
                 }
             }
         }
@@ -174,13 +132,13 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     private List <TopRatedPair> getTopUsedApplications(){
         Map<String, Integer> topUsedApplicationsMap = new HashMap<String, Integer>();
 
-        for (DataFlowStructure currentApplication : dataFlowStructureList) {
-            if (!currentApplication.applicationName.equals("")) {
-                if (topUsedApplicationsMap.containsKey(currentApplication.applicationName)) {
-                    Integer totalTimesApplicationUsed = topUsedApplicationsMap.get(currentApplication.applicationName);
-                    topUsedApplicationsMap.replace(currentApplication.applicationName, totalTimesApplicationUsed = totalTimesApplicationUsed + 1);
+        for (Record currentDataFlowRow : recordList) {
+            if (!currentDataFlowRow.getApplicationName().equals("")) {
+                if (topUsedApplicationsMap.containsKey(currentDataFlowRow.getApplicationName())) {
+                    Integer totalTimesApplicationUsed = topUsedApplicationsMap.get(currentDataFlowRow.getApplicationName());
+                    topUsedApplicationsMap.replace(currentDataFlowRow.getApplicationName(), totalTimesApplicationUsed = totalTimesApplicationUsed + 1);
                 } else {
-                    topUsedApplicationsMap.put(currentApplication.applicationName, 1);
+                    topUsedApplicationsMap.put(currentDataFlowRow.getApplicationName(), 1);
                 }
             }
         }
@@ -196,11 +154,11 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     }
 
     private void setDateFirst() {
-        this.dateFirst = dataFlowStructureList.get(0).dateObj;
+        this.dateFirst = recordList.get(0).getDateObj();
     }
 
     private void setDateLast() {
-        this.dateLast = dataFlowStructureList.get(dataFlowStructureList.size()-1).dateObj;
+        this.dateLast = recordList.get(recordList.size() - 1).getDateObj();
     }
 
     public Date getDateFirst() throws ParseException {
@@ -249,64 +207,25 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
             e.printStackTrace();
         }
     }
+
     public Date getDateOfSlider (int sliderValue){
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateFirst);
         cal.add(Calendar.SECOND, diffSec*sliderValue/1000 );
         return cal.getTime();
     }
-    private List parseDataFlowStructure(List <String[]> buffer) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
-        for (String[] csvRow: buffer){
-            Date dateObj = sdf.parse(csvRow[0]) ;
-            long bytesIn = Long.parseLong(csvRow[1]);
-            long bytesOut = Long.parseLong(csvRow[2]);
-            int packetsIn = Integer.parseInt(csvRow[3]);
-            int packetsOut = Integer.parseInt(csvRow[4]);
-            String applicationName = csvRow[5];
-            String destinationAddress = csvRow[6] ;
-            String protocolNumber  = csvRow[7];
-            String sourceAddress  = csvRow[8];
-            this.dataFlowStructureList.add(new DataFlowStructure(
-                    dateObj,
-                    bytesIn,
-                    bytesOut,
-                    packetsIn,
-                    packetsOut,
-                    applicationName,
-                    destinationAddress,
-                    protocolNumber,
-                    sourceAddress));
-        }
-        return dataFlowStructureList;
-    }
-    public void reparseDataFlowStructureListWithDateRange(Date dateFrom, Date dateTo) throws ParseException {
-        this.dataFlowStructureList.clear();
-        parseDataFlowStructure(this.buffer);
-        Calendar calDateFrom = Calendar.getInstance();
-        calDateFrom.setTime(dateFrom);
-        Calendar calDateTo = Calendar.getInstance();
-        calDateTo.setTime(dateTo);
 
-        for (int i = 0; i < dataFlowStructureList.size(); i++) {
-            Date testDate = dataFlowStructureList.get(i).dateObj;
-            Calendar calDateFromCsv = Calendar.getInstance();
-            calDateFromCsv.setTime(testDate);
-            if(calDateFrom.after(calDateFromCsv)){
-                dataFlowStructureList.remove(i);
-                i--;
-            }else if (calDateTo.before(calDateFromCsv)) {
-                dataFlowStructureList.remove(i);
-                i--;
-            }
-        }
+    public void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException {
+//
+        this.recordList = record.reparseRecordListDateRange(dateFrom,dateTo, this.buffer);
         notifyObserver();
     }
-    public void handleChangeSliderEvent(Date dateFrom, Date dateTo, GuiForm guiForm) throws ParseException {
-        this.guiForm = guiForm;
-        System.out.println("Slider change handled!" + dateFrom.toString() + " " + dateTo.toString());
-        reparseDataFlowStructureListWithDateRange(dateFrom, dateTo);
-    }
+
+//    public void handleChangeSliderEvent(Date dateFrom, Date dateTo, GuiForm guiForm) throws ParseException {
+//        this.guiForm = guiForm;
+//        System.out.println("Slider change handled!" + dateFrom.toString() + " " + dateTo.toString());
+//        reparseRecordListDateRange(dateFrom, dateTo);
+//    }
 
     public void addObserver(IObserver o){
         observers.add(o);
@@ -314,7 +233,6 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
 
     public void removeObserver(IObserver o){
         observers.remove(o);
-
     }
 
     public void notifyObserver() {
@@ -326,7 +244,5 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
             }
         }
     }
-
-//    public void handleCalculationEvent(GuiForm guiForm) throws ParseException {}
 }
 

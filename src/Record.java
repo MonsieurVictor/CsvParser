@@ -1,6 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,9 @@ public class Record {
 
     List <Record>recordList = new ArrayList<>();
 
-    public Record(
+    public Record(){}
+
+    private Record(
             Date dateObj,
             Long bytesIn,
             Long bytesOut,
@@ -40,7 +43,7 @@ public class Record {
     }
 
 
-    private List parseRecord(List <String[]> buffer) throws ParseException {
+    public List <Record> parseRecordList(List <String[]> buffer) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
         for (String[] csvRow : buffer) {
             Date dateObj = sdf.parse(csvRow[0]);
@@ -65,6 +68,31 @@ public class Record {
         }
         return recordList;
     }
+
+    public List <Record> reparseRecordListDateRange(Date dateFrom, Date dateTo, List buffer) throws ParseException {
+        recordList.clear();
+        parseRecordList(buffer);
+
+        Calendar calDateFrom = Calendar.getInstance();
+        calDateFrom.setTime(dateFrom);
+        Calendar calDateTo = Calendar.getInstance();
+        calDateTo.setTime(dateTo);
+
+        for (int i = 0; i < recordList.size(); i++) {
+            Date testDate = recordList.get(i).getDateObj();
+            Calendar calDateFromCsv = Calendar.getInstance();
+            calDateFromCsv.setTime(testDate);
+            if(calDateFrom.after(calDateFromCsv)){
+                recordList.remove(i);
+                i--;
+            }else if (calDateTo.before(calDateFromCsv)) {
+                recordList.remove(i);
+                i--;
+            }
+        }
+        return recordList;
+    }
+
     public Date getDateObj() {
         return dateObj;
     }
@@ -136,8 +164,4 @@ public class Record {
     public void setSourceAddress(String sourceAddress) {
         this.sourceAddress = sourceAddress;
     }
-
-
-
-
 }

@@ -19,6 +19,7 @@ public class Main {
     private ErrorLogger logger;
     private GuiForm guiForm;
     private JSONSaver jsonSaver;
+    private ControllerGui controllerGui;
 
     private Main (
                  AppOptions options,
@@ -26,7 +27,8 @@ public class Main {
                  TextAnalyzer analyzer,
                  ErrorLogger logger,
                  GuiForm guiForm,
-                 JSONSaver jsonSaver
+                 JSONSaver jsonSaver,
+                 ControllerGui controllerGui
               ) {
         this.options = options;
         this.reader = reader;
@@ -35,15 +37,16 @@ public class Main {
         this.logger = logger;
         this.guiForm = guiForm;
         this.jsonSaver = jsonSaver;
+        this.controllerGui = controllerGui;
     }
 
     private void start() {
         try {
+            controllerGui.initGui(analyzer, guiForm);
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.doAnalyze(guiForm);
             guiForm.startDraw(analyzer, guiForm);
-//            viewer.report(analyzer);
         } catch (IOException e) {
             logger.errorOpen(e);
 //             nice report on can't open the file
@@ -60,7 +63,8 @@ public class Main {
         TextAnalyzer analyzer = new TextAnalyzer();
         GuiForm guiForm = new GuiForm();
         JSONSaver jsonSaver = new JSONSaver();
-        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver); //почему нельзя просто создать объект с пустыми аргументами?
+        ControllerGui controllerGui = new ControllerGui();
+        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, controllerGui); //почему нельзя просто создать объект с пустыми аргументами?
         app.start();
     }
 }
