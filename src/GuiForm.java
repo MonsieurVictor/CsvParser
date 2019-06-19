@@ -13,6 +13,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class GuiForm implements IGuiForm, IObserver {
 
@@ -42,6 +46,10 @@ public class GuiForm implements IGuiForm, IObserver {
     private Date dateFrom;
     private Date dateTo;
 
+    Timer myTimer = new Timer();
+//    ScheduledThreadPoolExecutor executor;
+
+
     private JSlider sliderFrom;
     private JSlider sliderTo;
 
@@ -70,9 +78,12 @@ public class GuiForm implements IGuiForm, IObserver {
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
 
-    List<IObserver> observers = new ArrayList<>();
+
+
 
     public void startDraw(TextAnalyzer analyzer, GuiForm guiForm) throws ParseException {
+
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         this.guiForm = guiForm;
         this.analyzer = analyzer;
 //        addObserver(this.analyzer);
@@ -130,6 +141,7 @@ public class GuiForm implements IGuiForm, IObserver {
 
     private void drawTopRx() {
         categoryFlag = "Rx";
+
         listenerShowBarChart = evt -> {
             frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
         };
@@ -165,6 +177,7 @@ public class GuiForm implements IGuiForm, IObserver {
             framePieTopTx = createChartFrame(createJFreeChartPieTopTx(), "Top 10 Tx", 910, 510, 900, 300 );
         };
         buttonShowPieChart.addActionListener(listenerShowPieChart);
+
         listenerToJSON = evt -> {
             updateChartsTopTx();
             if (analyzer.getTopTransmittersPairs().isEmpty()) {
@@ -176,7 +189,9 @@ public class GuiForm implements IGuiForm, IObserver {
             }
         };
         buttonToJSON.addActionListener (listenerToJSON) ;
+
         listenerSliderFrom = createChangeListener();
+
         sliderFrom.addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
         sliderTo.addChangeListener(listenerSliderTo);
@@ -184,15 +199,44 @@ public class GuiForm implements IGuiForm, IObserver {
 
     private ChangeListener createChangeListener() {
         return evt -> {
-            dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-            dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
-            setLabelsDate();
-            try {
-                analyzer.reparseRecordListDateRange(dateFrom, dateTo);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            checkSlidersPropriety();
+
+            TimerTask myTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+
+                    dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
+                    dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                    setLabelsDate();
+                    try {
+                        analyzer.reparseRecordListDateRange(dateFrom, dateTo);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    checkSlidersPropriety();
+
+                }
+            };
+
+            myTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                    dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
+                    dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                    setLabelsDate();
+                    try {
+                        analyzer.reparseRecordListDateRange(dateFrom, dateTo);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    checkSlidersPropriety();
+
+                }
+            }, 0);
+
+
+
+
         };
     }
 
@@ -381,4 +425,7 @@ public class GuiForm implements IGuiForm, IObserver {
 //        }else if  (categoryFlag == "Apps"){
 //        updateChartsTopApps();
     }
+
+
 }
+
