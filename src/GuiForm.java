@@ -79,7 +79,6 @@ public class GuiForm implements IGuiForm {
 
         this.guiForm = guiForm;
         this.controller = controller;
-//        addObserver(this.analyzer);
 
         this.dateFirst = controller.getDateFirst();
         this.dateLast = controller.getDateLast();
