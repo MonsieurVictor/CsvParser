@@ -13,6 +13,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     private int diffSec;
     private Date [] dateArray = new Date [6];
     private List buffer;
+    ControllerGui controller;
 
     Record record = new Record();
 
@@ -25,7 +26,6 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
 
-    GuiForm guiForm;
 
        public class TopRatedPair {
         String key;
@@ -40,9 +40,9 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         this.buffer = buffer;
     }
 
-    public void doAnalyze(GuiForm guiForm) throws ParseException {
-        this.guiForm = guiForm;
-        addObserver(guiForm);
+    public void doAnalyze(ControllerGui controller) throws ParseException {
+        this.controller = controller;
+        addObserver(controller);
         recordList = record.parseRecordList(this.buffer);
 
         setDateFirst();
@@ -238,11 +238,17 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     public void notifyObserver() {
         for(IObserver o: observers){
             try {
-                o.handleCalculationEvent(guiForm);
+                o.handleCalculationEvent(controller);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+
+
+    }
+
+    int getDiffSec(){
+           return this.diffSec;
     }
 }
 

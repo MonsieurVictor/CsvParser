@@ -5,7 +5,6 @@ import java.io.File;
 
 public class AppOptions implements IAppOptions {
 
-
     private String filePath;
 
     public String getFilePath() {
@@ -29,8 +28,6 @@ public class AppOptions implements IAppOptions {
         System.out.println("\nThe file " + this.filePath + " was selected\n");
         return this;
     }
-
-
 
     /**
      * most full command format: <filePath> -s -f -w <ignoreListFilePath>

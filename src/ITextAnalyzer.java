@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ITextAnalyzer {
     void setBuffer(List buffer);
-    void doAnalyze(GuiForm guiForm) throws ParseException;
+    void doAnalyze(ControllerGui controller) throws ParseException;
     void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException;
     List <TextAnalyzer.TopRatedPair> getTopReceiversPairs();
     List <TextAnalyzer.TopRatedPair> getTopTransmittersPairs();

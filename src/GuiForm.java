@@ -14,11 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class GuiForm implements IGuiForm, IObserver {
+public class GuiForm implements IGuiForm {
+
+    private int diffSec;
 
     private JFrame jFrame = new JFrame("Main menu");
 
@@ -28,7 +27,7 @@ public class GuiForm implements IGuiForm, IObserver {
     private JPanel panelCenter;
     private JPanel rootPanelLauncher;
 
-    private String categoryFlag = "None";
+    public String categoryFlag = "None";
 
     private JButton buttonTopRx;
     private JButton buttonTopTx;
@@ -47,8 +46,6 @@ public class GuiForm implements IGuiForm, IObserver {
     private Date dateTo;
 
     Timer myTimer = new Timer();
-//    ScheduledThreadPoolExecutor executor;
-
 
     private JSlider sliderFrom;
     private JSlider sliderTo;
@@ -69,7 +66,7 @@ public class GuiForm implements IGuiForm, IObserver {
     private JLabel labelTo2;
 
     private GuiForm guiForm;
-    private TextAnalyzer analyzer;
+    private ControllerGui controller;
     private JSONSaver jsonSaver = new JSONSaver();
 
     private ActionListener listenerShowBarChart;
@@ -78,22 +75,18 @@ public class GuiForm implements IGuiForm, IObserver {
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
 
+    public void startDraw(ControllerGui controller, GuiForm guiForm) throws ParseException {
 
-
-
-    public void startDraw(TextAnalyzer analyzer, GuiForm guiForm) throws ParseException {
-
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         this.guiForm = guiForm;
-        this.analyzer = analyzer;
+        this.controller = controller;
 //        addObserver(this.analyzer);
 
-        this.dateFirst = analyzer.getDateFirst();
-        this.dateLast = analyzer.getDateLast();
-        dateFrom = analyzer.getDateFirst();
-        dateTo = analyzer.getDateLast();
-        dateArrayForSliderLabels = analyzer.getDateArrayForSliderLabels();
-        analyzer.setDateArrayForSliderLabels();
+        this.dateFirst = controller.getDateFirst();
+        this.dateLast = controller.getDateLast();
+        dateFrom = controller.getDateFirst();
+        dateTo = controller.getDateLast();
+        dateArrayForSliderLabels = controller.getDateArrayForSliderLabels();
+        controller.setDateArrayForSliderLabels();
         setLabelsDate();
         setSliderFrom();
         setSliderTo();
@@ -152,11 +145,11 @@ public class GuiForm implements IGuiForm, IObserver {
         buttonShowPieChart.addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
             updateChartsTopRx();
-            if (analyzer.getTopReceiversPairs().isEmpty()) {
+            if (controller.getTopReceiversPairs().isEmpty()) {
                 showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
             } else {
                 jsonSaver.setFileName("Top_10_Rx_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(analyzer.getTopReceiversPairs());
+                jsonSaver.createJSONFile(controller.getTopReceiversPairs());
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
@@ -180,11 +173,11 @@ public class GuiForm implements IGuiForm, IObserver {
 
         listenerToJSON = evt -> {
             updateChartsTopTx();
-            if (analyzer.getTopTransmittersPairs().isEmpty()) {
+            if (controller.getTopTransmittersPairs().isEmpty()) {
                 showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
             } else {
                 jsonSaver.setFileName("Top_10_Transmitters_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(analyzer.getTopTransmittersPairs());
+                jsonSaver.createJSONFile(controller.getTopTransmittersPairs());
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
@@ -204,16 +197,15 @@ public class GuiForm implements IGuiForm, IObserver {
                 @Override
                 public void run() {
 
-                    dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-                    dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                    dateFrom = getDateOfSlider(sliderFrom.getValue());
+                    dateTo = getDateOfSlider(sliderTo.getValue());
                     setLabelsDate();
                     try {
-                        analyzer.reparseRecordListDateRange(dateFrom, dateTo);
+                        controller.reparseRecordListDateRange(dateFrom, dateTo);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     checkSlidersPropriety();
-
                 }
             };
 
@@ -221,11 +213,11 @@ public class GuiForm implements IGuiForm, IObserver {
                 @Override
                 public void run() {
 
-                    dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-                    dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
+                    dateFrom = getDateOfSlider(sliderFrom.getValue());
+                    dateTo = getDateOfSlider(sliderTo.getValue());
                     setLabelsDate();
                     try {
-                        analyzer.reparseRecordListDateRange(dateFrom, dateTo);
+                        controller.reparseRecordListDateRange(dateFrom, dateTo);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -240,19 +232,6 @@ public class GuiForm implements IGuiForm, IObserver {
         };
     }
 
-//    private ChangeListener createChangeListenerTx(){
-//        return evt -> {
-//            dateFrom = analyzer.getDateOfSlider(sliderFrom.getValue());
-//            dateTo = analyzer.getDateOfSlider(sliderTo.getValue());
-//            setLabelsDate();
-//            try {
-//                analyzer.reparseRecordListDateRange(dateFrom, dateTo);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            checkSlidersPropriety();
-//        };
-//    }
 
     private ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
         ChartPanel chartBarPanel = new ChartPanel(chartBar);
@@ -297,19 +276,19 @@ public class GuiForm implements IGuiForm, IObserver {
     }
 
     private JFreeChart createChartBarTopRx() {
-        return createJFreeChartBar("Top 10 Received Packets", analyzer.getTopReceiversPairs());
+        return createJFreeChartBar("Top 10 Received Packets", controller.getTopReceiversPairs());
     }
 
     private JFreeChart createChartBarTopTx() {
-        return createJFreeChartBar("Top 10 Transmitted Packets", analyzer.getTopTransmittersPairs());
+        return createJFreeChartBar("Top 10 Transmitted Packets", controller.getTopTransmittersPairs());
     }
 
     private JFreeChart createJFreeChartPieTopRx() {
-        return createJFreeChartPie("Top 10 Received Packets", analyzer.getTopReceiversPairs());
+        return createJFreeChartPie("Top 10 Received Packets", controller.getTopReceiversPairs());
     }
 
     private JFreeChart createJFreeChartPieTopTx() {
-        return createJFreeChartPie("Top 10 Transmitted Packets", analyzer.getTopTransmittersPairs());
+        return createJFreeChartPie("Top 10 Transmitted Packets", controller.getTopTransmittersPairs());
     }
 
     private JFreeChart createJFreeChartBar(String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
@@ -341,7 +320,7 @@ public class GuiForm implements IGuiForm, IObserver {
                 + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateTo));
     }
 
-    private void updateChartsTopRx() {
+    public void updateChartsTopRx() {
         try {
             if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
                 frameBarTopRx.getContentPane().removeAll();
@@ -364,7 +343,7 @@ public class GuiForm implements IGuiForm, IObserver {
         }
     }
 
-    private void updateChartsTopTx() {
+    public void updateChartsTopTx() {
         try {
             if (frameBarTopTx.isShowing()) {
                 frameBarTopTx.getContentPane().removeAll();
@@ -407,19 +386,14 @@ public class GuiForm implements IGuiForm, IObserver {
             buttonToJSON.setEnabled(true);
         }
     }
+    public Date getDateOfSlider (int sliderValue){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateFirst);
+        cal.add(Calendar.SECOND, controller.getDiffSec()*sliderValue/1000 );
+        return cal.getTime();
+    }
 
-    public void handleCalculationEvent(GuiForm guiForm) throws ParseException {
-        this.guiForm = guiForm;
-        System.out.println("event of calculated handled");
-        if (categoryFlag == "none"){
-            System.out.println("Category is not selected!");
-        } else if (categoryFlag == "Rx"){
-            System.out.println(categoryFlag);
-            updateChartsTopRx();
-        } else if (categoryFlag == "Tx") {
-            System.out.println(categoryFlag);
-            updateChartsTopTx();
-        }
+
 //        }else if  (categoryFlag == "Protocols"){
 //        updateChartsTop"Protocols();
 //        }else if  (categoryFlag == "Apps"){
@@ -427,5 +401,5 @@ public class GuiForm implements IGuiForm, IObserver {
     }
 
 
-}
+
 

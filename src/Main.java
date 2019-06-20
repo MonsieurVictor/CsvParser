@@ -10,7 +10,6 @@
  You can use any open source libraries to accomplish this task
  Please confirm receipt of the email.*/
 
-import java.io.IOException;
 
 public class Main {
     private TextReader reader;
@@ -19,7 +18,7 @@ public class Main {
     private ErrorLogger logger;
     private GuiForm guiForm;
     private JSONSaver jsonSaver;
-    private ControllerGui controllerGui;
+    private ControllerGui controller;
 
     private Main (
                  AppOptions options,
@@ -28,7 +27,7 @@ public class Main {
                  ErrorLogger logger,
                  GuiForm guiForm,
                  JSONSaver jsonSaver,
-                 ControllerGui controllerGui
+                 ControllerGui controller
               ) {
         this.options = options;
         this.reader = reader;
@@ -37,24 +36,13 @@ public class Main {
         this.logger = logger;
         this.guiForm = guiForm;
         this.jsonSaver = jsonSaver;
-        this.controllerGui = controllerGui;
+        this.controller = controller;
     }
 
     private void start() {
-        try {
-            controllerGui.initGui(analyzer, guiForm);
-            options.parseOptions();
-            analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
-            analyzer.doAnalyze(guiForm);
-            guiForm.startDraw(analyzer, guiForm);
-        } catch (IOException e) {
-            logger.errorOpen(e);
-//             nice report on can't open the file
-        } catch (Exception e) {
-            logger.errorReadFlags(e);
-//             nice report here
+            controller.initGui(options, reader, analyzer,  guiForm, logger, jsonSaver, controller);
         }
-    }
+
 
     public static void main(String[] args) {
         AppOptions options = new AppOptions();
@@ -63,8 +51,8 @@ public class Main {
         TextAnalyzer analyzer = new TextAnalyzer();
         GuiForm guiForm = new GuiForm();
         JSONSaver jsonSaver = new JSONSaver();
-        ControllerGui controllerGui = new ControllerGui();
-        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, controllerGui); //почему нельзя просто создать объект с пустыми аргументами?
+        ControllerGui controller = new ControllerGui();
+        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, controller); //почему нельзя просто создать объект с пустыми аргументами?
         app.start();
     }
 }
