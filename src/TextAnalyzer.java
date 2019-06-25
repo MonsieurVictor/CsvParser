@@ -55,7 +55,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     }
 
 
-    public List <TopRatedPair> getTopReceiversPairs(){
+    public List getTopReceiversPairs(){
         topReceiversPairs.clear();
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
@@ -80,7 +80,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         return topReceiversPairs;
     }
 
-    public List <TopRatedPair> getTopTransmittersPairs(){
+    public List getTopTransmittersPairs(){
         topTransmittersPairs.clear();
         Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
 
@@ -247,7 +247,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
 
     }
 
-    int getDiffSec(){
+    public int getDiffSec(){
            return this.diffSec;
     }
 }

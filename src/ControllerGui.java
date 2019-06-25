@@ -5,20 +5,20 @@ import java.util.List;
 
 public class ControllerGui implements IController, IObserver {
     public ControllerGui(){}
-    private TextReader reader;
-    private TextAnalyzer analyzer;
-    private AppOptions options;
-    private ErrorLogger logger;
-    private GuiForm guiForm;
-    private JSONSaver jsonSaver;
+    private ITextReader reader;
+    private ITextAnalyzer analyzer;
+    private IAppOptions options;
+    private IErrorLogger logger;
+    private IGuiForm guiForm;
+    private IJSONSaver jsonSaver;
     private ControllerGui controller;
 
-    public void initGui(AppOptions options,
-                        TextReader reader,
-                        TextAnalyzer analyzer,
-                        GuiForm guiForm,
-                        ErrorLogger logger,
-                        JSONSaver jsonSaver,
+    public void initGui(IAppOptions options,
+                        ITextReader reader,
+                        ITextAnalyzer analyzer,
+                        IGuiForm guiForm,
+                        IErrorLogger logger,
+                        IJSONSaver jsonSaver,
                         ControllerGui controller) {
         this.options = options;
         this.reader = reader;
@@ -44,13 +44,13 @@ public class ControllerGui implements IController, IObserver {
 
     public void handleCalculationEvent(ControllerGui controller) {
         System.out.println("event of calculated handled");
-        if (guiForm.categoryFlag == "none"){
+        if (guiForm.getCategoryFlag() == "none"){
             System.out.println("Category is not selected!");
-        } else if (guiForm.categoryFlag == "Rx"){
-            System.out.println(guiForm.categoryFlag);
+        } else if (guiForm.getCategoryFlag() == "Rx"){
+            System.out.println(guiForm.getCategoryFlag());
             guiForm.updateChartsTopRx();
-        } else if (guiForm.categoryFlag == "Tx") {
-            System.out.println(guiForm.categoryFlag);
+        } else if (guiForm.getCategoryFlag() == "Tx") {
+            System.out.println(guiForm.getCategoryFlag());
             guiForm.updateChartsTopTx();
         }
     }
@@ -78,7 +78,7 @@ public class ControllerGui implements IController, IObserver {
         return analyzer.getTopTransmittersPairs();
     }
 
-    public void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException {
+    public void reparseRecordListDateRange(Date dateFrom, Date dateTo) {
         try {
             analyzer.reparseRecordListDateRange(dateFrom, dateTo);
         } catch (ParseException e) {

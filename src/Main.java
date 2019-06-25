@@ -12,21 +12,21 @@
 
 
 public class Main {
-    private TextReader reader;
-    private TextAnalyzer analyzer;
-    private AppOptions options;
-    private ErrorLogger logger;
-    private GuiForm guiForm;
-    private JSONSaver jsonSaver;
+    private ITextReader reader;
+    private ITextAnalyzer analyzer;
+    private IAppOptions options;
+    private IErrorLogger logger;
+    private IGuiForm guiForm;
+    private IJSONSaver jsonSaver;
     private ControllerGui controller;
 
     private Main (
-                 AppOptions options,
-                 TextReader reader,
-                 TextAnalyzer analyzer,
-                 ErrorLogger logger,
-                 GuiForm guiForm,
-                 JSONSaver jsonSaver,
+                 IAppOptions options,
+                 ITextReader reader,
+                 ITextAnalyzer analyzer,
+                 IErrorLogger logger,
+                 IGuiForm guiForm,
+                 IJSONSaver jsonSaver,
                  ControllerGui controller
               ) {
         this.options = options;
@@ -45,12 +45,12 @@ public class Main {
 
 
     public static void main(String[] args) {
-        AppOptions options = new AppOptions();
-        TextReader reader = new TextReader();
-        ErrorLogger logger = new ErrorLogger();
-        TextAnalyzer analyzer = new TextAnalyzer();
-        GuiForm guiForm = new GuiForm();
-        JSONSaver jsonSaver = new JSONSaver();
+        IAppOptions options = new AppOptions();
+        ITextReader reader = new TextReader();
+        IErrorLogger logger = new ErrorLogger();
+        ITextAnalyzer analyzer = new TextAnalyzer();
+        IGuiForm guiForm = new GuiForm();
+        IJSONSaver jsonSaver = new JSONSaver();
         ControllerGui controller = new ControllerGui();
         Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, controller); //почему нельзя просто создать объект с пустыми аргументами?
         app.start();

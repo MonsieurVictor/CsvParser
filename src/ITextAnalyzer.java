@@ -7,11 +7,12 @@ import java.util.List;
  */
 
 public interface ITextAnalyzer {
+    int getDiffSec();
     void setBuffer(List buffer);
     void doAnalyze(ControllerGui controller) throws ParseException;
     void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException;
-    List <TextAnalyzer.TopRatedPair> getTopReceiversPairs();
-    List <TextAnalyzer.TopRatedPair> getTopTransmittersPairs();
+    List getTopReceiversPairs();
+    List getTopTransmittersPairs();
     Date getDateOfSlider (int sliderValue);
     Date getDateFirst() throws ParseException;
     Date getDateLast()  throws ParseException;

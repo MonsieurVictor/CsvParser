@@ -65,7 +65,7 @@ public class GuiForm implements IGuiForm {
     private JLabel labelFrom2;
     private JLabel labelTo2;
 
-    private GuiForm guiForm;
+    private IGuiForm guiForm;
     private ControllerGui controller;
     private JSONSaver jsonSaver = new JSONSaver();
 
@@ -75,7 +75,7 @@ public class GuiForm implements IGuiForm {
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
 
-    public void startDraw(ControllerGui controller, GuiForm guiForm) throws ParseException {
+    public void startDraw(ControllerGui controller, IGuiForm guiForm) throws ParseException {
 
         this.guiForm = guiForm;
         this.controller = controller;
@@ -192,18 +192,14 @@ public class GuiForm implements IGuiForm {
     private ChangeListener createChangeListener() {
         return evt -> {
 
-            TimerTask myTimerTask = new TimerTask() {
+            new TimerTask() {
                 @Override
                 public void run() {
 
                     dateFrom = getDateOfSlider(sliderFrom.getValue());
                     dateTo = getDateOfSlider(sliderTo.getValue());
                     setLabelsDate();
-                    try {
-                        controller.reparseRecordListDateRange(dateFrom, dateTo);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    controller.reparseRecordListDateRange(dateFrom, dateTo);
                     checkSlidersPropriety();
                 }
             };
@@ -215,11 +211,7 @@ public class GuiForm implements IGuiForm {
                     dateFrom = getDateOfSlider(sliderFrom.getValue());
                     dateTo = getDateOfSlider(sliderTo.getValue());
                     setLabelsDate();
-                    try {
-                        controller.reparseRecordListDateRange(dateFrom, dateTo);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    controller.reparseRecordListDateRange(dateFrom, dateTo);
                     checkSlidersPropriety();
 
                 }
@@ -390,6 +382,14 @@ public class GuiForm implements IGuiForm {
         cal.setTime(dateFirst);
         cal.add(Calendar.SECOND, controller.getDiffSec()*sliderValue/1000 );
         return cal.getTime();
+    }
+
+    public String getCategoryFlag() {
+        return categoryFlag;
+    }
+
+    public void setCategoryFlag(String categoryFlag) {
+        this.categoryFlag = categoryFlag;
     }
 
 

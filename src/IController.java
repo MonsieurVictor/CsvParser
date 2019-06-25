@@ -3,13 +3,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface IController {
-    void initGui(AppOptions options,
-                        TextReader reader,
-                        TextAnalyzer analyzer,
-                        GuiForm guiForm,
-                        ErrorLogger logger,
-                        JSONSaver jsonSaver,
-                        ControllerGui controller);
+    void initGui(IAppOptions options,
+                 ITextReader reader,
+                 ITextAnalyzer analyzer,
+                 IGuiForm guiForm,
+                 IErrorLogger logger,
+                 IJSONSaver jsonSaver,
+                 ControllerGui controller);
 
     Date getDateFirst() throws ParseException;
 
