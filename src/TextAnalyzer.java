@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class TextAnalyzer implements ITextAnalyzer, IObservable {
@@ -26,8 +27,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
     List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
 
-
-       public class TopRatedPair {
+    public class TopRatedPair {
         String key;
         int value;
         TopRatedPair(String key, Integer value) {
@@ -37,6 +37,7 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     }
 
     public void setBuffer(List buffer) {
+//        this.buffer.clear();
         this.buffer = buffer;
     }
 
@@ -48,14 +49,27 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         setDateFirst();
         setDateLast();
         countRangeInitialDates(dateFirst, dateLast);
-        getTopReceiversPairs();
-        getTopTransmittersPairs();
-        getTopProtocols();
-        getTopUsedApplications();
+//        getTopReceiversPairs();
+//        getTopTransmittersPairs();
+//        getTopProtocols();
+//        getTopUsedApplications();
+
     }
 
+    public void doAnalyze() throws ParseException {
+        recordList = record.parseRecordList(this.buffer);
+        setDateFirst();
+        setDateLast();
+        countRangeInitialDates(dateFirst, dateLast);
+//        getTopReceiversPairs();
+//        getTopTransmittersPairs();
+//        getTopProtocols();
+//        getTopUsedApplications();
 
-    public List getTopReceiversPairs(){
+//        getMapTopRxAnalyzer(dateFirst, dateLast);
+    }
+
+     public List getTopReceiversPairs(){
         topReceiversPairs.clear();
         Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
 
@@ -105,53 +119,53 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         return topTransmittersPairs;
     }
 
-    private List <TopRatedPair> getTopProtocols(){
-        Map<String, Integer> topProtocolsMap = new HashMap<String, Integer>();
-
-        for (Record currentDataFlowRow : recordList) {
-            if (!currentDataFlowRow.getProtocolNumber().equals("")) {
-                if (topProtocolsMap.containsKey(currentDataFlowRow.getProtocolNumber())) {
-                    Integer totalTimesProtocolUsed = topProtocolsMap.get(currentDataFlowRow.getProtocolNumber());
-                    topProtocolsMap.replace(currentDataFlowRow.getProtocolNumber(), totalTimesProtocolUsed = totalTimesProtocolUsed + 1);
-                } else {
-                    topProtocolsMap.put(currentDataFlowRow.getProtocolNumber(), 1);
-                }
-            }
-        }
-        for (String key : topProtocolsMap.keySet()) {
-            topProtocolsPairs.add(new TopRatedPair(key, topProtocolsMap.get(key)));
-        }
-        Collections.sort(topProtocolsPairs, (o1, o2) -> o2.value - o1.value);
-        System.out.println(  " \n Top 3 Used Protocols:");
-        for (int i = 0; (i < 3) && (i < topProtocolsPairs.size()); i++) {
-            System.out.println(topProtocolsPairs.get(i).key + "  " +  topProtocolsPairs.get(i).value);
-        }
-        return topProtocolsPairs;
-    }
-
-    private List <TopRatedPair> getTopUsedApplications(){
-        Map<String, Integer> topUsedApplicationsMap = new HashMap<String, Integer>();
-
-        for (Record currentDataFlowRow : recordList) {
-            if (!currentDataFlowRow.getApplicationName().equals("")) {
-                if (topUsedApplicationsMap.containsKey(currentDataFlowRow.getApplicationName())) {
-                    Integer totalTimesApplicationUsed = topUsedApplicationsMap.get(currentDataFlowRow.getApplicationName());
-                    topUsedApplicationsMap.replace(currentDataFlowRow.getApplicationName(), totalTimesApplicationUsed = totalTimesApplicationUsed + 1);
-                } else {
-                    topUsedApplicationsMap.put(currentDataFlowRow.getApplicationName(), 1);
-                }
-            }
-        }
-        for (String key : topUsedApplicationsMap.keySet()) {
-            topUsedApplicationsPairs.add(new TopRatedPair(key, topUsedApplicationsMap.get(key)));
-        }
-        Collections.sort(topUsedApplicationsPairs, (o1, o2) -> o2.value - o1.value);
-        System.out.println(  " \n Top 10 Used Applications:");
-        for (int i = 0; (i < 10) && (i < topUsedApplicationsPairs.size()); i++) {
-            System.out.println(topUsedApplicationsPairs.get(i).key + "  " +  topUsedApplicationsPairs.get(i).value);
-        }
-        return topUsedApplicationsPairs;
-    }
+//    private List <TopRatedPair> getTopProtocols(){
+//        Map<String, Integer> topProtocolsMap = new HashMap<String, Integer>();
+//
+//        for (Record currentDataFlowRow : recordList) {
+//            if (!currentDataFlowRow.getProtocolNumber().equals("")) {
+//                if (topProtocolsMap.containsKey(currentDataFlowRow.getProtocolNumber())) {
+//                    Integer totalTimesProtocolUsed = topProtocolsMap.get(currentDataFlowRow.getProtocolNumber());
+//                    topProtocolsMap.replace(currentDataFlowRow.getProtocolNumber(), totalTimesProtocolUsed = totalTimesProtocolUsed + 1);
+//                } else {
+//                    topProtocolsMap.put(currentDataFlowRow.getProtocolNumber(), 1);
+//                }
+//            }
+//        }
+//        for (String key : topProtocolsMap.keySet()) {
+//            topProtocolsPairs.add(new TopRatedPair(key, topProtocolsMap.get(key)));
+//        }
+//        Collections.sort(topProtocolsPairs, (o1, o2) -> o2.value - o1.value);
+//        System.out.println(  " \n Top 3 Used Protocols:");
+//        for (int i = 0; (i < 3) && (i < topProtocolsPairs.size()); i++) {
+//            System.out.println(topProtocolsPairs.get(i).key + "  " +  topProtocolsPairs.get(i).value);
+//        }
+//        return topProtocolsPairs;
+//    }
+//
+//    private List <TopRatedPair> getTopUsedApplications(){
+//        Map<String, Integer> topUsedApplicationsMap = new HashMap<String, Integer>();
+//
+//        for (Record currentDataFlowRow : recordList) {
+//            if (!currentDataFlowRow.getApplicationName().equals("")) {
+//                if (topUsedApplicationsMap.containsKey(currentDataFlowRow.getApplicationName())) {
+//                    Integer totalTimesApplicationUsed = topUsedApplicationsMap.get(currentDataFlowRow.getApplicationName());
+//                    topUsedApplicationsMap.replace(currentDataFlowRow.getApplicationName(), totalTimesApplicationUsed = totalTimesApplicationUsed + 1);
+//                } else {
+//                    topUsedApplicationsMap.put(currentDataFlowRow.getApplicationName(), 1);
+//                }
+//            }
+//        }
+//        for (String key : topUsedApplicationsMap.keySet()) {
+//            topUsedApplicationsPairs.add(new TopRatedPair(key, topUsedApplicationsMap.get(key)));
+//        }
+//        Collections.sort(topUsedApplicationsPairs, (o1, o2) -> o2.value - o1.value);
+//        System.out.println(  " \n Top 10 Used Applications:");
+//        for (int i = 0; (i < 10) && (i < topUsedApplicationsPairs.size()); i++) {
+//            System.out.println(topUsedApplicationsPairs.get(i).key + "  " +  topUsedApplicationsPairs.get(i).value);
+//        }
+//        return topUsedApplicationsPairs;
+//    }
 
     private void setDateFirst() {
         this.dateFirst = recordList.get(0).getDateObj();
@@ -161,11 +175,11 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         this.dateLast = recordList.get(recordList.size() - 1).getDateObj();
     }
 
-    public Date getDateFirst() throws ParseException {
+    public Date getDateFirst() {
         return dateFirst;
     }
 
-    public Date getDateLast() throws ParseException {
+    public Date getDateLast() {
         return dateLast;
     }
 
@@ -216,16 +230,9 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
     }
 
     public void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException {
-//
         this.recordList = record.reparseRecordListDateRange(dateFrom,dateTo, this.buffer);
         notifyObserver();
     }
-
-//    public void handleChangeSliderEvent(Date dateFrom, Date dateTo, GuiForm guiForm) throws ParseException {
-//        this.guiForm = guiForm;
-//        System.out.println("Slider change handled!" + dateFrom.toString() + " " + dateTo.toString());
-//        reparseRecordListDateRange(dateFrom, dateTo);
-//    }
 
     public void addObserver(IObserver o){
         observers.add(o);
@@ -243,12 +250,62 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     public int getDiffSec(){
            return this.diffSec;
+    }
+
+    public Map <String, Long> getMapTopRx(Date dateFrom, Date dateTo){
+        Map <String, Long> mapTopRx = new HashMap<>();
+        mapTopRx = recordList
+                .stream()
+                .filter(record -> record.getDateObj().after(dateFrom) && record.getDateObj().before(dateTo))
+                .collect(Collectors.groupingBy(Record::getApplicationName, Collectors.summingLong(Record::getPacketsIn)))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return mapTopRx;
+    }
+
+    public Map <String, Long> getMapTopTx(Date dateFrom, Date dateTo){
+        Map <String, Long> mapTopTx = new HashMap<>();
+        mapTopTx = recordList
+                .stream()
+                .filter(record -> record.getDateObj().after(dateFrom) && record.getDateObj().before(dateTo))
+                .collect(Collectors.groupingBy(Record::getApplicationName, Collectors.summingLong(Record::getPacketsOut)))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return mapTopTx;
+    }
+
+    public Map <String, Long> getMapTopProtocols(Date dateFrom, Date dateTo){
+        Map <String, Long> mapTopProtocols = new HashMap<>();
+        mapTopProtocols = recordList
+                .stream()
+                .filter(record -> record.getDateObj().after(dateFrom) && record.getDateObj().before(dateTo))
+                .collect(Collectors.groupingBy(Record::getProtocolNumber, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return mapTopProtocols;
+    }
+
+    public Map <String, Long> getMapTopApps(Date dateFrom, Date dateTo){
+        Map <String, Long> mapTopApps = new HashMap<>();
+        mapTopApps = recordList
+                .stream()
+                .filter(record -> record.getDateObj().after(dateFrom) && record.getDateObj().before(dateTo))
+                .collect(Collectors.groupingBy(Record::getApplicationName, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        return mapTopApps;
     }
 }
 

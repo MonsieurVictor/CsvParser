@@ -6,18 +6,33 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class JSONSaver implements IJSONSaver  {
     private String jsonFileName;
 
-    public void createJSONFile(List<TextAnalyzer.TopRatedPair> pairs){
+    public void createJSONFile(Map<String, Long> map){
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; (i < 10) && i < (pairs.size()) ; i++) {
+//        map
+//                .entrySet()
+//                .stream()
+//                .limit(10)
+//                .forEach(e -> jsonArray.add(new JSONObject().put(e.getKey(), e.getValue())));
+
+        int i = 0;
+        for (Map.Entry<String, Long> entry : map.entrySet()) {
             JSONObject obj = new JSONObject();
-            obj.put(pairs.get(i).key, pairs.get(i).value);
+            obj.put(entry.getKey(), entry.getValue());
             jsonArray.add(obj);
+            i++;
+            if (i >= 10) {
+                break;
+            }
         }
-        try (FileWriter file = new FileWriter( "files" + File.separatorChar + getFileName())) {
+
+        try (FileWriter file = new FileWriter( "files"
+                + File.separatorChar
+                + getFileName())) {
             file.write(jsonArray.toJSONString());
             file.flush();
         } catch (IOException e) {

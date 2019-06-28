@@ -8,7 +8,6 @@ import java.util.List;
  */
 
 public interface ITextReader {
-    void readFileByAPath(String path) throws IOException;
     List getTextBuffer(String path) throws IOException;
 }
 

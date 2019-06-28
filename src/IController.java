@@ -3,13 +3,15 @@ import java.util.Date;
 import java.util.List;
 
 public interface IController {
-    void initGui(IAppOptions options,
-                 ITextReader reader,
-                 ITextAnalyzer analyzer,
-                 IGuiForm guiForm,
-                 IErrorLogger logger,
-                 IJSONSaver jsonSaver,
-                 ControllerGui controller);
+//    void initController(IAppOptions options,
+//                        ITextReader reader,
+//                        ITextAnalyzer analyzer,
+//                        IGuiForm guiForm,
+//                        IErrorLogger logger,
+//                        IJSONSaver jsonSaver,
+//                        ControllerGui controller);
+
+    void initController();
 
     Date getDateFirst() throws ParseException;
 
@@ -18,10 +20,6 @@ public interface IController {
     Date[] getDateArrayForSliderLabels();
 
     void setDateArrayForSliderLabels();
-
-    List<TextAnalyzer.TopRatedPair> getTopReceiversPairs();
-
-    List <TextAnalyzer.TopRatedPair> getTopTransmittersPairs();
 
     void reparseRecordListDateRange(Date dateFrom, Date dateTo) throws ParseException;
 

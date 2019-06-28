@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 import java.util.Timer;
 
 public class GuiForm implements IGuiForm {
@@ -51,14 +50,25 @@ public class GuiForm implements IGuiForm {
     private JSlider sliderTo;
 
     private ChartFrame frameBarTopRx;
-    private ChartFrame framePieTopRx;
     private ChartFrame frameBarTopTx;
+    private ChartFrame frameBarTopProtocols;
+    private ChartFrame frameBarTopApps;
+
     private ChartFrame framePieTopTx;
+    private ChartFrame framePieTopRx;
+    private ChartFrame framePieTopProtocols;
+    private ChartFrame framePieTopApps;
 
     private ChartPanel panelChartBarTopRx;
-    private ChartPanel panelChartPieTopRx;
     private ChartPanel panelChartBarTopTx;
+    private ChartPanel panelChartBarTopProtocols;
+    private ChartPanel panelChartBarTopApps;
+
+
+    private ChartPanel panelChartPieTopRx;
     private ChartPanel panelChartPieTopTx;
+    private ChartPanel panelChartPieTopProtocols;
+    private ChartPanel panelChartPieTopApps;
 
     private JLabel labelFrom;
     private JLabel labelTo;
@@ -79,9 +89,9 @@ public class GuiForm implements IGuiForm {
 
         this.guiForm = guiForm;
         this.controller = controller;
-
         this.dateFirst = controller.getDateFirst();
         this.dateLast = controller.getDateLast();
+
         dateFrom = controller.getDateFirst();
         dateTo = controller.getDateLast();
         dateArrayForSliderLabels = controller.getDateArrayForSliderLabels();
@@ -89,6 +99,7 @@ public class GuiForm implements IGuiForm {
         setLabelsDate();
         setSliderFrom();
         setSliderTo();
+
         buttonTopRx = new JButton("Top Receivers");
         buttonTopTx = new JButton("Top Transmitters");
         buttonTopProtocols = new JButton("Top Protocols");
@@ -108,12 +119,12 @@ public class GuiForm implements IGuiForm {
             drawTopTx();
         });
         buttonTopProtocols.addActionListener(e -> {
-//            setJframeMainMenu("Top 10 Protocols");
-//            drawMenuProtocols();
+            setJframeMainMenu("Top 10 Protocols");
+            drawTopProtocols();
         });
         buttonTopApps.addActionListener(e -> {
-//            setJframeMainMenu("Top 10 Apps");
-//            drawMenuApps();
+            setJframeMainMenu("Top 10 Apps");
+            drawTopApps();
         });
         buttonBack.addActionListener(e -> {
             buttonShowBarChart.removeActionListener(listenerShowBarChart);
@@ -133,7 +144,6 @@ public class GuiForm implements IGuiForm {
 
     private void drawTopRx() {
         categoryFlag = "Rx";
-
         listenerShowBarChart = evt -> {
             frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
         };
@@ -144,11 +154,11 @@ public class GuiForm implements IGuiForm {
         buttonShowPieChart.addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
             updateChartsTopRx();
-            if (controller.getTopReceiversPairs().isEmpty()) {
+            if (controller.getMapTopRxAnalyzer(dateFrom, dateTo).isEmpty()) {
                 showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
             } else {
                 jsonSaver.setFileName("Top_10_Rx_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getTopReceiversPairs());
+                jsonSaver.createJSONFile(controller.getMapTopRxAnalyzer(dateFrom, dateTo));
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
@@ -172,18 +182,72 @@ public class GuiForm implements IGuiForm {
 
         listenerToJSON = evt -> {
             updateChartsTopTx();
-            if (controller.getTopTransmittersPairs().isEmpty()) {
+            if (controller.getMapTopTxAnalyzer(dateFrom,dateTo).isEmpty()) {
                 showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
             } else {
                 jsonSaver.setFileName("Top_10_Transmitters_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getTopTransmittersPairs());
+                jsonSaver.createJSONFile(controller.getMapTopTxAnalyzer(dateFrom, dateTo));
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
         buttonToJSON.addActionListener (listenerToJSON) ;
-
         listenerSliderFrom = createChangeListener();
+        sliderFrom.addChangeListener(listenerSliderFrom);
+        listenerSliderTo = createChangeListener();
+        sliderTo.addChangeListener(listenerSliderTo);
+    }
 
+    private void drawTopProtocols() {
+        categoryFlag = "Protocols";
+
+        listenerShowBarChart = evt -> {
+            frameBarTopProtocols = createChartFrame(createChartBarTopProtocols(), "Top 10 Protocols", 0, 205, 900, 300);
+        };
+        buttonShowBarChart.addActionListener(listenerShowBarChart);
+        listenerShowPieChart = evt -> {
+            framePieTopProtocols = createChartFrame(createJFreeChartPieTopProtocols(), "Top 10 Protocols", 0, 510, 900, 300 );
+        };
+        buttonShowPieChart.addActionListener(listenerShowPieChart);
+        listenerToJSON = evt -> {
+            updateChartsTopProtocols();
+            if (controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo).isEmpty()) {
+                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
+            } else {
+                jsonSaver.setFileName("Top_10_Protocols_", dateFrom, dateTo);
+                jsonSaver.createJSONFile(controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
+                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
+            }
+        };
+        buttonToJSON.addActionListener(listenerToJSON);
+        listenerSliderFrom = createChangeListener();
+        sliderFrom.addChangeListener(listenerSliderFrom);
+        listenerSliderTo = createChangeListener();
+        sliderTo.addChangeListener(listenerSliderTo);
+    }
+
+    private void drawTopApps() {
+        categoryFlag = "Apps";
+
+        listenerShowBarChart = evt -> {
+            frameBarTopApps = createChartFrame(createChartBarTopApps(), "Top 10 Apps", 0, 205, 900, 300);
+        };
+        buttonShowBarChart.addActionListener(listenerShowBarChart);
+        listenerShowPieChart = evt -> {
+            framePieTopApps = createChartFrame(createJFreeChartPieTopApps(), "Top 10 Apps", 0, 510, 900, 300 );
+        };
+        buttonShowPieChart.addActionListener(listenerShowPieChart);
+        listenerToJSON = evt -> {
+            updateChartsTopApps();
+            if (controller.getMapTopAppsAnalyzer(dateFrom, dateTo).isEmpty()) {
+                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
+            } else {
+                jsonSaver.setFileName("Top_10_Apps_", dateFrom, dateTo);
+                jsonSaver.createJSONFile(controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
+                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
+            }
+        };
+        buttonToJSON.addActionListener(listenerToJSON);
+        listenerSliderFrom = createChangeListener();
         sliderFrom.addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
         sliderTo.addChangeListener(listenerSliderTo);
@@ -216,13 +280,8 @@ public class GuiForm implements IGuiForm {
 
                 }
             }, 0);
-
-
-
-
         };
     }
-
 
     private ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
         ChartPanel chartBarPanel = new ChartPanel(chartBar);
@@ -267,26 +326,47 @@ public class GuiForm implements IGuiForm {
     }
 
     private JFreeChart createChartBarTopRx() {
-        return createJFreeChartBar("Top 10 Received Packets", controller.getTopReceiversPairs());
+        return createJFreeChartBar("Top 10 Received Packets",
+                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
     }
 
     private JFreeChart createChartBarTopTx() {
-        return createJFreeChartBar("Top 10 Transmitted Packets", controller.getTopTransmittersPairs());
+        return createJFreeChartBar("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
+    }
+
+    private JFreeChart createChartBarTopProtocols() {
+        return createJFreeChartBar("Top 10 Protocols", controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
+    }
+
+    private JFreeChart createChartBarTopApps() {
+        return createJFreeChartBar("Top 10 Applications", controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
     }
 
     private JFreeChart createJFreeChartPieTopRx() {
-        return createJFreeChartPie("Top 10 Received Packets", controller.getTopReceiversPairs());
+        return createJFreeChartPie("Top 10 Received Packets",
+                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
     }
 
     private JFreeChart createJFreeChartPieTopTx() {
-        return createJFreeChartPie("Top 10 Transmitted Packets", controller.getTopTransmittersPairs());
+        return createJFreeChartPie("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
     }
 
-    private JFreeChart createJFreeChartBar(String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
+    private JFreeChart createJFreeChartPieTopProtocols() {
+        return createJFreeChartPie("Top 3 Protocols",
+                controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
+    }
+
+    private JFreeChart createJFreeChartPieTopApps() {
+        return createJFreeChartPie("Top 10 Applications",
+                controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
+    }
+
+    private JFreeChart createJFreeChartBar(String categoryName, Map <String, Long> map ) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (int i = 0; (i < 10) && i < (pair.size()) ; i++) {
-            dataset.setValue(pair.get(i).value, "", pair.get(i).key);
-        }
+
+
+        map.entrySet().stream().limit(10).forEach(e -> dataset.setValue(e.getValue(), "", e.getKey()));
+
         JFreeChart chartBar = ChartFactory.createBarChart3D(categoryName
                         + getDateRangeString(), "",
                 "Packets", dataset,  PlotOrientation.HORIZONTAL,
@@ -294,11 +374,11 @@ public class GuiForm implements IGuiForm {
         return chartBar;
     }
 
-    private JFreeChart createJFreeChartPie(String categoryName, List<TextAnalyzer.TopRatedPair> pair) {
+    private JFreeChart createJFreeChartPie(String categoryName, Map <String, Long> map ) {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        for (int i = 0; (i < 10) && i < (pair.size()) ; i++) {
-            dataset.setValue(pair.get(i).key, new Integer(pair.get(i).value));
-        }
+
+        map.entrySet().stream().limit(10).forEach(e -> dataset.setValue(e.getKey(), e.getValue()));
+
         JFreeChart chartPie = ChartFactory.createPieChart3D(categoryName + getDateRangeString(),
                 dataset, true, true, true);
         return chartPie;
@@ -357,6 +437,52 @@ public class GuiForm implements IGuiForm {
         }
     }
 
+    public void updateChartsTopProtocols() {
+        try {
+            if (frameBarTopProtocols.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
+                frameBarTopProtocols.getContentPane().removeAll();
+                panelChartBarTopProtocols = new ChartPanel(createChartBarTopProtocols());
+                frameBarTopProtocols.add(panelChartBarTopProtocols);
+                frameBarTopProtocols.setVisible(true);
+            }
+        } catch (Exception e) {
+            System.out.println("frameBarTopProtocols exception catched: " + e);
+        }
+        try {
+            if (framePieTopProtocols.isShowing()) {
+                framePieTopProtocols.getContentPane().removeAll();
+                panelChartPieTopProtocols = new ChartPanel(createJFreeChartPieTopProtocols());
+                framePieTopProtocols.add(panelChartPieTopProtocols, BorderLayout.CENTER);
+                framePieTopProtocols.setVisible(true);
+            }
+        } catch (Exception e) {
+            System.out.println("framePieTopProtocols exception catched: " + e);
+        }
+    }
+
+    public void updateChartsTopApps() {
+        try {
+            if (frameBarTopApps.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
+                frameBarTopApps.getContentPane().removeAll();
+                panelChartBarTopApps = new ChartPanel(createChartBarTopApps());
+                frameBarTopApps.add(panelChartBarTopApps);
+                frameBarTopApps.setVisible(true);
+            }
+        } catch (Exception e) {
+            System.out.println("frameBarTopApps exception catched: " + e);
+        }
+        try {
+            if (framePieTopApps.isShowing()) {
+                framePieTopApps.getContentPane().removeAll();
+                panelChartPieTopApps = new ChartPanel(createJFreeChartPieTopApps());
+                framePieTopApps.add(panelChartPieTopApps, BorderLayout.CENTER);
+                framePieTopApps.setVisible(true);
+            }
+        } catch (Exception e) {
+            System.out.println("framePieTopApps exception catched: " + e);
+        }
+    }
+
     private void setLabelsDate() {
         labelFrom.setText("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom)));
         labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
@@ -377,6 +503,7 @@ public class GuiForm implements IGuiForm {
             buttonToJSON.setEnabled(true);
         }
     }
+
     public Date getDateOfSlider (int sliderValue){
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateFirst);
@@ -392,11 +519,6 @@ public class GuiForm implements IGuiForm {
         this.categoryFlag = categoryFlag;
     }
 
-
-//        }else if  (categoryFlag == "Protocols"){
-//        updateChartsTop"Protocols();
-//        }else if  (categoryFlag == "Apps"){
-//        updateChartsTopApps();
     }
 
 

@@ -16,10 +16,11 @@ public class Record {
     private String destinationAddress;
     private String protocolNumber;
     private String sourceAddress;
+    private boolean isCorrectRow = true;
 
     List <Record>recordList = new ArrayList<>();
 
-    public Record(){}
+    public Record(){this.isCorrectRow = true;}
 
     private Record(
             Date dateObj,
@@ -30,7 +31,8 @@ public class Record {
             String applicationName,
             String destinationAddress,
             String protocolNumber,
-            String sourceAddress) {
+            String sourceAddress,
+            boolean isCorrectRow) {
         this.dateObj = dateObj;
         this.bytesIn = bytesIn;
         this.bytesOut = bytesOut;
@@ -40,31 +42,36 @@ public class Record {
         this.destinationAddress = destinationAddress;
         this.protocolNumber = protocolNumber;
         this.sourceAddress = sourceAddress;
+        this.sourceAddress = sourceAddress;
+        this.isCorrectRow = isCorrectRow;
     }
-
 
     public List <Record> parseRecordList(List <String[]> buffer) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss.SSSSSSSSS a");
+        recordList.clear();
         for (String[] csvRow : buffer) {
-            Date dateObj = sdf.parse(csvRow[0]);
-            long bytesIn = Long.parseLong(csvRow[1]);
-            long bytesOut = Long.parseLong(csvRow[2]);
-            int packetsIn = Integer.parseInt(csvRow[3]);
-            int packetsOut = Integer.parseInt(csvRow[4]);
-            String applicationName = csvRow[5];
-            String destinationAddress = csvRow[6];
-            String protocolNumber = csvRow[7];
-            String sourceAddress = csvRow[8];
-            this.recordList.add(new Record(
-                    dateObj,
-                    bytesIn,
-                    bytesOut,
-                    packetsIn,
-                    packetsOut,
-                    applicationName,
-                    destinationAddress,
-                    protocolNumber,
-                    sourceAddress));
+            if (csvRow.length == 9 && csvRow[5].length() != 0) {
+                Date dateObj = sdf.parse(csvRow[0]);
+                long bytesIn = Long.parseLong(csvRow[1]);
+                long bytesOut = Long.parseLong(csvRow[2]);
+                int packetsIn = Integer.parseInt(csvRow[3]);
+                int packetsOut = Integer.parseInt(csvRow[4]);
+                String applicationName = csvRow[5];
+                String destinationAddress = csvRow[6];
+                String protocolNumber = csvRow[7];
+                String sourceAddress = csvRow[8];
+                this.recordList.add(new Record(
+                        dateObj,
+                        bytesIn,
+                        bytesOut,
+                        packetsIn,
+                        packetsOut,
+                        applicationName,
+                        destinationAddress,
+                        protocolNumber,
+                        sourceAddress,
+                        isCorrectRow));
+            }
         }
         return recordList;
     }

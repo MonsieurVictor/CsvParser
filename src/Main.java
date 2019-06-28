@@ -10,7 +10,6 @@
  You can use any open source libraries to accomplish this task
  Please confirm receipt of the email.*/
 
-
 public class Main {
     private ITextReader reader;
     private ITextAnalyzer analyzer;
@@ -18,7 +17,9 @@ public class Main {
     private IErrorLogger logger;
     private IGuiForm guiForm;
     private IJSONSaver jsonSaver;
-    private ControllerGui controller;
+    private IConsoleLogger consoleLogger;
+    private ControllerConsole controllerConsole;
+    private ControllerGui controllerGui;
 
     private Main (
                  IAppOptions options,
@@ -27,7 +28,9 @@ public class Main {
                  IErrorLogger logger,
                  IGuiForm guiForm,
                  IJSONSaver jsonSaver,
-                 ControllerGui controller
+                 IConsoleLogger consoleLogger,
+                 ControllerConsole controllerConsole,
+                 ControllerGui controllerGui
               ) {
         this.options = options;
         this.reader = reader;
@@ -36,13 +39,15 @@ public class Main {
         this.logger = logger;
         this.guiForm = guiForm;
         this.jsonSaver = jsonSaver;
-        this.controller = controller;
+        this.consoleLogger = consoleLogger;
+        this.controllerConsole = controllerConsole;
+        this.controllerGui = controllerGui;
     }
 
     private void start() {
-            controller.initGui(options, reader, analyzer,  guiForm, logger, jsonSaver, controller);
-        }
-
+        controllerConsole.initController(options, reader, analyzer,  guiForm, logger, jsonSaver, consoleLogger, controllerConsole);
+        controllerGui.initController(options, reader, analyzer,  guiForm, logger, jsonSaver, controllerGui);
+    }
 
     public static void main(String[] args) {
         IAppOptions options = new AppOptions();
@@ -51,8 +56,10 @@ public class Main {
         ITextAnalyzer analyzer = new TextAnalyzer();
         IGuiForm guiForm = new GuiForm();
         IJSONSaver jsonSaver = new JSONSaver();
-        ControllerGui controller = new ControllerGui();
-        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, controller); //почему нельзя просто создать объект с пустыми аргументами?
+        IConsoleLogger consoleLogger = new ConsoleLogger();
+        ControllerConsole controllerConsole = new ControllerConsole();
+        ControllerGui controllerGui = new ControllerGui();
+        Main app = new Main(options, reader, analyzer, logger, guiForm, jsonSaver, consoleLogger, controllerConsole, controllerGui); //почему нельзя просто создать объект с пустыми аргументами?
         app.start();
     }
 }

@@ -5,7 +5,9 @@ public interface IGuiForm {
 
     String getCategoryFlag();
     void setCategoryFlag(String categoryFlag);
-    public void updateChartsTopTx();
-    public void updateChartsTopRx();
+    void updateChartsTopTx();
+    void updateChartsTopRx();
+    void updateChartsTopProtocols();
+    void updateChartsTopApps();
 }
 
