@@ -102,6 +102,8 @@ public class GuiForm implements IGuiForm {
         setSliderFrom();
         setSliderTo();
 
+        ToolTipManager.sharedInstance().setInitialDelay(300);
+
         buttonTopRx = new JButton(new ImageIcon(getClass().getResource("/main/resources/receivers3.png")));
         buttonTopTx = new JButton(new ImageIcon(getClass().getResource("/main/resources/Tx.png")));
         buttonTopProtocols = new JButton(new ImageIcon(getClass().getResource("/main/resources/protocols2.png")));
@@ -114,6 +116,7 @@ public class GuiForm implements IGuiForm {
 
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         rootPanelLauncher = new JPanel();
+
         rootPanelLauncher.add(buttonTopRx);
         rootPanelLauncher.add(buttonTopTx);
         rootPanelLauncher.add(buttonTopProtocols);
@@ -142,11 +145,11 @@ public class GuiForm implements IGuiForm {
             sliderTo.removeChangeListener(listenerSliderTo);
             jFrame.setTitle("Main menu");
             jFrame.setContentPane(rootPanelLauncher);
-            jFrame.setBounds(0, 0, 300, 200);
+            jFrame.setBounds(0, 0, 170, 150);
             jFrame.setVisible(true);
         });
         jFrame.setContentPane(rootPanelLauncher);
-        jFrame.setBounds(0, 0, 300, 200);
+        jFrame.setBounds(0, 0, 170, 150);
         jFrame.setVisible(true);
     }
 
