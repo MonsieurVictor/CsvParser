@@ -263,32 +263,16 @@ public class GuiForm implements IGuiForm {
 
     private ChangeListener createChangeListener() {
         return evt -> {
-            JSlider source = (JSlider)evt.getSource();  // get the slider
+            JSlider source = (JSlider)evt.getSource();
+            dateFrom = getDateOfSlider(sliderFrom.getValue());
+            dateTo = getDateOfSlider(sliderTo.getValue());
+            setLabelsDate(); // get the slider
             if (!source.getValueIsAdjusting()) {
-                new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        dateFrom = getDateOfSlider(sliderFrom.getValue());
-                        dateTo = getDateOfSlider(sliderTo.getValue());
-                        setLabelsDate();
-                        controller.reparseRecordListDateRange(dateFrom, dateTo);
-                        checkSlidersPropriety();
-                    }
-                };
-
-                myTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-
-                        dateFrom = getDateOfSlider(sliderFrom.getValue());
-                        dateTo = getDateOfSlider(sliderTo.getValue());
-                        setLabelsDate();
-                        controller.reparseRecordListDateRange(dateFrom, dateTo);
-                        checkSlidersPropriety();
-
-                    }
-                }, 0);
+                dateFrom = getDateOfSlider(sliderFrom.getValue());
+                dateTo = getDateOfSlider(sliderTo.getValue());
+                setLabelsDate();
+                controller.reparseRecordListDateRange(dateFrom, dateTo);
+                checkSlidersPropriety();
             }
         };
     }
