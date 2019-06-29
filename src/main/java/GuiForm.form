@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GuiForm">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="main.java.GuiForm">
   <grid id="27dc6" binding="rootPanelChart" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="290" y="237" width="933" height="560"/>
@@ -59,7 +59,7 @@
               <background color="-1"/>
               <hideActionText value="true"/>
               <horizontalTextPosition value="0"/>
-              <icon value="icons/back3.png"/>
+              <icon value="main/resources/back3.png"/>
               <text value=""/>
               <toolTipText value="Back"/>
             </properties>
@@ -71,7 +71,7 @@
               <hideActionText value="true"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <icon value="icons/bar2.png"/>
+              <icon value="main/resources/bar2.png"/>
               <text value=""/>
               <toolTipText value="Show Bar Chart"/>
               <verticalAlignment value="0"/>
@@ -87,7 +87,7 @@
               <focusPainted value="true"/>
               <focusTraversalPolicyProvider value="false"/>
               <horizontalTextPosition value="0"/>
-              <icon value="icons/pie2.png"/>
+              <icon value="main/resources/pie2.png"/>
               <text value=""/>
               <toolTipText value="Show Pie Chart"/>
             </properties>
@@ -98,7 +98,7 @@
               <autoscrolls value="false"/>
               <background color="-1"/>
               <enabled value="true"/>
-              <icon value="icons/JSON2.png"/>
+              <icon value="main/resources/JSON2.png"/>
               <text value=""/>
               <toolTipText value="to .JSON file"/>
             </properties>

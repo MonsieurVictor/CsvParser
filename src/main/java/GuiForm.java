@@ -1,3 +1,5 @@
+package main.java;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -100,10 +102,16 @@ public class GuiForm implements IGuiForm {
         setSliderFrom();
         setSliderTo();
 
-        buttonTopRx = new JButton("Top Receivers");
-        buttonTopTx = new JButton("Top Transmitters");
-        buttonTopProtocols = new JButton("Top Protocols");
-        buttonTopApps = new JButton("Top Apps");
+        buttonTopRx = new JButton(new ImageIcon(getClass().getResource("/main/resources/receivers3.png")));
+        buttonTopTx = new JButton(new ImageIcon(getClass().getResource("/main/resources/Tx.png")));
+        buttonTopProtocols = new JButton(new ImageIcon(getClass().getResource("/main/resources/protocols2.png")));
+        buttonTopApps = new JButton(new ImageIcon(getClass().getResource("/main/resources/apps.png")));
+
+        buttonTopRx.setToolTipText("Top 10 Receivers");
+        buttonTopTx.setToolTipText("Top 10 Transmitters");
+        buttonTopProtocols.setToolTipText("Top 3 Protocols");
+        buttonTopApps.setToolTipText("Top 10 Apps");
+
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         rootPanelLauncher = new JPanel();
         rootPanelLauncher.add(buttonTopRx);
@@ -255,31 +263,33 @@ public class GuiForm implements IGuiForm {
 
     private ChangeListener createChangeListener() {
         return evt -> {
+            JSlider source = (JSlider)evt.getSource();  // get the slider
+            if (!source.getValueIsAdjusting()) {
+                new TimerTask() {
+                    @Override
+                    public void run() {
 
-            new TimerTask() {
-                @Override
-                public void run() {
+                        dateFrom = getDateOfSlider(sliderFrom.getValue());
+                        dateTo = getDateOfSlider(sliderTo.getValue());
+                        setLabelsDate();
+                        controller.reparseRecordListDateRange(dateFrom, dateTo);
+                        checkSlidersPropriety();
+                    }
+                };
 
-                    dateFrom = getDateOfSlider(sliderFrom.getValue());
-                    dateTo = getDateOfSlider(sliderTo.getValue());
-                    setLabelsDate();
-                    controller.reparseRecordListDateRange(dateFrom, dateTo);
-                    checkSlidersPropriety();
-                }
-            };
+                myTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
 
-            myTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
+                        dateFrom = getDateOfSlider(sliderFrom.getValue());
+                        dateTo = getDateOfSlider(sliderTo.getValue());
+                        setLabelsDate();
+                        controller.reparseRecordListDateRange(dateFrom, dateTo);
+                        checkSlidersPropriety();
 
-                    dateFrom = getDateOfSlider(sliderFrom.getValue());
-                    dateTo = getDateOfSlider(sliderTo.getValue());
-                    setLabelsDate();
-                    controller.reparseRecordListDateRange(dateFrom, dateTo);
-                    checkSlidersPropriety();
-
-                }
-            }, 0);
+                    }
+                }, 0);
+            }
         };
     }
 

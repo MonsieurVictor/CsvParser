@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.File;
 import java.io.IOException;
 import org.json.simple.JSONArray;
@@ -5,7 +7,6 @@ import org.json.simple.JSONObject;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class JSONSaver implements IJSONSaver  {

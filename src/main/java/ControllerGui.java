@@ -1,7 +1,8 @@
+package main.java;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class ControllerGui implements IController, IObserver {
@@ -76,14 +77,6 @@ public class ControllerGui implements IController, IObserver {
     public void setDateArrayForSliderLabels(){
         analyzer.setDateArrayForSliderLabels();
     }
-
-//    public List <TextAnalyzer.TopRatedPair> getTopReceiversPairs(){
-//        return analyzer.getTopReceiversPairs();
-//    }
-//
-//    public List <TextAnalyzer.TopRatedPair> getTopTransmittersPairs(){
-//        return analyzer.getTopTransmittersPairs();
-//    }
 
     public Map<String, Long> getMapTopRxAnalyzer(Date dateFrom, Date dateTo) {
         return analyzer.getMapTopRx(dateFrom, dateTo);

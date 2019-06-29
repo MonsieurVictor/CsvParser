@@ -1,3 +1,5 @@
+package main.java;
+
 import java.text.ParseException;
 
 public interface IGuiForm {

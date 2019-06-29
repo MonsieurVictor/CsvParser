@@ -1,3 +1,5 @@
+package main.java;
+
 /**Create a class that computes the Top 10 traffic receivers,
  * Top 10 traffic transmitters,
  * top 3 used protocols,
