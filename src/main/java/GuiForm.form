@@ -12,7 +12,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="33c1" class="javax.swing.JLabel" binding="labelFrom2">
+          <component id="33c1" class="javax.swing.JLabel" binding="labelFromAtSlider">
             <constraints border-constraint="West"/>
             <properties>
               <text value=" Date from:"/>
@@ -27,7 +27,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="c4f04" class="javax.swing.JLabel" binding="labelTo2">
+          <component id="c4f04" class="javax.swing.JLabel" binding="labelToAtSlider">
             <constraints border-constraint="West"/>
             <properties>
               <text value=" Date to     :"/>
@@ -42,7 +42,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="38d0f" class="javax.swing.JLabel" binding="labelFrom">
+          <component id="38d0f" class="javax.swing.JLabel" binding="labelFromAtButtons">
             <constraints/>
             <properties>
               <enabled value="true"/>
@@ -103,7 +103,7 @@
               <toolTipText value="to .JSON file"/>
             </properties>
           </component>
-          <component id="1363c" class="javax.swing.JLabel" binding="labelTo">
+          <component id="1363c" class="javax.swing.JLabel" binding="labelToAtButtons">
             <constraints/>
             <properties>
               <font name="Courier New" size="14" style="1"/>

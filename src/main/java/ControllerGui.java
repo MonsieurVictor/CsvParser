@@ -15,7 +15,7 @@ public class ControllerGui implements IController, IObserver {
     private IJSONSaver jsonSaver;
     private ControllerGui controllerGui;
 
-    public void initController(){};
+    public void initController(){}
 
     public void initController(IAppOptions options,
                                ITextReader reader,
@@ -35,8 +35,9 @@ public class ControllerGui implements IController, IObserver {
         try {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
-            analyzer.doAnalyze(controllerGui);
+            analyzer.prepareForAnalyze(controllerGui);
             guiForm.startDraw(controllerGui, guiForm);
+            addActionListenersMainMenu();
         } catch (IOException e) {
             logger.logIOException(e);
             //             nice report on can't open the file
@@ -57,8 +58,10 @@ public class ControllerGui implements IController, IObserver {
             System.out.println(guiForm.getCategoryFlag());
             guiForm.updateChartsTopTx();
         } else if (guiForm.getCategoryFlag() == "Protocols") {
+            System.out.println(guiForm.getCategoryFlag());
             guiForm.updateChartsTopProtocols();
         } else if (guiForm.getCategoryFlag() == "Apps") {
+            System.out.println(guiForm.getCategoryFlag());
             guiForm.updateChartsTopApps();
         }
     }
@@ -104,5 +107,39 @@ public class ControllerGui implements IController, IObserver {
 
     public int getDiffSec(){
          return analyzer.getDiffSec();
+    }
+
+    private void addActionListenersMainMenu(){
+        guiForm.getButtonTopRx().addActionListener(e -> {
+                guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                guiForm.drawTopRx();
+            }
+        );
+        guiForm.getButtonTopTx().addActionListener(e -> {
+                guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                guiForm.drawTopTx();
+            }
+        );
+        guiForm.getButtonTopProtocols().addActionListener(e -> {
+                guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                guiForm.drawTopProtocols();
+            }
+        );
+        guiForm.getButtonTopApps().addActionListener(e -> {
+                guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                guiForm.drawTopApps();
+            }
+        );
+//        guiForm.getButtonBack().addActionListener(e -> {
+//            guiForm.getButtonShowBarChart().removeActionListener(getListenerShowBarChart());
+//            guiForm.getButtonShowPieChart().removeActionListener(getListenerShowPieChart());
+//            guiForm.getButtonToJSON().removeActionListener(getListenerToJSON());
+//            guiForm.getSliderFrom().removeChangeListener(getListenerSliderFrom());
+//            guiForm.getSliderTo().removeChangeListener(getListenerSliderTo());
+//            guiForm.getjFrameMain().setTitle("Main menu");
+//            guiForm.getjFrameMain().setContentPane(getRootPanelLauncher());
+//            guiForm.getjFrameMain().setBounds(0, 0, 170, 150);
+//            guiForm.getjFrameMain().setVisible(true);
+//        });
     }
 }

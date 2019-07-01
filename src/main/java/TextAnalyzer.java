@@ -24,26 +24,11 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
 
     List <Record> recordList = new ArrayList<>();
 
-    List <TextAnalyzer.TopRatedPair> topReceiversPairs = new ArrayList<>();
-    List <TextAnalyzer.TopRatedPair> topTransmittersPairs = new ArrayList<>();
-    List <TextAnalyzer.TopRatedPair> topProtocolsPairs = new ArrayList<>();
-    List <TextAnalyzer.TopRatedPair> topUsedApplicationsPairs = new ArrayList<>();
-
-    public class TopRatedPair {
-        String key;
-        int value;
-        TopRatedPair(String key, Integer value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
     public void setBuffer(List buffer) {
-//        this.buffer.clear();
         this.buffer = buffer;
     }
 
-    public void doAnalyze(ControllerGui controller) throws ParseException {
+    public void prepareForAnalyze(ControllerGui controller) throws ParseException {
         this.controller = controller;
         addObserver(controller);
         recordList = record.parseRecordList(this.buffer);
@@ -51,123 +36,14 @@ public class TextAnalyzer implements ITextAnalyzer, IObservable {
         setDateFirst();
         setDateLast();
         countRangeInitialDates(dateFirst, dateLast);
-//        getTopReceiversPairs();
-//        getTopTransmittersPairs();
-//        getTopProtocols();
-//        getTopUsedApplications();
-
     }
 
-    public void doAnalyze() throws ParseException {
+    public void prepareForAnalyze() throws ParseException {
         recordList = record.parseRecordList(this.buffer);
         setDateFirst();
         setDateLast();
         countRangeInitialDates(dateFirst, dateLast);
-//        getTopReceiversPairs();
-//        getTopTransmittersPairs();
-//        getTopProtocols();
-//        getTopUsedApplications();
-
-//        getMapTopRxAnalyzer(dateFirst, dateLast);
     }
-
-     public List getTopReceiversPairs(){
-        topReceiversPairs.clear();
-        Map<String, Integer> top10ReceiversMap = new HashMap<String, Integer>();
-
-        for (Record currentDataFlowRow : recordList) {
-            if (!currentDataFlowRow.getApplicationName().equals("")) {
-                if (top10ReceiversMap.containsKey(currentDataFlowRow.getApplicationName())) {
-                    Integer totalPacketsReceived = top10ReceiversMap.get(currentDataFlowRow.getApplicationName());
-                    top10ReceiversMap.replace(currentDataFlowRow.getApplicationName(), totalPacketsReceived = totalPacketsReceived + currentDataFlowRow.getPacketsIn());
-                } else {
-                    top10ReceiversMap.put(currentDataFlowRow.getApplicationName(), currentDataFlowRow.getPacketsIn());
-                }
-            }
-        }
-        for (String key : top10ReceiversMap.keySet()) {
-            topReceiversPairs.add(new TopRatedPair(key, top10ReceiversMap.get(key)));
-        }
-        Collections.sort(topReceiversPairs, (o1, o2) -> o2.value - o1.value);
-        System.out.println(  " \n Top 10 Rated Receivers:");
-        for (int i = 0; (i < 10) && (i < topReceiversPairs.size()); i++) {
-            System.out.println(topReceiversPairs.get(i).key + "  " + topReceiversPairs.get(i).value);
-        }
-        return topReceiversPairs;
-    }
-
-    public List getTopTransmittersPairs(){
-        topTransmittersPairs.clear();
-        Map<String, Integer> top10TransmittersMap = new HashMap<String, Integer>();
-
-        for (Record currentDataFlowRow : recordList) {
-            if (!currentDataFlowRow.getApplicationName().equals("")) {
-                if (top10TransmittersMap.containsKey(currentDataFlowRow.getApplicationName())) {
-                    Integer totalPacketsTransmitted = top10TransmittersMap.get(currentDataFlowRow.getApplicationName());
-                    top10TransmittersMap.replace(currentDataFlowRow.getApplicationName(), totalPacketsTransmitted = totalPacketsTransmitted + currentDataFlowRow.getPacketsOut());
-                } else {
-                    top10TransmittersMap.put(currentDataFlowRow.getApplicationName(), currentDataFlowRow.getPacketsOut());
-                }
-            }
-        }
-        for (String key : top10TransmittersMap.keySet()) {
-            topTransmittersPairs.add(new TopRatedPair(key, top10TransmittersMap.get(key)));
-        }
-        Collections.sort(topTransmittersPairs, (o1, o2) -> o2.value - o1.value);
-        System.out.println(  " \n Top 10 Rated Transmitters:");
-        for (int i = 0; (i < 10) && (i < topTransmittersPairs.size()); i++) {
-            System.out.println(topTransmittersPairs.get(i).key + "  " +  topTransmittersPairs.get(i).value);
-        }
-        return topTransmittersPairs;
-    }
-
-//    private List <TopRatedPair> getTopProtocols(){
-//        Map<String, Integer> topProtocolsMap = new HashMap<String, Integer>();
-//
-//        for (Record currentDataFlowRow : recordList) {
-//            if (!currentDataFlowRow.getProtocolNumber().equals("")) {
-//                if (topProtocolsMap.containsKey(currentDataFlowRow.getProtocolNumber())) {
-//                    Integer totalTimesProtocolUsed = topProtocolsMap.get(currentDataFlowRow.getProtocolNumber());
-//                    topProtocolsMap.replace(currentDataFlowRow.getProtocolNumber(), totalTimesProtocolUsed = totalTimesProtocolUsed + 1);
-//                } else {
-//                    topProtocolsMap.put(currentDataFlowRow.getProtocolNumber(), 1);
-//                }
-//            }
-//        }
-//        for (String key : topProtocolsMap.keySet()) {
-//            topProtocolsPairs.add(new TopRatedPair(key, topProtocolsMap.get(key)));
-//        }
-//        Collections.sort(topProtocolsPairs, (o1, o2) -> o2.value - o1.value);
-//        System.out.println(  " \n Top 3 Used Protocols:");
-//        for (int i = 0; (i < 3) && (i < topProtocolsPairs.size()); i++) {
-//            System.out.println(topProtocolsPairs.get(i).key + "  " +  topProtocolsPairs.get(i).value);
-//        }
-//        return topProtocolsPairs;
-//    }
-//
-//    private List <TopRatedPair> getTopUsedApplications(){
-//        Map<String, Integer> topUsedApplicationsMap = new HashMap<String, Integer>();
-//
-//        for (Record currentDataFlowRow : recordList) {
-//            if (!currentDataFlowRow.getApplicationName().equals("")) {
-//                if (topUsedApplicationsMap.containsKey(currentDataFlowRow.getApplicationName())) {
-//                    Integer totalTimesApplicationUsed = topUsedApplicationsMap.get(currentDataFlowRow.getApplicationName());
-//                    topUsedApplicationsMap.replace(currentDataFlowRow.getApplicationName(), totalTimesApplicationUsed = totalTimesApplicationUsed + 1);
-//                } else {
-//                    topUsedApplicationsMap.put(currentDataFlowRow.getApplicationName(), 1);
-//                }
-//            }
-//        }
-//        for (String key : topUsedApplicationsMap.keySet()) {
-//            topUsedApplicationsPairs.add(new TopRatedPair(key, topUsedApplicationsMap.get(key)));
-//        }
-//        Collections.sort(topUsedApplicationsPairs, (o1, o2) -> o2.value - o1.value);
-//        System.out.println(  " \n Top 10 Used Applications:");
-//        for (int i = 0; (i < 10) && (i < topUsedApplicationsPairs.size()); i++) {
-//            System.out.println(topUsedApplicationsPairs.get(i).key + "  " +  topUsedApplicationsPairs.get(i).value);
-//        }
-//        return topUsedApplicationsPairs;
-//    }
 
     private void setDateFirst() {
         this.dateFirst = recordList.get(0).getDateObj();

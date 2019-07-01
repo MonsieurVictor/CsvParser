@@ -14,13 +14,12 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Timer;
 
 public class GuiForm implements IGuiForm {
 
     private int diffSec;
 
-    private JFrame jFrame = new JFrame("Main menu");
+    private JFrame jFrameMain = new JFrame("Main menu");
 
     private JPanel rootPanelChart;
     private JPanel panelSlider;
@@ -30,9 +29,9 @@ public class GuiForm implements IGuiForm {
 
     public String categoryFlag = "None";
 
-    private JButton buttonTopRx;
     private JButton buttonTopTx;
     private JButton buttonTopProtocols;
+    private JButton buttonTopRx;
     private JButton buttonTopApps;
 
     private JButton buttonBack;
@@ -45,8 +44,6 @@ public class GuiForm implements IGuiForm {
     private Date dateLast;
     private Date dateFrom;
     private Date dateTo;
-
-    Timer myTimer = new Timer();
 
     private JSlider sliderFrom;
     private JSlider sliderTo;
@@ -66,16 +63,15 @@ public class GuiForm implements IGuiForm {
     private ChartPanel panelChartBarTopProtocols;
     private ChartPanel panelChartBarTopApps;
 
-
     private ChartPanel panelChartPieTopRx;
     private ChartPanel panelChartPieTopTx;
     private ChartPanel panelChartPieTopProtocols;
     private ChartPanel panelChartPieTopApps;
 
-    private JLabel labelFrom;
-    private JLabel labelTo;
-    private JLabel labelFrom2;
-    private JLabel labelTo2;
+    private JLabel labelFromAtButtons;
+    private JLabel labelToAtButtons;
+    private JLabel labelFromAtSlider;
+    private JLabel labelToAtSlider;
 
     private IGuiForm guiForm;
     private ControllerGui controller;
@@ -86,6 +82,94 @@ public class GuiForm implements IGuiForm {
     private ActionListener listenerToJSON;
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
+
+    public JButton getButtonTopRx() {
+        return buttonTopRx;
+    }
+
+    public void setButtonTopRx(JButton buttonTopRx) {
+        this.buttonTopRx = buttonTopRx;
+    }
+
+    public JButton getButtonTopTx() {
+        return buttonTopTx;
+    }
+
+    public void setButtonTopTx(JButton buttonTopTx) {
+        this.buttonTopTx = buttonTopTx;
+    }
+
+    public JButton getButtonTopProtocols() {
+        return buttonTopProtocols;
+    }
+
+    public void setButtonTopProtocols(JButton buttonTopProtocols) {
+        this.buttonTopProtocols = buttonTopProtocols;
+    }
+
+    public JButton getButtonTopApps() {
+        return buttonTopApps;
+    }
+
+    public void setButtonTopApps(JButton buttonTopApps) {
+        this.buttonTopApps = buttonTopApps;
+    }
+
+    public JButton getButtonBack() {
+        return buttonBack;
+    }
+
+    public void setButtonBack(JButton buttonBack) {
+        this.buttonBack = buttonBack;
+    }
+
+    public JFrame getjFrameMain() {
+        return jFrameMain;
+    }
+
+    public void setjFrameMain(JFrame jFrameMain) {
+        this.jFrameMain = jFrameMain;
+    }
+
+    public JButton getButtonShowBarChart() {
+        return buttonShowBarChart;
+    }
+
+    public void setButtonShowBarChart(JButton buttonShowBarChart) {
+        this.buttonShowBarChart = buttonShowBarChart;
+    }
+
+    public JButton getButtonShowPieChart() {
+        return buttonShowPieChart;
+    }
+
+    public void setButtonShowPieChart(JButton buttonShowPieChart) {
+        this.buttonShowPieChart = buttonShowPieChart;
+    }
+
+    public JButton getButtonToJSON() {
+        return buttonToJSON;
+    }
+
+    public void setButtonToJSON(JButton buttonToJSON) {
+        this.buttonToJSON = buttonToJSON;
+    }
+
+    public JSlider getSliderFrom() {
+        return sliderFrom;
+    }
+
+    public void setSliderFrom(JSlider sliderFrom) {
+        this.sliderFrom = sliderFrom;
+    }
+
+    public JSlider getSliderTo() {
+        return sliderTo;
+    }
+
+    public void setSliderTo(JSlider sliderTo) {
+        this.sliderTo = sliderTo;
+    }
 
     public void startDraw(ControllerGui controller, IGuiForm guiForm) throws ParseException {
 
@@ -114,46 +198,46 @@ public class GuiForm implements IGuiForm {
         buttonTopProtocols.setToolTipText("Top 3 Protocols");
         buttonTopApps.setToolTipText("Top 10 Apps");
 
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         rootPanelLauncher = new JPanel();
 
         rootPanelLauncher.add(buttonTopRx);
         rootPanelLauncher.add(buttonTopTx);
         rootPanelLauncher.add(buttonTopProtocols);
         rootPanelLauncher.add(buttonTopApps);
-        buttonTopRx.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Receivers");
-            drawTopRx();
-        });
-        buttonTopTx.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Transmitters");
-            drawTopTx();
-        });
-        buttonTopProtocols.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Protocols");
-            drawTopProtocols();
-        });
-        buttonTopApps.addActionListener(e -> {
-            setJframeMainMenu("Top 10 Apps");
-            drawTopApps();
-        });
+//        buttonTopRx.addActionListener(e -> {
+//            setJFrameMainMenu("Top 10 Receivers");
+//            drawTopRx();
+//        });
+//        buttonTopTx.addActionListener(e -> {
+//            setJFrameMainMenu("Top 10 Transmitters");
+//            drawTopTx();
+//        });
+//        buttonTopProtocols.addActionListener(e -> {
+//            setJFrameMainMenu("Top 10 Protocols");
+//            drawTopProtocols();
+//        });
+//        buttonTopApps.addActionListener(e -> {
+//            setJFrameMainMenu("Top 10 Apps");
+//            drawTopApps();
+//        });
         buttonBack.addActionListener(e -> {
             buttonShowBarChart.removeActionListener(listenerShowBarChart);
             buttonShowPieChart.removeActionListener(listenerShowPieChart);
             buttonToJSON.removeActionListener(listenerToJSON);
             sliderFrom.removeChangeListener(listenerSliderFrom);
             sliderTo.removeChangeListener(listenerSliderTo);
-            jFrame.setTitle("Main menu");
-            jFrame.setContentPane(rootPanelLauncher);
-            jFrame.setBounds(0, 0, 170, 150);
-            jFrame.setVisible(true);
+            jFrameMain.setTitle("Main menu");
+            jFrameMain.setContentPane(rootPanelLauncher);
+            jFrameMain.setBounds(0, 0, 170, 150);
+            jFrameMain.setVisible(true);
         });
-        jFrame.setContentPane(rootPanelLauncher);
-        jFrame.setBounds(0, 0, 170, 150);
-        jFrame.setVisible(true);
+        jFrameMain.setContentPane(rootPanelLauncher);
+        jFrameMain.setBounds(0, 0, 170, 150);
+        jFrameMain.setVisible(true);
     }
 
-    private void drawTopRx() {
+    public void drawTopRx() {
         categoryFlag = "Rx";
         listenerShowBarChart = evt -> {
             frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
@@ -180,7 +264,7 @@ public class GuiForm implements IGuiForm {
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private void drawTopTx(){
+    public void drawTopTx(){
         categoryFlag = "Tx";
         listenerShowBarChart = evt -> {
             frameBarTopTx = createChartFrame(createChartBarTopTx(), "Top 10 Tx", 910, 205, 900, 300);
@@ -208,7 +292,7 @@ public class GuiForm implements IGuiForm {
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private void drawTopProtocols() {
+    public void drawTopProtocols() {
         categoryFlag = "Protocols";
 
         listenerShowBarChart = evt -> {
@@ -236,7 +320,7 @@ public class GuiForm implements IGuiForm {
         sliderTo.addChangeListener(listenerSliderTo);
     }
 
-    private void drawTopApps() {
+    public void drawTopApps() {
         categoryFlag = "Apps";
 
         listenerShowBarChart = evt -> {
@@ -269,7 +353,7 @@ public class GuiForm implements IGuiForm {
             JSlider source = (JSlider)evt.getSource();
             dateFrom = getDateOfSlider(sliderFrom.getValue());
             dateTo = getDateOfSlider(sliderTo.getValue());
-            setLabelsDate(); // get the slider
+            setLabelsDate();
             if (!source.getValueIsAdjusting()) {
                 dateFrom = getDateOfSlider(sliderFrom.getValue());
                 dateTo = getDateOfSlider(sliderTo.getValue());
@@ -315,11 +399,11 @@ public class GuiForm implements IGuiForm {
         return slider;
     }
 
-    private void setJframeMainMenu(String titleStr) {
-        jFrame.setTitle(titleStr);
-        jFrame.setContentPane(rootPanelChart);
-        jFrame.setVisible(true);
-        jFrame.setBounds(0, 0, 900, 200);
+    public void setJFrameMainMenu(String titleStr) {
+        jFrameMain.setTitle(titleStr);
+        jFrameMain.setContentPane(rootPanelChart);
+        jFrameMain.setVisible(true);
+        jFrameMain.setBounds(0, 0, 900, 200);
     }
 
     private JFreeChart createChartBarTopRx() {
@@ -481,8 +565,8 @@ public class GuiForm implements IGuiForm {
     }
 
     private void setLabelsDate() {
-        labelFrom.setText("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom)));
-        labelTo.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
+        labelFromAtButtons.setText("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom)));
+        labelToAtButtons.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
     }
 
     private static void showInfoBox(String infoMessage, String titleBar) {
@@ -501,7 +585,8 @@ public class GuiForm implements IGuiForm {
         }
     }
 
-    public Date getDateOfSlider (int sliderValue){
+    @Override
+    public Date getDateOfSlider(int sliderValue){
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateFirst);
         cal.add(Calendar.SECOND, controller.getDiffSec()*sliderValue/1000 );
@@ -515,8 +600,7 @@ public class GuiForm implements IGuiForm {
     public void setCategoryFlag(String categoryFlag) {
         this.categoryFlag = categoryFlag;
     }
-
-    }
+}
 
 
 

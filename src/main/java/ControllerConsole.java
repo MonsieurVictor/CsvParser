@@ -38,7 +38,7 @@ public class ControllerConsole implements IController {
         try {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
-            analyzer.doAnalyze();
+            analyzer.prepareForAnalyze();
             consoleLogger.writeMapToConsole("Top 10 Receivers: " , analyzer.getMapTopRx(analyzer.getDateFirst(), analyzer.getDateLast()), 10);
             consoleLogger.writeMapToConsole("Top 10 Transmitters: " , analyzer.getMapTopTx(analyzer.getDateFirst(), analyzer.getDateLast()), 10);
             consoleLogger.writeMapToConsole("Top 3 Protocols: " , analyzer.getMapTopProtocols(analyzer.getDateFirst(), analyzer.getDateLast()), 3);
