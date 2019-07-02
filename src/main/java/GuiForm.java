@@ -8,9 +8,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,7 +23,8 @@ public class GuiForm implements IGuiForm {
     private JPanel panelSlider;
     private JPanel panelButton;
     private JPanel panelCenter;
-    private JPanel rootPanelLauncher;
+
+    private JPanel panelRootLauncher;
 
     public String categoryFlag = "None";
 
@@ -47,6 +46,91 @@ public class GuiForm implements IGuiForm {
 
     private JSlider sliderFrom;
     private JSlider sliderTo;
+
+    public ChartFrame getFrameBarTopRx() {
+        return frameBarTopRx;
+    }
+
+    public void setFrameBarTopRx(ChartFrame frameBarTopRx) {
+        this.frameBarTopRx = frameBarTopRx;
+    }
+
+    public ChartFrame getFrameBarTopTx() {
+        return frameBarTopTx;
+    }
+
+    public void setFrameBarTopTx(ChartFrame frameBarTopTx) {
+        this.frameBarTopTx = frameBarTopTx;
+    }
+
+    public ChartFrame getFrameBarTopProtocols() {
+        return frameBarTopProtocols;
+    }
+
+    public void setFrameBarTopProtocols(ChartFrame frameBarTopProtocols) {
+        this.frameBarTopProtocols = frameBarTopProtocols;
+    }
+
+    
+    public ChartFrame getFrameBarTopApps() {
+        return frameBarTopApps;
+    }
+
+    public void setFrameBarTopApps(ChartFrame frameBarTopApps) {
+        this.frameBarTopApps = frameBarTopApps;
+    }
+
+    public ChartFrame getFramePieTopTx() {
+        return framePieTopTx;
+    }
+
+    public void setFramePieTopTx(ChartFrame framePieTopTx) {
+        this.framePieTopTx = framePieTopTx;
+    }
+
+    public ChartFrame getFramePieTopRx() {
+        return framePieTopRx;
+    }
+
+    public void setFramePieTopRx(ChartFrame framePieTopRx) {
+        this.framePieTopRx = framePieTopRx;
+    }
+
+    
+    public Date getDateFrom() {
+        return dateFrom;
+    }
+
+    
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public ChartFrame getFramePieTopProtocols() {
+        return framePieTopProtocols;
+    }
+
+    public void setFramePieTopProtocols(ChartFrame framePieTopProtocols) {
+        this.framePieTopProtocols = framePieTopProtocols;
+    }
+
+    public ChartFrame getFramePieTopApps() {
+        return framePieTopApps;
+    }
+
+    public void setFramePieTopApps(ChartFrame framePieTopApps) {
+        this.framePieTopApps = framePieTopApps;
+    }
 
     private ChartFrame frameBarTopRx;
     private ChartFrame frameBarTopTx;
@@ -77,11 +161,15 @@ public class GuiForm implements IGuiForm {
     private ControllerGui controller;
     private JSONSaver jsonSaver = new JSONSaver();
 
-    private ActionListener listenerShowBarChart;
-    private ActionListener listenerShowPieChart;
-    private ActionListener listenerToJSON;
-    private ChangeListener listenerSliderFrom;
-    private ChangeListener listenerSliderTo;
+//    private ActionListener listenerShowBarChart;
+//    private ActionListener listenerShowPieChart;
+//    private ActionListener listenerToJSON;
+//    private ChangeListener listenerSliderFrom;
+//    private ChangeListener listenerSliderTo;
+
+    public JPanel getPanelRootLauncher() {
+        return panelRootLauncher;
+    }
 
     public JButton getButtonTopRx() {
         return buttonTopRx;
@@ -199,172 +287,35 @@ public class GuiForm implements IGuiForm {
         buttonTopApps.setToolTipText("Top 10 Apps");
 
         jFrameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        rootPanelLauncher = new JPanel();
+        panelRootLauncher = new JPanel();
 
-        rootPanelLauncher.add(buttonTopRx);
-        rootPanelLauncher.add(buttonTopTx);
-        rootPanelLauncher.add(buttonTopProtocols);
-        rootPanelLauncher.add(buttonTopApps);
-//        buttonTopRx.addActionListener(e -> {
-//            setJFrameMainMenu("Top 10 Receivers");
-//            drawTopRx();
-//        });
-//        buttonTopTx.addActionListener(e -> {
-//            setJFrameMainMenu("Top 10 Transmitters");
-//            drawTopTx();
-//        });
-//        buttonTopProtocols.addActionListener(e -> {
-//            setJFrameMainMenu("Top 10 Protocols");
-//            drawTopProtocols();
-//        });
-//        buttonTopApps.addActionListener(e -> {
-//            setJFrameMainMenu("Top 10 Apps");
-//            drawTopApps();
-//        });
-        buttonBack.addActionListener(e -> {
-            buttonShowBarChart.removeActionListener(listenerShowBarChart);
-            buttonShowPieChart.removeActionListener(listenerShowPieChart);
-            buttonToJSON.removeActionListener(listenerToJSON);
-            sliderFrom.removeChangeListener(listenerSliderFrom);
-            sliderTo.removeChangeListener(listenerSliderTo);
-            jFrameMain.setTitle("Main menu");
-            jFrameMain.setContentPane(rootPanelLauncher);
-            jFrameMain.setBounds(0, 0, 170, 150);
-            jFrameMain.setVisible(true);
-        });
-        jFrameMain.setContentPane(rootPanelLauncher);
+        panelRootLauncher.add(buttonTopRx);
+        panelRootLauncher.add(buttonTopTx);
+        panelRootLauncher.add(buttonTopProtocols);
+        panelRootLauncher.add(buttonTopApps);
+
+        jFrameMain.setContentPane(panelRootLauncher);
         jFrameMain.setBounds(0, 0, 170, 150);
         jFrameMain.setVisible(true);
     }
 
-    public void drawTopRx() {
-        categoryFlag = "Rx";
-        listenerShowBarChart = evt -> {
-            frameBarTopRx = createChartFrame(createChartBarTopRx(), "Top 10 Rx", 0, 205, 900, 300);
-        };
-        buttonShowBarChart.addActionListener(listenerShowBarChart);
-        listenerShowPieChart = evt -> {
-            framePieTopRx = createChartFrame(createJFreeChartPieTopRx(), "Top 10 Rx", 0, 510, 900, 300 );
-        };
-        buttonShowPieChart.addActionListener(listenerShowPieChart);
-        listenerToJSON = evt -> {
-            updateChartsTopRx();
-            if (controller.getMapTopRxAnalyzer(dateFrom, dateTo).isEmpty()) {
-                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
-            } else {
-                jsonSaver.setFileName("Top_10_Rx_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getMapTopRxAnalyzer(dateFrom, dateTo));
-                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
-            }
-        };
-        buttonToJSON.addActionListener(listenerToJSON);
-        listenerSliderFrom = createChangeListener();
-        sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListener();
-        sliderTo.addChangeListener(listenerSliderTo);
-    }
+//    public ChangeListener createChangeListener() {
+//        return evt -> {
+//            JSlider source = (JSlider)evt.getSource();
+//            dateFrom = getDateOfSlider(sliderFrom.getValue());
+//            dateTo = getDateOfSlider(sliderTo.getValue());
+//            setLabelsDate();
+//            if (!source.getValueIsAdjusting()) {
+//                dateFrom = getDateOfSlider(sliderFrom.getValue());
+//                dateTo = getDateOfSlider(sliderTo.getValue());
+//                setLabelsDate();
+//                controller.reparseRecordListDateRange(dateFrom, dateTo);
+//                checkSlidersPropriety();
+//            }
+//        };
+//    }
 
-    public void drawTopTx(){
-        categoryFlag = "Tx";
-        listenerShowBarChart = evt -> {
-            frameBarTopTx = createChartFrame(createChartBarTopTx(), "Top 10 Tx", 910, 205, 900, 300);
-        };
-        buttonShowBarChart.addActionListener(listenerShowBarChart);
-        listenerShowPieChart = evt -> {
-            framePieTopTx = createChartFrame(createJFreeChartPieTopTx(), "Top 10 Tx", 910, 510, 900, 300 );
-        };
-        buttonShowPieChart.addActionListener(listenerShowPieChart);
-
-        listenerToJSON = evt -> {
-            updateChartsTopTx();
-            if (controller.getMapTopTxAnalyzer(dateFrom,dateTo).isEmpty()) {
-                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
-            } else {
-                jsonSaver.setFileName("Top_10_Transmitters_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getMapTopTxAnalyzer(dateFrom, dateTo));
-                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
-            }
-        };
-        buttonToJSON.addActionListener (listenerToJSON) ;
-        listenerSliderFrom = createChangeListener();
-        sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListener();
-        sliderTo.addChangeListener(listenerSliderTo);
-    }
-
-    public void drawTopProtocols() {
-        categoryFlag = "Protocols";
-
-        listenerShowBarChart = evt -> {
-            frameBarTopProtocols = createChartFrame(createChartBarTopProtocols(), "Top 10 Protocols", 0, 205, 900, 300);
-        };
-        buttonShowBarChart.addActionListener(listenerShowBarChart);
-        listenerShowPieChart = evt -> {
-            framePieTopProtocols = createChartFrame(createJFreeChartPieTopProtocols(), "Top 10 Protocols", 0, 510, 900, 300 );
-        };
-        buttonShowPieChart.addActionListener(listenerShowPieChart);
-        listenerToJSON = evt -> {
-            updateChartsTopProtocols();
-            if (controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo).isEmpty()) {
-                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
-            } else {
-                jsonSaver.setFileName("Top_10_Protocols_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
-                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
-            }
-        };
-        buttonToJSON.addActionListener(listenerToJSON);
-        listenerSliderFrom = createChangeListener();
-        sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListener();
-        sliderTo.addChangeListener(listenerSliderTo);
-    }
-
-    public void drawTopApps() {
-        categoryFlag = "Apps";
-
-        listenerShowBarChart = evt -> {
-            frameBarTopApps = createChartFrame(createChartBarTopApps(), "Top 10 Apps", 0, 205, 900, 300);
-        };
-        buttonShowBarChart.addActionListener(listenerShowBarChart);
-        listenerShowPieChart = evt -> {
-            framePieTopApps = createChartFrame(createJFreeChartPieTopApps(), "Top 10 Apps", 0, 510, 900, 300 );
-        };
-        buttonShowPieChart.addActionListener(listenerShowPieChart);
-        listenerToJSON = evt -> {
-            updateChartsTopApps();
-            if (controller.getMapTopAppsAnalyzer(dateFrom, dateTo).isEmpty()) {
-                showInfoBox("It's nothing to save! The Top Rating List is Empty!\n", "Save error");
-            } else {
-                jsonSaver.setFileName("Top_10_Apps_", dateFrom, dateTo);
-                jsonSaver.createJSONFile(controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
-                showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
-            }
-        };
-        buttonToJSON.addActionListener(listenerToJSON);
-        listenerSliderFrom = createChangeListener();
-        sliderFrom.addChangeListener(listenerSliderFrom);
-        listenerSliderTo = createChangeListener();
-        sliderTo.addChangeListener(listenerSliderTo);
-    }
-
-    private ChangeListener createChangeListener() {
-        return evt -> {
-            JSlider source = (JSlider)evt.getSource();
-            dateFrom = getDateOfSlider(sliderFrom.getValue());
-            dateTo = getDateOfSlider(sliderTo.getValue());
-            setLabelsDate();
-            if (!source.getValueIsAdjusting()) {
-                dateFrom = getDateOfSlider(sliderFrom.getValue());
-                dateTo = getDateOfSlider(sliderTo.getValue());
-                setLabelsDate();
-                controller.reparseRecordListDateRange(dateFrom, dateTo);
-                checkSlidersPropriety();
-            }
-        };
-    }
-
-    private ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
+    public ChartFrame createChartFrame(JFreeChart chartBar, String categoryName, int locationX, int locationY, int sizeX, int sizeY){
         ChartPanel chartBarPanel = new ChartPanel(chartBar);
         chartBarPanel.setLayout(new GridLayout());
         ChartFrame chartFrame = new ChartFrame(categoryName, null);
@@ -376,15 +327,18 @@ public class GuiForm implements IGuiForm {
         return chartFrame;
     }
 
-    private void setSliderFrom () {
+    
+    public void setSliderFrom() {
             panelCenter.add(sliderFrom = createSlider(0));
         }
 
-    private void setSliderTo () {
+    
+    public void setSliderTo() {
         panelSlider.add(sliderTo = createSlider(1000));
     }
 
-    private JSlider createSlider(int initialValue) {
+    
+    public JSlider createSlider(int initialValue) {
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 1000, initialValue);
         Hashtable labelTable = new Hashtable();
         int i = -200;
@@ -406,43 +360,43 @@ public class GuiForm implements IGuiForm {
         jFrameMain.setBounds(0, 0, 900, 200);
     }
 
-    private JFreeChart createChartBarTopRx() {
-        return createJFreeChartBar("Top 10 Received Packets",
-                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
-    }
+//    public JFreeChart createJFreeChartBarRx() {
+//        return createJFreeChartBar("Top 10 Received Packets",
+//                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartBarTx() {
+//        return createJFreeChartBar("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartBarProtocols() {
+//        return createJFreeChartBar("Top 10 Protocols", controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartBarApps() {
+//        return createJFreeChartBar("Top 10 Applications", controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartPieRx() {
+//        return createJFreeChartPie("Top 10 Received Packets",
+//                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartPieTx() {
+//        return createJFreeChartPie("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartPieProtocols() {
+//        return createJFreeChartPie("Top 3 Protocols",
+//                controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
+//    }
+//
+//    public JFreeChart createJFreeChartPieApps() {
+//        return createJFreeChartPie("Top 10 Applications",
+//                controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
+//    }
 
-    private JFreeChart createChartBarTopTx() {
-        return createJFreeChartBar("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createChartBarTopProtocols() {
-        return createJFreeChartBar("Top 10 Protocols", controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createChartBarTopApps() {
-        return createJFreeChartBar("Top 10 Applications", controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createJFreeChartPieTopRx() {
-        return createJFreeChartPie("Top 10 Received Packets",
-                controller.getMapTopRxAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createJFreeChartPieTopTx() {
-        return createJFreeChartPie("Top 10 Transmitted Packets", controller.getMapTopTxAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createJFreeChartPieTopProtocols() {
-        return createJFreeChartPie("Top 3 Protocols",
-                controller.getMapTopProtocolsAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createJFreeChartPieTopApps() {
-        return createJFreeChartPie("Top 10 Applications",
-                controller.getMapTopAppsAnalyzer(dateFrom, dateTo));
-    }
-
-    private JFreeChart createJFreeChartBar(String categoryName, Map <String, Long> map ) {
+    public JFreeChart createJFreeChartBar(String categoryName, Map<String, Long> map) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 
@@ -455,7 +409,7 @@ public class GuiForm implements IGuiForm {
         return chartBar;
     }
 
-    private JFreeChart createJFreeChartPie(String categoryName, Map <String, Long> map ) {
+    public JFreeChart createJFreeChartPie(String categoryName, Map<String, Long> map) {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
         map.entrySet().stream().limit(10).forEach(e -> dataset.setValue(e.getKey(), e.getValue()));
@@ -465,115 +419,346 @@ public class GuiForm implements IGuiForm {
         return chartPie;
     }
 
-    private String getDateRangeString() {
+    
+    public String getDateRangeString() {
         return (" from: "
                 + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateFrom)
                 + " to: "
                 + new SimpleDateFormat("yyyy-MM-dd hh:mm").format(dateTo));
     }
 
-    public void updateChartsTopRx() {
-        try {
-            if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
-                frameBarTopRx.getContentPane().removeAll();
-                panelChartBarTopRx = new ChartPanel(createChartBarTopRx());
-                frameBarTopRx.add(panelChartBarTopRx);
-                frameBarTopRx.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("frameBarTopRx exception catched: " + e);
-        }
-        try {
-            if (framePieTopRx.isShowing()) {
-                framePieTopRx.getContentPane().removeAll();
-                panelChartPieTopRx = new ChartPanel(createJFreeChartPieTopRx());
-                framePieTopRx.add(panelChartPieTopRx, BorderLayout.CENTER);
-                framePieTopRx.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("framePieTopRx exception catched: " + e);
-        }
+//    public void updateChartsTopRx() {
+//        try {
+//            if (frameBarTopRx.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
+//                frameBarTopRx.getContentPane().removeAll();
+//                panelChartBarTopRx = new ChartPanel(createJFreeChartBarRx());
+//                frameBarTopRx.add(panelChartBarTopRx);
+//                frameBarTopRx.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("frameBarTopRx exception catched: " + e);
+//        }
+//        try {
+//            if (framePieTopRx.isShowing()) {
+//                framePieTopRx.getContentPane().removeAll();
+//                panelChartPieTopRx = new ChartPanel(createJFreeChartPieRx());
+//                framePieTopRx.add(panelChartPieTopRx, BorderLayout.CENTER);
+//                framePieTopRx.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("framePieTopRx exception catched: " + e);
+//        }
+//    }
+//
+//    public void updateChartsTopTx() {
+//        try {
+//            if (frameBarTopTx.isShowing()) {
+//                frameBarTopTx.getContentPane().removeAll();
+//                panelChartBarTopTx = new ChartPanel(createJFreeChartBarTx());
+//                frameBarTopTx.add(panelChartBarTopTx);
+//                frameBarTopTx.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("frameBarTopTx exception catched: " + e);
+//        }
+//        try {
+//            if (framePieTopTx.isShowing()) {
+//                framePieTopTx.getContentPane().removeAll();
+//                panelChartPieTopTx = new ChartPanel(createJFreeChartPieTx());
+//                framePieTopTx.add(panelChartPieTopTx, BorderLayout.CENTER);
+//                framePieTopTx.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("framePieTopTx exception catched: " + e);
+//        }
+//    }
+//
+//    public void updateChartsTopProtocols() {
+//        try {
+//            if (frameBarTopProtocols.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
+//                frameBarTopProtocols.getContentPane().removeAll();
+//                panelChartBarTopProtocols = new ChartPanel(createJFreeChartBarProtocols());
+//                frameBarTopProtocols.add(panelChartBarTopProtocols);
+//                frameBarTopProtocols.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("frameBarTopProtocols exception catched: " + e);
+//        }
+//        try {
+//            if (framePieTopProtocols.isShowing()) {
+//                framePieTopProtocols.getContentPane().removeAll();
+//                panelChartPieTopProtocols = new ChartPanel(createJFreeChartPieProtocols());
+//                framePieTopProtocols.add(panelChartPieTopProtocols, BorderLayout.CENTER);
+//                framePieTopProtocols.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("framePieTopProtocols exception catched: " + e);
+//        }
+//    }
+
+//    public void updateChartsTopApps() {
+//        try {
+//            if (frameBarTopApps.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
+//                frameBarTopApps.getContentPane().removeAll();
+//                panelChartBarTopApps = new ChartPanel(createJFreeChartBarApps());
+//                frameBarTopApps.add(panelChartBarTopApps);
+//                frameBarTopApps.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("frameBarTopApps exception catched: " + e);
+//        }
+//        try {
+//            if (framePieTopApps.isShowing()) {
+//                framePieTopApps.getContentPane().removeAll();
+//                panelChartPieTopApps = new ChartPanel(createJFreeChartPieApps());
+//                framePieTopApps.add(panelChartPieTopApps, BorderLayout.CENTER);
+//                framePieTopApps.setVisible(true);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("framePieTopApps exception catched: " + e);
+//        }
+//    }
+
+    
+    public int getDiffSec() {
+        return diffSec;
     }
 
-    public void updateChartsTopTx() {
-        try {
-            if (frameBarTopTx.isShowing()) {
-                frameBarTopTx.getContentPane().removeAll();
-                panelChartBarTopTx = new ChartPanel(createChartBarTopTx());
-                frameBarTopTx.add(panelChartBarTopTx);
-                frameBarTopTx.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("frameBarTopTx exception catched: " + e);
-        }
-        try {
-            if (framePieTopTx.isShowing()) {
-                framePieTopTx.getContentPane().removeAll();
-                panelChartPieTopTx = new ChartPanel(createJFreeChartPieTopTx());
-                framePieTopTx.add(panelChartPieTopTx, BorderLayout.CENTER);
-                framePieTopTx.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("framePieTopTx exception catched: " + e);
-        }
+    
+    public void setDiffSec(int diffSec) {
+        this.diffSec = diffSec;
     }
 
-    public void updateChartsTopProtocols() {
-        try {
-            if (frameBarTopProtocols.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
-                frameBarTopProtocols.getContentPane().removeAll();
-                panelChartBarTopProtocols = new ChartPanel(createChartBarTopProtocols());
-                frameBarTopProtocols.add(panelChartBarTopProtocols);
-                frameBarTopProtocols.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("frameBarTopProtocols exception catched: " + e);
-        }
-        try {
-            if (framePieTopProtocols.isShowing()) {
-                framePieTopProtocols.getContentPane().removeAll();
-                panelChartPieTopProtocols = new ChartPanel(createJFreeChartPieTopProtocols());
-                framePieTopProtocols.add(panelChartPieTopProtocols, BorderLayout.CENTER);
-                framePieTopProtocols.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("framePieTopProtocols exception catched: " + e);
-        }
+    public JPanel getRootPanelChart() {
+        return rootPanelChart;
     }
 
-    public void updateChartsTopApps() {
-        try {
-            if (frameBarTopApps.isShowing()) {      // to prevent showing the chart if it's closed during moving the slider
-                frameBarTopApps.getContentPane().removeAll();
-                panelChartBarTopApps = new ChartPanel(createChartBarTopApps());
-                frameBarTopApps.add(panelChartBarTopApps);
-                frameBarTopApps.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("frameBarTopApps exception catched: " + e);
-        }
-        try {
-            if (framePieTopApps.isShowing()) {
-                framePieTopApps.getContentPane().removeAll();
-                panelChartPieTopApps = new ChartPanel(createJFreeChartPieTopApps());
-                framePieTopApps.add(panelChartPieTopApps, BorderLayout.CENTER);
-                framePieTopApps.setVisible(true);
-            }
-        } catch (Exception e) {
-            System.out.println("framePieTopApps exception catched: " + e);
-        }
+    
+    public void setRootPanelChart(JPanel rootPanelChart) {
+        this.rootPanelChart = rootPanelChart;
     }
 
-    private void setLabelsDate() {
+    
+    public JPanel getPanelSlider() {
+        return panelSlider;
+    }
+
+    
+    public void setPanelSlider(JPanel panelSlider) {
+        this.panelSlider = panelSlider;
+    }
+
+    
+    public JPanel getPanelButton() {
+        return panelButton;
+    }
+
+    
+    public void setPanelButton(JPanel panelButton) {
+        this.panelButton = panelButton;
+    }
+
+    
+    public JPanel getPanelCenter() {
+        return panelCenter;
+    }
+
+    
+    public void setPanelCenter(JPanel panelCenter) {
+        this.panelCenter = panelCenter;
+    }
+
+    
+    public void setPanelRootLauncher(JPanel panelRootLauncher) {
+        this.panelRootLauncher = panelRootLauncher;
+    }
+
+    
+    public Date[] getDateArrayForSliderLabels() {
+        return dateArrayForSliderLabels;
+    }
+
+    
+    public void setDateArrayForSliderLabels(Date[] dateArrayForSliderLabels) {
+        this.dateArrayForSliderLabels = dateArrayForSliderLabels;
+    }
+
+    
+    public Date getDateFirst() {
+        return dateFirst;
+    }
+
+    
+    public void setDateFirst(Date dateFirst) {
+        this.dateFirst = dateFirst;
+    }
+
+    
+    public Date getDateLast() {
+        return dateLast;
+    }
+
+    
+    public void setDateLast(Date dateLast) {
+        this.dateLast = dateLast;
+    }
+
+    
+    public ChartPanel getPanelChartBarTopRx() {
+        return panelChartBarTopRx;
+    }
+
+    
+    public void setPanelChartBarTopRx(ChartPanel panelChartBarTopRx) {
+        this.panelChartBarTopRx = panelChartBarTopRx;
+    }
+
+    
+    public ChartPanel getPanelChartBarTopTx() {
+        return panelChartBarTopTx;
+    }
+
+    
+    public void setPanelChartBarTopTx(ChartPanel panelChartBarTopTx) {
+        this.panelChartBarTopTx = panelChartBarTopTx;
+    }
+
+    
+    public ChartPanel getPanelChartBarTopProtocols() {
+        return panelChartBarTopProtocols;
+    }
+
+    
+    public void setPanelChartBarTopProtocols(ChartPanel panelChartBarTopProtocols) {
+        this.panelChartBarTopProtocols = panelChartBarTopProtocols;
+    }
+
+    
+    public ChartPanel getPanelChartBarTopApps() {
+        return panelChartBarTopApps;
+    }
+
+    
+    public void setPanelChartBarTopApps(ChartPanel panelChartBarTopApps) {
+        this.panelChartBarTopApps = panelChartBarTopApps;
+    }
+
+    
+    public ChartPanel getPanelChartPieTopRx() {
+        return panelChartPieTopRx;
+    }
+
+    
+    public void setPanelChartPieTopRx(ChartPanel panelChartPieTopRx) {
+        this.panelChartPieTopRx = panelChartPieTopRx;
+    }
+
+    
+    public ChartPanel getPanelChartPieTopTx() {
+        return panelChartPieTopTx;
+    }
+
+    
+    public void setPanelChartPieTopTx(ChartPanel panelChartPieTopTx) {
+        this.panelChartPieTopTx = panelChartPieTopTx;
+    }
+
+    
+    public ChartPanel getPanelChartPieTopProtocols() {
+        return panelChartPieTopProtocols;
+    }
+
+    
+    public void setPanelChartPieTopProtocols(ChartPanel panelChartPieTopProtocols) {
+        this.panelChartPieTopProtocols = panelChartPieTopProtocols;
+    }
+
+    
+    public ChartPanel getPanelChartPieTopApps() {
+        return panelChartPieTopApps;
+    }
+
+    
+    public void setPanelChartPieTopApps(ChartPanel panelChartPieTopApps) {
+        this.panelChartPieTopApps = panelChartPieTopApps;
+    }
+
+    
+    public JLabel getLabelFromAtButtons() {
+        return labelFromAtButtons;
+    }
+
+    
+    public void setLabelFromAtButtons(JLabel labelFromAtButtons) {
+        this.labelFromAtButtons = labelFromAtButtons;
+    }
+
+    
+    public JLabel getLabelToAtButtons() {
+        return labelToAtButtons;
+    }
+
+    
+    public void setLabelToAtButtons(JLabel labelToAtButtons) {
+        this.labelToAtButtons = labelToAtButtons;
+    }
+
+    
+    public JLabel getLabelFromAtSlider() {
+        return labelFromAtSlider;
+    }
+
+    
+    public void setLabelFromAtSlider(JLabel labelFromAtSlider) {
+        this.labelFromAtSlider = labelFromAtSlider;
+    }
+
+    
+    public JLabel getLabelToAtSlider() {
+        return labelToAtSlider;
+    }
+
+    
+    public void setLabelToAtSlider(JLabel labelToAtSlider) {
+        this.labelToAtSlider = labelToAtSlider;
+    }
+
+    
+    public IGuiForm getGuiForm() {
+        return guiForm;
+    }
+
+    
+    public void setGuiForm(IGuiForm guiForm) {
+        this.guiForm = guiForm;
+    }
+
+    
+    public ControllerGui getController() {
+        return controller;
+    }
+
+    
+    public void setController(ControllerGui controller) {
+        this.controller = controller;
+    }
+
+    
+    public JSONSaver getJsonSaver() {
+        return jsonSaver;
+    }
+
+    
+    public void setJsonSaver(JSONSaver jsonSaver) {
+        this.jsonSaver = jsonSaver;
+    }
+
+    public void setLabelsDate() {
         labelFromAtButtons.setText("Date from: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateFrom)));
         labelToAtButtons.setText("Date to: " + (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(dateTo)));
     }
 
-    private static void showInfoBox(String infoMessage, String titleBar) {
-        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void checkSlidersPropriety(){
+    public void checkSlidersPropriety(){
         if (dateFrom.compareTo(dateTo) >= 0 ){
             buttonShowBarChart.setEnabled(false);
             buttonShowPieChart.setEnabled(false);
@@ -585,13 +770,7 @@ public class GuiForm implements IGuiForm {
         }
     }
 
-    @Override
-    public Date getDateOfSlider(int sliderValue){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dateFirst);
-        cal.add(Calendar.SECOND, controller.getDiffSec()*sliderValue/1000 );
-        return cal.getTime();
-    }
+
 
     public String getCategoryFlag() {
         return categoryFlag;
