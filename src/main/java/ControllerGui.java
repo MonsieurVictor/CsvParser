@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Map;
 
 public class ControllerGui implements IController, IObserver {
-
     private ITextReader reader;
     private ITextAnalyzer analyzer;
     private IAppOptions options;
@@ -22,14 +21,11 @@ public class ControllerGui implements IController, IObserver {
     private IGuiForm guiForm;
     private IJSONSaver jsonSaver;
     private ControllerGui controllerGui;
-
     private ActionListener listenerShowBarChart;
     private ActionListener listenerShowPieChart;
     private ActionListener listenerToJSON;
     private ChangeListener listenerSliderFrom;
     private ChangeListener listenerSliderTo;
-
-    public void initController(){}
 
     public void initController(IAppOptions options,
                                ITextReader reader,
@@ -45,12 +41,13 @@ public class ControllerGui implements IController, IObserver {
         this.logger = logger;
         this.jsonSaver = jsonSaver;
         this.controllerGui = controllerGui;
-
         try {
             options.parseOptions();
             analyzer.setBuffer(reader.getTextBuffer(options.getFilePath()));
             analyzer.prepareForAnalyze(controllerGui);
-            guiForm.startDraw(controllerGui, guiForm);
+            guiForm.setGuiForm(guiForm);
+            prepareGuiDate();
+            guiForm.startDraw();
             addActionListenersMainMenu();
         } catch (IOException e) {
             logger.logIOException(e);
@@ -78,6 +75,15 @@ public class ControllerGui implements IController, IObserver {
             System.out.println(guiForm.getCategoryFlag());
             updateChartsTopApps();
         }
+    }
+
+    private void prepareGuiDate() throws ParseException {
+        guiForm.setDateFirst(getDateFirst());
+        guiForm.setDateLast(getDateLast());
+        guiForm.setDateFrom(getDateFirst());
+        guiForm.setDateTo(getDateLast());
+        guiForm.setDateArrayForSliderLabels(getDateArrayForSliderLabels());
+        setDateArrayForSliderLabels();
     }
 
     public Date getDateFirst() throws ParseException {
@@ -125,22 +131,22 @@ public class ControllerGui implements IController, IObserver {
 
     private void addActionListenersMainMenu() {
         guiForm.getButtonTopRx().addActionListener(e -> {
-                    guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                    guiForm.setJFrameMain("Top 10 Transmitters");
                     drawTopRx();
                 }
         );
         guiForm.getButtonTopTx().addActionListener(e -> {
-                    guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                    guiForm.setJFrameMain("Top 10 Transmitters");
                     drawTopTx();
                 }
         );
         guiForm.getButtonTopProtocols().addActionListener(e -> {
-                    guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                    guiForm.setJFrameMain("Top 10 Transmitters");
                     drawTopProtocols();
                 }
         );
         guiForm.getButtonTopApps().addActionListener(e -> {
-                    guiForm.setJFrameMainMenu("Top 10 Transmitters");
+                    guiForm.setJFrameMain("Top 10 Transmitters");
                     drawTopApps();
                 }
         );
@@ -159,24 +165,19 @@ public class ControllerGui implements IController, IObserver {
 
     private void drawTopRx(){
         guiForm.setCategoryFlag("Rx");
-
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopRx(
                     guiForm.createChartFrame(
                             createJFreeChartBarRx(),
                             "Top 10 Rx", 0, 205, 900, 300));
         };
-
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
-
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopRx(guiForm.createChartFrame(
                     createJFreeChartPieRx(),
                     "Top 10 Rx", 0, 510, 900, 300 ));
         };
-
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
-
         listenerToJSON = evt -> {
             updateChartsTopRx();
             if (getMapTopRxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()).isEmpty()) {
@@ -187,34 +188,28 @@ public class ControllerGui implements IController, IObserver {
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
-
         guiForm.getButtonToJSON().addActionListener(listenerToJSON);
         listenerSliderFrom = createChangeListener();
         guiForm.getSliderFrom().addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
-        guiForm.getSliderFrom().addChangeListener(listenerSliderTo);
+        guiForm.getSliderTo().addChangeListener(listenerSliderTo);
     }
 
     private void drawTopTx(){
         guiForm.setCategoryFlag("Tx");
-
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopTx(
                     guiForm.createChartFrame(
                             createJFreeChartBarTx(),
                             "Top 10 Tx", 0, 205, 900, 300));
         };
-
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
-
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopTx(guiForm.createChartFrame(
                     createJFreeChartPieTx(),
                     "Top 10 Tx", 0, 510, 900, 300 ));
         };
-
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
-
         listenerToJSON = evt -> {
             updateChartsTopTx();
             if (getMapTopTxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()).isEmpty()) {
@@ -225,34 +220,28 @@ public class ControllerGui implements IController, IObserver {
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
-
         guiForm.getButtonToJSON().addActionListener(listenerToJSON);
         listenerSliderFrom = createChangeListener();
         guiForm.getSliderFrom().addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
-        guiForm.getSliderFrom().addChangeListener(listenerSliderTo);
+        guiForm.getSliderTo().addChangeListener(listenerSliderTo);
     }
 
     private void drawTopProtocols(){
         guiForm.setCategoryFlag("Protocols");
-
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopProtocols(
                     guiForm.createChartFrame(
                             createJFreeChartBarProtocols(),
                             "Top 10 Protocols", 0, 205, 900, 300));
         };
-
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
-
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopProtocols(guiForm.createChartFrame(
                     createJFreeChartPieProtocols(),
                     "Top 10 Protocols", 0, 510, 900, 300 ));
         };
-
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
-
         listenerToJSON = evt -> {
             updateChartsTopProtocols();
             if (getMapTopProtocolsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()).isEmpty()) {
@@ -263,34 +252,28 @@ public class ControllerGui implements IController, IObserver {
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
-
         guiForm.getButtonToJSON().addActionListener(listenerToJSON);
         listenerSliderFrom = createChangeListener();
         guiForm.getSliderFrom().addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
-        guiForm.getSliderFrom().addChangeListener(listenerSliderTo);
+        guiForm.getSliderTo().addChangeListener(listenerSliderTo);
     }
 
     private void drawTopApps(){
         guiForm.setCategoryFlag("Apps");
-
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopApps(
                     guiForm.createChartFrame(
                             createJFreeChartBarApps(),
                             "Top 10 Apps", 0, 205, 900, 300));
         };
-
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
-
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopApps(guiForm.createChartFrame(
                     createJFreeChartPieApps(),
                     "Top 10 Apps", 0, 510, 900, 300 ));
         };
-
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
-
         listenerToJSON = evt -> {
             updateChartsTopApps();
             if (getMapTopAppsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()).isEmpty()) {
@@ -301,14 +284,12 @@ public class ControllerGui implements IController, IObserver {
                 showInfoBox("The file successfully saved to:\n" + jsonSaver.getFileName(), "Save result");
             }
         };
-
         guiForm.getButtonToJSON().addActionListener(listenerToJSON);
         listenerSliderFrom = createChangeListener();
         guiForm.getSliderFrom().addChangeListener(listenerSliderFrom);
         listenerSliderTo = createChangeListener();
-        guiForm.getSliderFrom().addChangeListener(listenerSliderTo);
+        guiForm.getSliderTo().addChangeListener(listenerSliderTo);
     }
-
 
     static void showInfoBox(String infoMessage, String titleBar) {
         JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
@@ -458,13 +439,10 @@ public class ControllerGui implements IController, IObserver {
         };
     }
     
-        public Date getDateOfSlider(int sliderValue){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(guiForm.getDateFirst());
-            cal.add(Calendar.SECOND, getDiffSec()*sliderValue/1000 );
-            return cal.getTime();
-        }
-
-
-
+    public Date getDateOfSlider(int sliderValue){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(guiForm.getDateFirst());
+        cal.add(Calendar.SECOND, getDiffSec()*sliderValue/1000 );
+        return cal.getTime();
+    }
 }
