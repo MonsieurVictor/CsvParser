@@ -131,24 +131,24 @@ public class ControllerGui implements IController, IObserver {
 
     private void addActionListenersMainMenu() {
         guiForm.getButtonTopRx().addActionListener(e -> {
-                    guiForm.setJFrameMain("Top 10 Transmitters");
-                    drawTopRx();
-                }
+                guiForm.setJFrameMain("Top 10 Transmitters");
+                drawTopRx();
+            }
         );
         guiForm.getButtonTopTx().addActionListener(e -> {
-                    guiForm.setJFrameMain("Top 10 Transmitters");
-                    drawTopTx();
-                }
+                guiForm.setJFrameMain("Top 10 Transmitters");
+                drawTopTx();
+            }
         );
         guiForm.getButtonTopProtocols().addActionListener(e -> {
-                    guiForm.setJFrameMain("Top 10 Transmitters");
-                    drawTopProtocols();
-                }
+                guiForm.setJFrameMain("Top 10 Transmitters");
+                drawTopProtocols();
+            }
         );
         guiForm.getButtonTopApps().addActionListener(e -> {
-                    guiForm.setJFrameMain("Top 10 Transmitters");
-                    drawTopApps();
-                }
+                guiForm.setJFrameMain("Top 10 Transmitters");
+                drawTopApps();
+            }
         );
         guiForm.getButtonBack().addActionListener(e -> {
             guiForm.getButtonShowBarChart().removeActionListener(listenerShowBarChart);
@@ -167,15 +167,15 @@ public class ControllerGui implements IController, IObserver {
         guiForm.setCategoryFlag("Rx");
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopRx(
-                    guiForm.createChartFrame(
-                            createJFreeChartBarRx(),
-                            "Top 10 Rx", 0, 205, 900, 300));
+                guiForm.createChartFrame(
+                    createJFreeChartBarRx(),
+                    "Top 10 Rx", 0, 205, 900, 300));
         };
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopRx(guiForm.createChartFrame(
-                    createJFreeChartPieRx(),
-                    "Top 10 Rx", 0, 510, 900, 300 ));
+                createJFreeChartPieRx(),
+                "Top 10 Rx", 0, 510, 900, 300 ));
         };
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
@@ -199,15 +199,15 @@ public class ControllerGui implements IController, IObserver {
         guiForm.setCategoryFlag("Tx");
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopTx(
-                    guiForm.createChartFrame(
-                            createJFreeChartBarTx(),
-                            "Top 10 Tx", 0, 205, 900, 300));
+                guiForm.createChartFrame(
+                    createJFreeChartBarTx(),
+                    "Top 10 Tx", 0, 205, 900, 300));
         };
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopTx(guiForm.createChartFrame(
-                    createJFreeChartPieTx(),
-                    "Top 10 Tx", 0, 510, 900, 300 ));
+                createJFreeChartPieTx(),
+                "Top 10 Tx", 0, 510, 900, 300 ));
         };
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
@@ -231,15 +231,15 @@ public class ControllerGui implements IController, IObserver {
         guiForm.setCategoryFlag("Protocols");
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopProtocols(
-                    guiForm.createChartFrame(
-                            createJFreeChartBarProtocols(),
-                            "Top 10 Protocols", 0, 205, 900, 300));
+                guiForm.createChartFrame(
+                    createJFreeChartBarProtocols(),
+                    "Top 10 Protocols", 0, 205, 900, 300));
         };
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopProtocols(guiForm.createChartFrame(
-                    createJFreeChartPieProtocols(),
-                    "Top 10 Protocols", 0, 510, 900, 300 ));
+                createJFreeChartPieProtocols(),
+                "Top 10 Protocols", 0, 510, 900, 300 ));
         };
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
@@ -263,15 +263,15 @@ public class ControllerGui implements IController, IObserver {
         guiForm.setCategoryFlag("Apps");
         listenerShowBarChart = evt -> {
             guiForm.setFrameBarTopApps(
-                    guiForm.createChartFrame(
-                            createJFreeChartBarApps(),
-                            "Top 10 Apps", 0, 205, 900, 300));
+                guiForm.createChartFrame(
+                    createJFreeChartBarApps(),
+                    "Top 10 Apps", 0, 205, 900, 300));
         };
         guiForm.getButtonShowBarChart().addActionListener(listenerShowBarChart);
         listenerShowPieChart = evt -> {
             guiForm.setFramePieTopApps(guiForm.createChartFrame(
-                    createJFreeChartPieApps(),
-                    "Top 10 Apps", 0, 510, 900, 300 ));
+                createJFreeChartPieApps(),
+                "Top 10 Apps", 0, 510, 900, 300 ));
         };
         guiForm.getButtonShowPieChart().addActionListener(listenerShowPieChart);
         listenerToJSON = evt -> {
@@ -297,7 +297,7 @@ public class ControllerGui implements IController, IObserver {
 
     public JFreeChart createJFreeChartBarRx() {
         return guiForm.createJFreeChartBar("Top 10 Received Packets",
-                getMapTopRxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
+            getMapTopRxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
     }
 
     public JFreeChart createJFreeChartBarTx() {
@@ -314,7 +314,7 @@ public class ControllerGui implements IController, IObserver {
 
     public JFreeChart createJFreeChartPieRx() {
         return guiForm.createJFreeChartPie("Top 10 Received Packets",
-                getMapTopRxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
+            getMapTopRxAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
     }
 
     public JFreeChart createJFreeChartPieTx() {
@@ -323,12 +323,12 @@ public class ControllerGui implements IController, IObserver {
 
     public JFreeChart createJFreeChartPieProtocols() {
         return guiForm.createJFreeChartPie("Top 3 Protocols",
-                getMapTopProtocolsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
+            getMapTopProtocolsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
     }
 
     public JFreeChart createJFreeChartPieApps() {
         return guiForm.createJFreeChartPie("Top 10 Applications",
-                getMapTopAppsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
+            getMapTopAppsAnalyzer(guiForm.getDateFrom(), guiForm.getDateTo()));
     }
 
     public void updateChartsTopRx() {

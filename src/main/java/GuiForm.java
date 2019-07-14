@@ -64,9 +64,7 @@ public class GuiForm implements IGuiForm {
         return frameBarTopProtocols;
     }
 
-    public void setFrameBarTopProtocols(ChartFrame frameBarTopProtocols) {
-        this.frameBarTopProtocols = frameBarTopProtocols;
-    }
+    public void setFrameBarTopProtocols(ChartFrame frameBarTopProtocols) { this.frameBarTopProtocols = frameBarTopProtocols; }
 
     public ChartFrame getFrameBarTopApps() {
         return frameBarTopApps;
@@ -104,7 +102,6 @@ public class GuiForm implements IGuiForm {
         return dateTo;
     }
 
-
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
@@ -113,9 +110,7 @@ public class GuiForm implements IGuiForm {
         return framePieTopProtocols;
     }
 
-    public void setFramePieTopProtocols(ChartFrame framePieTopProtocols) {
-        this.framePieTopProtocols = framePieTopProtocols;
-    }
+    public void setFramePieTopProtocols(ChartFrame framePieTopProtocols) {this.framePieTopProtocols = framePieTopProtocols;}
 
     public ChartFrame getFramePieTopApps() {
         return framePieTopApps;
@@ -201,6 +196,78 @@ public class GuiForm implements IGuiForm {
         return sliderTo;
     }
 
+    public Date getDateFirst() {
+        return dateFirst;
+    }
+
+    public void setDateFirst(Date dateFirst) {
+        this.dateFirst = dateFirst;
+    }
+
+    public void setDateLast(Date dateLast) {
+        this.dateLast = dateLast;
+    }
+
+    public ChartPanel getPanelChartBarTopRx() {
+        return panelChartBarTopRx;
+    }
+
+    public void setPanelChartBarTopRx(ChartPanel panelChartBarTopRx) {
+        this.panelChartBarTopRx = panelChartBarTopRx;
+    }
+
+    public ChartPanel getPanelChartBarTopTx() {
+        return panelChartBarTopTx;
+    }
+
+    public void setPanelChartBarTopTx(ChartPanel panelChartBarTopTx) {
+        this.panelChartBarTopTx = panelChartBarTopTx;
+    }
+
+    public ChartPanel getPanelChartBarTopProtocols() {
+        return panelChartBarTopProtocols;
+    }
+
+    public void setPanelChartBarTopProtocols(ChartPanel panelChartBarTopProtocols) { this.panelChartBarTopProtocols = panelChartBarTopProtocols; }
+
+    public ChartPanel getPanelChartBarTopApps() {
+        return panelChartBarTopApps;
+    }
+
+    public void setPanelChartBarTopApps(ChartPanel panelChartBarTopApps) { this.panelChartBarTopApps = panelChartBarTopApps; }
+
+    public ChartPanel getPanelChartPieTopRx() {
+        return panelChartPieTopRx;
+    }
+
+    public void setPanelChartPieTopRx(ChartPanel panelChartPieTopRx) {
+        this.panelChartPieTopRx = panelChartPieTopRx;
+    }
+
+    public ChartPanel getPanelChartPieTopTx() {
+        return panelChartPieTopTx;
+    }
+
+    public void setPanelChartPieTopTx(ChartPanel panelChartPieTopTx) {
+        this.panelChartPieTopTx = panelChartPieTopTx;
+    }
+
+    public ChartPanel getPanelChartPieTopProtocols() {
+        return panelChartPieTopProtocols;
+    }
+
+    public void setPanelChartPieTopProtocols(ChartPanel panelChartPieTopProtocols) { this.panelChartPieTopProtocols = panelChartPieTopProtocols; }
+
+    public ChartPanel getPanelChartPieTopApps() {
+        return panelChartPieTopApps;
+    }
+
+    public void setPanelChartPieTopApps(ChartPanel panelChartPieTopApps) { this.panelChartPieTopApps = panelChartPieTopApps; }
+
+    public void setGuiForm(IGuiForm guiForm) {
+        this.guiForm = guiForm;
+    }
+
     public void startDraw(){
         setLabelsDate();
         setSliderFrom();
@@ -274,12 +341,9 @@ public class GuiForm implements IGuiForm {
 
     public JFreeChart createJFreeChartBar(String categoryName, Map<String, Long> map) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-
         map.entrySet().stream().limit(10).forEach(e -> dataset.setValue(e.getValue(), "", e.getKey()));
-
         JFreeChart chartBar = ChartFactory.createBarChart3D(categoryName
-                        + getDateRangeString(), "",
+                + getDateRangeString(), "",
                 "Packets", dataset,  PlotOrientation.HORIZONTAL,
                 false, true, false);
         return chartBar;
@@ -287,9 +351,7 @@ public class GuiForm implements IGuiForm {
 
     public JFreeChart createJFreeChartPie(String categoryName, Map<String, Long> map) {
         DefaultPieDataset dataset = new DefaultPieDataset();
-
         map.entrySet().stream().limit(10).forEach(e -> dataset.setValue(e.getKey(), e.getValue()));
-
         JFreeChart chartPie = ChartFactory.createPieChart3D(categoryName + getDateRangeString(),
                 dataset, true, true, true);
         return chartPie;
@@ -304,86 +366,6 @@ public class GuiForm implements IGuiForm {
 
     public void setDateArrayForSliderLabels(Date[] dateArrayForSliderLabels) {
         this.dateArrayForSliderLabels = dateArrayForSliderLabels;
-    }
-
-    public Date getDateFirst() {
-        return dateFirst;
-    }
-
-    public void setDateFirst(Date dateFirst) {
-        this.dateFirst = dateFirst;
-    }
-
-    public void setDateLast(Date dateLast) {
-        this.dateLast = dateLast;
-    }
-
-    public ChartPanel getPanelChartBarTopRx() {
-        return panelChartBarTopRx;
-    }
-
-    public void setPanelChartBarTopRx(ChartPanel panelChartBarTopRx) {
-        this.panelChartBarTopRx = panelChartBarTopRx;
-    }
-
-    public ChartPanel getPanelChartBarTopTx() {
-        return panelChartBarTopTx;
-    }
-
-    public void setPanelChartBarTopTx(ChartPanel panelChartBarTopTx) {
-        this.panelChartBarTopTx = panelChartBarTopTx;
-    }
-
-    public ChartPanel getPanelChartBarTopProtocols() {
-        return panelChartBarTopProtocols;
-    }
-
-    public void setPanelChartBarTopProtocols(ChartPanel panelChartBarTopProtocols) {
-        this.panelChartBarTopProtocols = panelChartBarTopProtocols;
-    }
-
-    public ChartPanel getPanelChartBarTopApps() {
-        return panelChartBarTopApps;
-    }
-
-    public void setPanelChartBarTopApps(ChartPanel panelChartBarTopApps) {
-        this.panelChartBarTopApps = panelChartBarTopApps;
-    }
-
-    public ChartPanel getPanelChartPieTopRx() {
-        return panelChartPieTopRx;
-    }
-
-    public void setPanelChartPieTopRx(ChartPanel panelChartPieTopRx) {
-        this.panelChartPieTopRx = panelChartPieTopRx;
-    }
-
-    public ChartPanel getPanelChartPieTopTx() {
-        return panelChartPieTopTx;
-    }
-
-    public void setPanelChartPieTopTx(ChartPanel panelChartPieTopTx) {
-        this.panelChartPieTopTx = panelChartPieTopTx;
-    }
-
-    public ChartPanel getPanelChartPieTopProtocols() {
-        return panelChartPieTopProtocols;
-    }
-
-    public void setPanelChartPieTopProtocols(ChartPanel panelChartPieTopProtocols) {
-        this.panelChartPieTopProtocols = panelChartPieTopProtocols;
-    }
-
-    public ChartPanel getPanelChartPieTopApps() {
-        return panelChartPieTopApps;
-    }
-
-    public void setPanelChartPieTopApps(ChartPanel panelChartPieTopApps) {
-        this.panelChartPieTopApps = panelChartPieTopApps;
-    }
-
-    public void setGuiForm(IGuiForm guiForm) {
-        this.guiForm = guiForm;
     }
 
     public void setLabelsDate() {
